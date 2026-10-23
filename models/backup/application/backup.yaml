@@ -1,0 +1,34 @@
+elements:
+  - id: app-backup
+    type: ApplicationComponent
+    name: Backup jobs
+    c4: system
+    documentation: Nightly restic snapshots of Nextcloud data and its database.
+    properties: { technology: restic }
+  - id: app-svc-backup
+    type: ApplicationService
+    name: Scheduled backup
+  - id: app-offsite-b2
+    type: ApplicationComponent
+    name: Backblaze B2
+    c4: system
+    external: true
+    state: retiring
+    documentation: Off-site object storage for encrypted backup snapshots (being replaced).
+  - id: app-offsite-hetzner
+    type: ApplicationComponent
+    name: Hetzner Storage Box
+    c4: system
+    external: true
+    state: new
+    documentation: Off-site storage for encrypted restic snapshots, EU-hosted, flat price.
+
+relationships:
+  - { type: Realization, source: app-backup, target: app-svc-backup }
+  - { type: Serving, source: app-svc-backup, target: enterprise/bus-proc-backup }
+  - { type: Realization, source: app-backup, target: enterprise/mot-req-backup }
+  - { type: Realization, source: compute/tech-nas, target: app-backup }
+  - { type: Access, source: app-backup, target: nextcloud/app-data-files, access: read }
+  - { type: Flow, source: nextcloud/app-nextcloud-db, target: app-backup, name: Nightly dump }
+  - { type: Flow, source: app-backup, target: app-offsite-b2, name: Encrypted snapshots, state: retiring, properties: { technology: S3 over HTTPS } }
+  - { type: Flow, source: app-backup, target: app-offsite-hetzner, name: Encrypted snapshots, state: new, properties: { technology: restic over SFTP } }

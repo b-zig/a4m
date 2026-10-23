@@ -1,0 +1,18 @@
+elements:
+  - id: app-jellyfin
+    type: ApplicationComponent
+    name: Jellyfin
+    c4: system
+    state: new
+    documentation: Media server streaming the family's videos and music to TVs and phones.
+    properties: { technology: Jellyfin 10 }
+  - id: app-svc-streaming
+    type: ApplicationService
+    name: Media streaming
+    state: new
+
+relationships:
+  - { type: Realization, source: app-jellyfin, target: app-svc-streaming, state: new }
+  - { type: Serving, source: app-svc-streaming, target: enterprise/bus-role-user, state: new }
+  - { type: Access, source: app-jellyfin, target: nextcloud/app-data-files, access: read, name: Family videos, state: new }
+  - { type: Serving, source: dns/app-svc-dns, target: app-jellyfin, name: DNS lookups, state: new }

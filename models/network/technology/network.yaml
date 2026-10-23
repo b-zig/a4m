@@ -1,0 +1,27 @@
+elements:
+  - id: tech-router
+    type: Device
+    name: Edge router
+    properties: { technology: OPNsense, ip: 10.0.10.1 }
+  - id: tech-switch
+    type: Device
+    name: Core switch
+    properties: { model: 8-port managed PoE }
+  - id: tech-net-wan
+    type: CommunicationNetwork
+    name: Internet (ISP)
+  - id: tech-net-lan
+    type: CommunicationNetwork
+    name: LAN (VLAN 10)
+    properties: { vlan: 10, subnet: 10.0.10.0/24 }
+  - id: tech-net-iot
+    type: CommunicationNetwork
+    name: IoT (VLAN 20)
+    properties: { vlan: 20, subnet: 10.0.20.0/24 }
+
+relationships:
+  - { type: Association, source: tech-router, target: tech-net-wan }
+  - { type: Association, source: tech-router, target: tech-net-lan }
+  - { type: Association, source: tech-router, target: tech-net-iot }
+  - { type: Association, source: tech-switch, target: tech-net-lan }
+  - { type: Association, source: tech-switch, target: tech-net-iot }

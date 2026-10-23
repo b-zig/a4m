@@ -1,0 +1,16 @@
+elements:
+  - id: app-home-assistant
+    type: ApplicationComponent
+    name: Home Assistant
+    c4: system
+    documentation: Smart-home automation, dashboards and device integrations.
+    properties: { technology: Home Assistant OS }
+  - id: app-svc-automation
+    type: ApplicationService
+    name: Automations and dashboards
+
+relationships:
+  - { type: Realization, source: app-home-assistant, target: app-svc-automation }
+  - { type: Realization, source: app-svc-automation, target: enterprise/bus-svc-automation }
+  - { type: Serving, source: app-svc-automation, target: enterprise/bus-role-user }
+  - { type: Serving, source: dns/app-svc-dns, target: app-home-assistant, name: DNS lookups }

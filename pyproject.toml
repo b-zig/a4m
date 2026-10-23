@@ -1,0 +1,21 @@
+[project]
+name = "a4m"
+version = "0.1.0"
+description = "ArchiMate architecture-as-code: YAML models validated against ArchiMate 3.2, exported to Archi (OEF) and Mermaid/C4"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6", "jsonschema>=4"]
+
+[project.optional-dependencies]
+xsd = ["xmlschema>=3"]
+
+[project.scripts]
+a4m = "a4m.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["a4m"]
+# rules/ and schema/ are read from the checkout, so install editable: pip install -e .

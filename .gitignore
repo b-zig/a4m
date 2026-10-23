@@ -1,0 +1,8 @@
+build/
+__pycache__/
+*.pyc
+.venv/
+tools/node_modules/
+*.bak
+# Archi local files
+*.archimate.bak

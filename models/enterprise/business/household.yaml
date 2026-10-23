@@ -1,0 +1,42 @@
+elements:
+  - id: bus-family
+    type: BusinessActor
+    name: Family
+    c4: person
+    documentation: Household members using files, photos and smart-home dashboards.
+  - id: bus-admin
+    type: BusinessActor
+    name: Home lab admin
+    c4: person
+    documentation: Runs and maintains the home lab.
+  - id: bus-role-user
+    type: BusinessRole
+    name: Service user
+  - id: bus-proc-share
+    type: BusinessProcess
+    name: Share files and photos
+  - id: bus-proc-backup
+    type: BusinessProcess
+    name: Back up family data
+  - id: bus-svc-file-sharing
+    type: BusinessService
+    name: File sharing
+  - id: bus-svc-automation
+    type: BusinessService
+    name: Home automation
+  - id: bus-obj-photos
+    type: BusinessObject
+    name: Family photos and documents
+
+relationships:
+  - { type: Assignment, source: bus-family, target: bus-role-user }
+  - { type: Assignment, source: bus-role-user, target: bus-proc-share }
+  - { type: Assignment, source: bus-admin, target: bus-proc-backup }
+  - { type: Realization, source: bus-proc-share, target: bus-svc-file-sharing }
+  - { type: Serving, source: bus-svc-file-sharing, target: bus-role-user }
+  - { type: Serving, source: bus-svc-automation, target: bus-role-user }
+  - { type: Access, source: bus-proc-share, target: bus-obj-photos, access: readwrite }
+  - { type: Access, source: bus-proc-backup, target: bus-obj-photos, access: read }
+  - { type: Realization, source: bus-svc-file-sharing, target: str-cap-file-sharing }
+  - { type: Realization, source: bus-svc-automation, target: str-cap-home-automation }
+  - { type: Association, source: bus-family, target: mot-family, name: represented by }

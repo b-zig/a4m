@@ -1,0 +1,14 @@
+elements:
+  - id: app-pihole
+    type: ApplicationComponent
+    name: Pi-hole
+    c4: system
+    documentation: Network-wide DNS resolver with ad and tracker blocking.
+  - id: app-svc-dns
+    type: ApplicationService
+    name: DNS resolution and filtering
+
+relationships:
+  - { type: Realization, source: app-pihole, target: app-svc-dns }
+  - { type: Realization, source: app-pihole, target: enterprise/mot-req-dns-filter }
+  - { type: Serving, source: app-svc-dns, target: enterprise/bus-admin, name: Admin console }

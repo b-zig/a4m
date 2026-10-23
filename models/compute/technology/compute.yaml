@@ -1,0 +1,53 @@
+# One Proxmox host and a NAS. Workload VMs/LXCs belong to the SAs that run on them.
+elements:
+  - id: tech-pve-01
+    type: Node
+    name: Proxmox host 01
+    c4: deployment
+    documentation: Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host).
+    properties: { technology: Proxmox VE 8, ip: 10.0.10.11, cpu: 8 cores, ram: 64 GB }
+  - id: tech-proxmox-ve
+    type: SystemSoftware
+    name: Proxmox VE
+  - id: tech-vm-docker
+    type: Node
+    name: VM docker-01
+    c4: deployment
+    documentation: Shared Docker host for containerised solutions.
+    properties: { technology: Debian 12 VM, ip: 10.0.10.21 }
+  - id: tech-docker
+    type: SystemSoftware
+    name: Docker Engine
+    c4: deployment
+    properties: { technology: Docker Compose }
+  - id: tech-nas
+    type: Device
+    name: NAS
+    c4: deployment
+    documentation: Synology NAS holding solution data (NFS) and running backup jobs.
+    properties: { technology: Synology DSM 7, ip: 10.0.10.5 }
+  - id: tech-svc-vm-hosting
+    type: TechnologyService
+    name: VM hosting
+  - id: tech-svc-nfs
+    type: TechnologyService
+    name: NFS storage
+
+relationships:
+  - { type: Composition, source: tech-pve-01, target: tech-proxmox-ve }
+  - { type: Composition, source: tech-pve-01, target: tech-vm-docker }
+  - { type: Realization, source: tech-proxmox-ve, target: tech-svc-vm-hosting }
+  - { type: Serving, source: tech-svc-vm-hosting, target: tech-vm-docker }
+  - { type: Assignment, source: tech-vm-docker, target: tech-docker }
+  - { type: Realization, source: tech-nas, target: tech-svc-nfs }
+  - { type: Serving, source: tech-svc-nfs, target: tech-vm-docker, name: Docker data volumes }
+  # placement and power come from the network SA
+  - { type: Aggregation, source: network/oth-loc-home, target: tech-pve-01 }
+  - { type: Aggregation, source: network/oth-loc-home, target: tech-nas }
+  - { type: Serving, source: network/phys-ups, target: tech-pve-01 }
+  - { type: Serving, source: network/phys-ups, target: tech-nas }
+  - { type: Association, source: tech-pve-01, target: network/tech-net-lan }
+  - { type: Association, source: tech-nas, target: network/tech-net-lan }
+  # the enterprise's hardware resource
+  - { type: Realization, source: tech-pve-01, target: enterprise/str-res-hardware }
+  - { type: Realization, source: tech-nas, target: enterprise/str-res-hardware }

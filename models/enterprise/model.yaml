@@ -1,0 +1,13 @@
+name: Home Lab
+version: "0.2"
+kind: enterprise
+status: implemented
+owner: home lab admin
+exports: "*"
+documentation: >-
+  The home lab as an enterprise: why it exists (motivation), what it can do (capabilities),
+  who uses it (business) and the roadmap. Every solution architecture under models/ builds on
+  these elements; it is the test bed for the a4m workflow before the office network.
+properties:
+  dns_domain: home.lan
+  lan_subnet: 10.0.10.0/24

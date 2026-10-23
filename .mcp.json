@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "a4m": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["-m", "a4m", "mcp"]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+name: Backup
+version: "0.3"
+kind: solution
+status: approved
+owner: home lab admin
+documentation: >-
+  Nightly restic snapshots of Nextcloud data and the database, copied off-site. Approved
+  change (ADR-0001): move the off-site copy from Backblaze B2 to a Hetzner Storage Box.
+exports: [app-backup]

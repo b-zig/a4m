@@ -1,0 +1,7 @@
+name: DNS filtering (Pi-hole)
+version: "0.2"
+kind: platform
+status: implemented
+owner: home lab admin
+documentation: Network-wide DNS resolution with ad and tracker blocking, used by every other solution.
+exports: [app-pihole, app-svc-dns]

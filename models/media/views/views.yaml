@@ -1,0 +1,11 @@
+views:
+  - id: view-overview
+    name: Media streaming — overview
+    viewpoint: Layered
+    include_layers: [business, application, technology]
+  - id: c4-context
+    kind: c4-context
+    name: Media streaming — system context
+  - id: c4-deployment
+    kind: c4-deployment
+    name: Media streaming — deployment

@@ -1,0 +1,9 @@
+name: Home network and rack
+version: "0.2"
+kind: platform
+status: implemented
+owner: home lab admin
+documentation: >-
+  Edge router, core switch, VLANs, the rack location and its UPS. Other SAs attach their
+  nodes to the networks and place them in the rack.
+exports: [tech-net-wan, tech-net-lan, tech-net-iot, oth-loc-home, phys-ups]

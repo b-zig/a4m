@@ -1,0 +1,39 @@
+elements:
+  - id: mot-family
+    type: Stakeholder
+    name: Family
+    documentation: Everyone in the household who relies on the self-hosted services.
+  - id: mot-drv-privacy
+    type: Driver
+    name: Data privacy
+    documentation: Keep family photos, documents and smart-home data off third-party clouds.
+  - id: mot-asm-single-host
+    type: Assessment
+    name: Single hypervisor is a SPOF
+    documentation: All VMs run on one Proxmox host; a hardware failure takes every service down.
+  - id: mot-goal-reliable
+    type: Goal
+    name: Reliable self-hosted services
+  - id: mot-goal-portable
+    type: Goal
+    name: Portable to the office network
+    documentation: The same tooling and patterns must be reusable for the office environment.
+  - id: mot-pri-as-code
+    type: Principle
+    name: Architecture as code
+    documentation: The architecture lives in git as validated ArchiMate YAML; diagrams are generated.
+  - id: mot-req-backup
+    type: Requirement
+    name: Nightly off-site backups
+  - id: mot-req-dns-filter
+    type: Requirement
+    name: Network-wide ad and tracker blocking
+
+relationships:
+  - { type: Association, source: mot-family, target: mot-drv-privacy }
+  - { type: Influence, source: mot-drv-privacy, target: mot-goal-reliable, modifier: "+" }
+  - { type: Association, source: mot-asm-single-host, target: mot-drv-privacy }
+  - { type: Influence, source: mot-asm-single-host, target: mot-goal-reliable, modifier: "-" }
+  - { type: Realization, source: mot-pri-as-code, target: mot-goal-portable }
+  - { type: Realization, source: mot-req-backup, target: mot-goal-reliable }
+  - { type: Realization, source: mot-req-dns-filter, target: mot-goal-reliable }

@@ -1,0 +1,20 @@
+# Deployed as images on the shared Docker VM of the compute platform.
+elements:
+  - id: tech-art-nextcloud
+    type: Artifact
+    name: nextcloud:29-apache image
+  - id: tech-art-mariadb
+    type: Artifact
+    name: mariadb:11 image
+  - id: tech-art-redis
+    type: Artifact
+    name: redis:7 image
+
+relationships:
+  - { type: Assignment, source: compute/tech-docker, target: tech-art-nextcloud }
+  - { type: Assignment, source: compute/tech-docker, target: tech-art-mariadb }
+  - { type: Assignment, source: compute/tech-docker, target: tech-art-redis }
+  - { type: Realization, source: tech-art-nextcloud, target: app-nextcloud-web }
+  - { type: Realization, source: tech-art-mariadb, target: app-nextcloud-db }
+  - { type: Realization, source: tech-art-redis, target: app-nextcloud-cache }
+  - { type: Serving, source: compute/tech-svc-nfs, target: app-nextcloud-web, name: User files volume }

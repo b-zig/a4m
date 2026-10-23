@@ -1,0 +1,9 @@
+elements:
+  - id: tech-art-jellyfin
+    type: Artifact
+    name: jellyfin/jellyfin image
+    state: new
+
+relationships:
+  - { type: Assignment, source: compute/tech-docker, target: tech-art-jellyfin, state: new }
+  - { type: Realization, source: tech-art-jellyfin, target: app-jellyfin, state: new }

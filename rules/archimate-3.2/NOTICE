@@ -1,0 +1,8 @@
+relationships.xml and relationships-keys.xml are vendored unmodified from Archi
+(https://github.com/archimatetool/archi, com.archimatetool.model/model/),
+the ArchiMate 3.2 relationship matrix Archi uses to validate relationships.
+
+Copyright (c) 2013-2026 Phillip Beauvoir, Jean-Baptiste Sarrodie, The Open Group.
+Licensed under the MIT License; see LICENSE.archi.txt in this directory.
+
+To refresh:  make rules-refresh   (re-downloads both files from Archi master)

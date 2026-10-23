@@ -1,0 +1,8 @@
+elements:
+  - id: phys-ups
+    type: Equipment
+    name: UPS
+    documentation: 900 VA line-interactive UPS; ~20 minutes runtime for host, NAS and network.
+
+relationships:
+  - { type: Serving, source: phys-ups, target: tech-router }

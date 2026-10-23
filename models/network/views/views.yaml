@@ -1,0 +1,5 @@
+views:
+  - id: view-network
+    name: Network, rack and power
+    documentation: Network segments, rack and power, with the nodes other SAs connect to them.
+    include_layers: [technology, physical, other]

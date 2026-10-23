@@ -1,0 +1,9 @@
+name: Media streaming
+version: "0.1"
+kind: solution
+status: proposed
+owner: home lab admin
+documentation: >-
+  Proposal: stream the family's videos and music with Jellyfin, deployed as a container on
+  the shared Docker VM and reading media from the Nextcloud data on the NAS.
+exports: [app-jellyfin]

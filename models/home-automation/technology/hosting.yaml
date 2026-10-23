@@ -1,0 +1,12 @@
+elements:
+  - id: tech-vm-haos
+    type: Node
+    name: VM haos
+    c4: deployment
+    properties: { technology: Home Assistant OS VM, ip: 10.0.20.10 }
+
+relationships:
+  - { type: Realization, source: tech-vm-haos, target: app-home-assistant }
+  - { type: Composition, source: compute/tech-pve-01, target: tech-vm-haos }
+  - { type: Serving, source: compute/tech-svc-vm-hosting, target: tech-vm-haos }
+  - { type: Association, source: tech-vm-haos, target: network/tech-net-iot }

@@ -1,0 +1,17 @@
+views:
+  - id: view-motivation
+    name: Motivation and strategy
+    documentation: Why the home lab exists, which capabilities it provides, and which solutions realize the requirements.
+    include: [dns/app-pihole, backup/app-backup, compute/tech-pve-01, compute/tech-nas]
+    include_layers: [motivation, strategy]
+
+  - id: view-business
+    name: Business and supporting services
+    documentation: Who uses the home lab and which application services of the solution architectures support them.
+    include_layers: [business, application]
+
+  - id: view-migration
+    name: Office migration roadmap
+    viewpoint: Implementation and Migration
+    include: [mot-goal-portable]
+    include_layers: [implementation]

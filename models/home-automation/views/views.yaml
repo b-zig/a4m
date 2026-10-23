@@ -1,0 +1,8 @@
+views:
+  - id: view-overview
+    name: Home automation — overview
+    viewpoint: Layered
+    include_layers: [business, application, technology]
+  - id: c4-context
+    kind: c4-context
+    name: Home automation — system context

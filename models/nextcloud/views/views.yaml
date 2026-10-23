@@ -1,0 +1,17 @@
+views:
+  - id: view-layered
+    name: Nextcloud — layered overview
+    viewpoint: Layered
+    documentation: The business it supports, the application, and the platform it runs on.
+    include_layers: [business, application, technology]
+  - id: c4-context
+    kind: c4-context
+    scope: app-nextcloud
+    name: Nextcloud — system context
+  - id: c4-containers
+    kind: c4-container
+    scope: app-nextcloud
+    name: Nextcloud — containers
+  - id: c4-deployment
+    kind: c4-deployment
+    name: Nextcloud — deployment

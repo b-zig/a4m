@@ -1,0 +1,46 @@
+# C4 model <-> ArchiMate mapping used by a4m.
+# C4 is a *projection* of the ArchiMate model: an element opts in with `c4: <tag>`,
+# and C4 diagrams are derived from the ArchiMate relationships.
+
+tags:
+  person:
+    types: [BusinessActor, BusinessRole]
+    mermaid: Person            # Person_Ext when external: true
+  system:
+    types: [ApplicationComponent, ApplicationCollaboration]
+    mermaid: System            # System_Ext / SystemDb / SystemQueue
+  container:
+    types: [ApplicationComponent]
+    parent: system             # exactly one c4:system must compose/aggregate it
+    mermaid: Container         # ContainerDb / ContainerQueue via c4_shape
+  component:
+    types: [ApplicationComponent]
+    parent: container          # exactly one c4:container must compose/aggregate it
+    mermaid: Component
+  deployment:
+    types: [Node, Device, SystemSoftware, TechnologyCollaboration, Facility, Equipment, Location]
+    mermaid: Deployment_Node   # nested via Composition / Aggregation / Assignment
+
+# Relationship types that structurally nest one C4 element in another.
+nesting: [Composition, Aggregation]
+deployment_nesting: [Composition, Aggregation, Assignment]
+
+# ArchiMate relationships that become C4 `Rel(...)` arrows, with default labels.
+# flip: true means the C4 arrow points the other way (ArchiMate "A serves B" == C4 "B uses A").
+interactions:
+  Serving:    { label: Uses, flip: true }
+  Flow:       { label: Sends data to, flip: false }
+  Triggering: { label: Triggers, flip: false }
+  Access:     { label: Accesses, flip: false }
+
+# Untagged intermediate elements are "collapsed": a service, interface, function or role
+# resolves to the tagged element(s) that realize / are assigned to / compose it.
+collapse_via: [Realization, Assignment, Composition, Aggregation]
+
+# Deployment hosting: a container/system is placed inside deployment node D when
+# D -Realization-> X, or D -(Assignment|Composition|Aggregation)-> Artifact -Realization-> X.
+hosting:
+  direct: [Realization]
+  via_artifact: [Assignment, Composition, Aggregation]
+
+shapes: [database, queue]

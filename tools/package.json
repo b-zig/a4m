@@ -1,0 +1,13 @@
+{
+  "name": "a4m-tools",
+  "private": true,
+  "description": "Optional checks for generated docs (Mermaid syntax).",
+  "type": "module",
+  "scripts": {
+    "check-mermaid": "node check-mermaid.mjs ../docs"
+  },
+  "dependencies": {
+    "jsdom": "25.0.1",
+    "mermaid": "11.4.1"
+  }
+}

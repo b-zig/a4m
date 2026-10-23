@@ -1,0 +1,48 @@
+# Nextcloud: a C4 system made of three containers (web, database, cache).
+elements:
+  - id: app-nextcloud
+    type: ApplicationComponent
+    name: Nextcloud
+    c4: system
+    documentation: Self-hosted file sync, sharing and photo backup for the family.
+  - id: app-nextcloud-web
+    type: ApplicationComponent
+    name: Nextcloud web
+    c4: container
+    documentation: Web UI, WebDAV and mobile sync endpoints.
+    properties: { technology: PHP 8 / Apache }
+  - id: app-nextcloud-db
+    type: ApplicationComponent
+    name: Nextcloud database
+    c4: container
+    c4_shape: database
+    documentation: Metadata, shares and user accounts.
+    properties: { technology: MariaDB 11 }
+  - id: app-nextcloud-cache
+    type: ApplicationComponent
+    name: Nextcloud cache
+    c4: container
+    documentation: File locking and session cache.
+    properties: { technology: Redis 7 }
+  - id: app-svc-file-sync
+    type: ApplicationService
+    name: File sync and share
+  - id: app-data-files
+    type: DataObject
+    name: User files
+    documentation: Family files and photos, stored on the NAS over NFS.
+
+relationships:
+  - { type: Composition, source: app-nextcloud, target: app-nextcloud-web }
+  - { type: Composition, source: app-nextcloud, target: app-nextcloud-db }
+  - { type: Composition, source: app-nextcloud, target: app-nextcloud-cache }
+  - { type: Realization, source: app-nextcloud-web, target: app-svc-file-sync }
+  - { type: Flow, source: app-nextcloud-web, target: app-nextcloud-db, name: Reads/writes metadata, properties: { technology: MySQL protocol } }
+  - { type: Flow, source: app-nextcloud-web, target: app-nextcloud-cache, name: Locks and sessions, properties: { technology: RESP } }
+  - { type: Access, source: app-nextcloud-web, target: app-data-files, access: readwrite }
+  # what it does for the enterprise
+  - { type: Serving, source: app-svc-file-sync, target: enterprise/bus-proc-share }
+  - { type: Realization, source: app-svc-file-sync, target: enterprise/bus-svc-file-sharing }
+  - { type: Realization, source: app-data-files, target: enterprise/bus-obj-photos }
+  # platforms it uses
+  - { type: Serving, source: dns/app-svc-dns, target: app-nextcloud, name: DNS lookups }

@@ -1,0 +1,7 @@
+name: Nextcloud
+version: "0.2"
+kind: solution
+status: implemented
+owner: home lab admin
+documentation: Self-hosted file sync, sharing and photo backup for the family, running as containers on the shared Docker VM.
+exports: [app-nextcloud, app-nextcloud-db, app-data-files]

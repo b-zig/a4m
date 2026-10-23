@@ -1,0 +1,7 @@
+{
+  "yaml.schemas": {
+    "./schema/a4m.schema.json": ["models/*/**/*.yaml", "models/*/**/*.yml"]
+  },
+  "files.associations": { "*.ajs": "javascript" },
+  "chat.promptFiles": true
+}

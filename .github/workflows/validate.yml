@@ -1,0 +1,47 @@
+name: architecture
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+
+      - name: Unit tests
+        run: python -m unittest discover -s tests -t .
+
+      - name: Validate every solution architecture
+        run: python -m a4m validate
+
+      - name: Build and check generated docs are committed
+        run: |
+          python -m a4m build
+          if [ -n "$(git status --porcelain -- docs/)" ]; then
+            git status --short -- docs/
+            echo "::error::docs/ is stale — run 'python3 -m a4m build' and commit docs/"
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Mermaid syntax
+        run: |
+          npm ci --prefix tools
+          node tools/check-mermaid.mjs docs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: archi-oef
+          path: build/*.oef.xml
