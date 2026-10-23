@@ -1,0 +1,6 @@
+elements:
+  - id: data-events
+    type: DataObject
+    name: Event topics
+    state: new
+    documentation: Retained state and event messages, kept by the broker until consumed.

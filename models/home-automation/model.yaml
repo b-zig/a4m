@@ -1,7 +1,7 @@
 name: Home automation
 version: "0.2"
 kind: solution
-status: implemented
+status: proposed
 owner: home lab admin
 documentation: Home Assistant OS in its own VM on the IoT network.
 exports: [app-home-assistant]

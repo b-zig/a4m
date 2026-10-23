@@ -15,6 +15,7 @@ C4Deployment
           Container(nextcloud__app_nextcloud_web, "Nextcloud web", "PHP 8 / Apache", "Web UI, WebDAV and mobile sync endpoints.")
           ContainerDb(nextcloud__app_nextcloud_db, "Nextcloud database", "MariaDB 11", "Metadata, shares and user accounts.")
           Container(nextcloud__app_nextcloud_cache, "Nextcloud cache", "Redis 7", "File locking and session cache.")
+          System(events__app_mqtt_broker, "MQTT broker [PROPOSED]", "Shared publish/subscribe broker for device, media and system events.")
           System(media__app_jellyfin, "Jellyfin [PROPOSED]", "Media server streaming the family's videos and music to TVs and phones.")
         }
       }
@@ -31,11 +32,16 @@ C4Deployment
   }
   Rel(nextcloud__app_nextcloud_db, backup__app_backup, "Nightly dump")
   Rel(home_automation__app_home_assistant, dns__app_pihole, "Uses — DNS lookups")
+  Rel(home_automation__app_home_assistant, events__app_mqtt_broker, "Uses — Device and media events")
   Rel(media__app_jellyfin, dns__app_pihole, "Uses — DNS lookups")
+  Rel(media__app_jellyfin, events__app_mqtt_broker, "Playback events", "MQTT")
   Rel(nextcloud__app_nextcloud_web, nextcloud__app_nextcloud_db, "Reads/writes metadata", "MySQL protocol")
   Rel(nextcloud__app_nextcloud_web, nextcloud__app_nextcloud_cache, "Locks and sessions", "RESP")
+  UpdateElementStyle(events__app_mqtt_broker, $borderColor="#6a1b9a", $fontColor="#6a1b9a")
   UpdateElementStyle(media__app_jellyfin, $borderColor="#6a1b9a", $fontColor="#6a1b9a")
+  UpdateRelStyle(home_automation__app_home_assistant, events__app_mqtt_broker, $textColor="#6a1b9a", $lineColor="#6a1b9a")
   UpdateRelStyle(media__app_jellyfin, dns__app_pihole, $textColor="#6a1b9a", $lineColor="#6a1b9a")
+  UpdateRelStyle(media__app_jellyfin, events__app_mqtt_broker, $textColor="#6a1b9a", $lineColor="#6a1b9a")
   UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
 ```
 
@@ -115,6 +121,7 @@ C4Deployment
 |---|---|---|---|---|---|
 | Backup jobs (`backup/app-backup`) | ApplicationComponent | Application | system |  | Nightly restic snapshots of Nextcloud data and its database. |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
+| MQTT broker (`events/app-mqtt-broker`) | ApplicationComponent | Application | system | new | Shared publish/subscribe broker for device, media and system events. |
 | Home Assistant (`home-automation/app-home-assistant`) | ApplicationComponent | Application | system |  | Smart-home automation, dashboards and device integrations. |
 | Jellyfin (`media/app-jellyfin`) | ApplicationComponent | Application | system | new | Media server streaming the family's videos and music to TVs and phones. |
 | Nextcloud web (`nextcloud/app-nextcloud-web`) | ApplicationComponent | Application | container |  | Web UI, WebDAV and mobile sync endpoints. |
@@ -132,5 +139,6 @@ C4Deployment
 
 - [ADR-0001: Move off-site backups from Backblaze B2 to a Hetzner Storage Box](../../models/backup/decisions/ADR-0001-move-offsite-backups-to-hetzner.md) — *accepted*
 - [ADR-0001: Use Proxmox VE for virtualisation](../../models/compute/decisions/ADR-0001-use-proxmox-for-virtualisation.md) — *accepted*
+- [ADR-0001: Introduce a shared MQTT event fabric](../../models/events/decisions/ADR-0001-introduce-a-shared-mqtt-event-fabric.md) — *proposed*
 - [ADR-0001: Add Jellyfin as the family media server](../../models/media/decisions/ADR-0001-add-jellyfin-media-server.md) — *proposed*
 - [ADR-0001: Run Nextcloud as Docker containers on a dedicated VM](../../models/nextcloud/decisions/ADR-0001-run-nextcloud-as-containers.md) — *accepted*

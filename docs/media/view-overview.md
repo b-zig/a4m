@@ -18,6 +18,7 @@ flowchart TB
     app_jellyfin["Jellyfin<br/>«ApplicationComponent»<br/>NEW"]
     app_svc_streaming("Media streaming<br/>«ApplicationService»<br/>NEW")
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    events__app_mqtt_broker["MQTT broker<br/>«ApplicationComponent» · events<br/>NEW"]
   end
   subgraph layer_infrastructure["Infrastructure"]
     direction LR
@@ -28,6 +29,7 @@ flowchart TB
   app_svc_streaming -->|"serves"| enterprise__bus_role_user
   app_jellyfin -.->|"Family videos"| nextcloud__data_files
   dns__app_svc_dns -->|"DNS lookups"| app_jellyfin
+  app_jellyfin -.->|"Playback events"| events__app_mqtt_broker
   compute__infra_docker -->|"assigned to"| infra_art_jellyfin
   infra_art_jellyfin -.->|"realizes"| app_jellyfin
   classDef business fill:#FFFFB5,stroke:#555,color:#000
@@ -37,21 +39,22 @@ flowchart TB
   class nextcloud__data_files information
   style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_jellyfin,app_svc_streaming,dns__app_svc_dns application
+  class app_jellyfin,app_svc_streaming,dns__app_svc_dns,events__app_mqtt_broker application
   style layer_application fill:#fafafa,stroke:#bbb
   classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
   class infra_art_jellyfin,compute__infra_docker infrastructure
   style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__infra_docker,dns__app_svc_dns,enterprise__bus_role_user,nextcloud__data_files foreign
+  class compute__infra_docker,dns__app_svc_dns,enterprise__bus_role_user,events__app_mqtt_broker,nextcloud__data_files foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
-  class app_jellyfin,app_svc_streaming,infra_art_jellyfin st_new
+  class app_jellyfin,app_svc_streaming,infra_art_jellyfin,events__app_mqtt_broker st_new
   linkStyle 0 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
   linkStyle 1 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
   linkStyle 2 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
   linkStyle 3 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
   linkStyle 4 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
   linkStyle 5 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
+  linkStyle 6 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
@@ -81,6 +84,7 @@ flowchart TB
     app_jellyfin["Jellyfin<br/>«ApplicationComponent»"]
     app_svc_streaming("Media streaming<br/>«ApplicationService»")
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    events__app_mqtt_broker["MQTT broker<br/>«ApplicationComponent» · events"]
   end
   subgraph layer_infrastructure["Infrastructure"]
     direction LR
@@ -91,6 +95,7 @@ flowchart TB
   app_svc_streaming -->|"serves"| enterprise__bus_role_user
   app_jellyfin -.->|"Family videos"| nextcloud__data_files
   dns__app_svc_dns -->|"DNS lookups"| app_jellyfin
+  app_jellyfin -.->|"Playback events"| events__app_mqtt_broker
   compute__infra_docker -->|"assigned to"| infra_art_jellyfin
   infra_art_jellyfin -.->|"realizes"| app_jellyfin
   classDef business fill:#FFFFB5,stroke:#555,color:#000
@@ -100,13 +105,13 @@ flowchart TB
   class nextcloud__data_files information
   style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_jellyfin,app_svc_streaming,dns__app_svc_dns application
+  class app_jellyfin,app_svc_streaming,dns__app_svc_dns,events__app_mqtt_broker application
   style layer_application fill:#fafafa,stroke:#bbb
   classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
   class infra_art_jellyfin,compute__infra_docker infrastructure
   style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__infra_docker,dns__app_svc_dns,enterprise__bus_role_user,nextcloud__data_files foreign
+  class compute__infra_docker,dns__app_svc_dns,enterprise__bus_role_user,events__app_mqtt_broker,nextcloud__data_files foreign
 ```
 
 </details>
@@ -121,6 +126,7 @@ flowchart TB
 | Docker Engine (`compute/infra-docker`) | SystemSoftware | Infrastructure | deployment |  |  |
 | DNS resolution and filtering (`dns/app-svc-dns`) | ApplicationService | Application |  |  |  |
 | Service user (`enterprise/bus-role-user`) | BusinessRole | Business |  |  |  |
+| MQTT broker (`events/app-mqtt-broker`) | ApplicationComponent | Application | system | new | Shared publish/subscribe broker for device, media and system events. |
 | User files (`nextcloud/data-files`) | DataObject | Information |  |  | Family files and photos, stored on the NAS over NFS. |
 
 ## Related decisions

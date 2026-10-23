@@ -11,6 +11,7 @@ C4Deployment
       Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
         Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "[compute]") {
           System(app_jellyfin, "Jellyfin [NEW]", "Media server streaming the family's videos and music to TVs and phones.")
+          System_Ext(events__app_mqtt_broker, "MQTT broker [NEW]", "[events] Shared publish/subscribe broker for device, media and system events.")
         }
       }
       Deployment_Node(dns__infra_lxc_pihole, "LXC pihole", "Debian 12 LXC", "[dns]") {
@@ -19,8 +20,11 @@ C4Deployment
     }
   }
   Rel(app_jellyfin, dns__app_pihole, "Uses — DNS lookups")
+  Rel(app_jellyfin, events__app_mqtt_broker, "Playback events", "MQTT")
   UpdateElementStyle(app_jellyfin, $borderColor="#2e7d32", $fontColor="#2e7d32")
+  UpdateElementStyle(events__app_mqtt_broker, $borderColor="#2e7d32", $fontColor="#2e7d32")
   UpdateRelStyle(app_jellyfin, dns__app_pihole, $textColor="#2e7d32", $lineColor="#2e7d32")
+  UpdateRelStyle(app_jellyfin, events__app_mqtt_broker, $textColor="#2e7d32", $lineColor="#2e7d32")
   UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
 ```
 
@@ -46,6 +50,7 @@ C4Deployment
       Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
         Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "[compute]") {
           System(app_jellyfin, "Jellyfin", "Media server streaming the family's videos and music to TVs and phones.")
+          System_Ext(events__app_mqtt_broker, "MQTT broker", "[events] Shared publish/subscribe broker for device, media and system events.")
         }
       }
       Deployment_Node(dns__infra_lxc_pihole, "LXC pihole", "Debian 12 LXC", "[dns]") {
@@ -54,6 +59,7 @@ C4Deployment
     }
   }
   Rel(app_jellyfin, dns__app_pihole, "Uses — DNS lookups")
+  Rel(app_jellyfin, events__app_mqtt_broker, "Playback events", "MQTT")
   UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
 ```
 
@@ -65,6 +71,7 @@ C4Deployment
 |---|---|---|---|---|---|
 | Jellyfin (`app-jellyfin`) | ApplicationComponent | Application | system | new | Media server streaming the family's videos and music to TVs and phones. |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
+| MQTT broker (`events/app-mqtt-broker`) | ApplicationComponent | Application | system | new | Shared publish/subscribe broker for device, media and system events. |
 | Home office rack (`network/infra-loc-home`) | Location | Infrastructure | deployment |  |  |
 | Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
 | VM docker-01 (`compute/infra-vm-docker`) | Node | Infrastructure | deployment |  | Shared Docker host for containerised solutions. |

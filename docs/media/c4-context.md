@@ -8,14 +8,18 @@ C4Context
   title Media streaming — system context
   Person(enterprise__bus_family, "Family", "[enterprise] Household members using files, photos and smart-home dashboards.")
   System_Ext(dns__app_pihole, "Pi-hole", "[dns] Network-wide DNS resolver with ad and tracker blocking.")
+  System_Ext(events__app_mqtt_broker, "MQTT broker [NEW]", "[events] Shared publish/subscribe broker for device, media and system events.")
   Boundary(boundary_media, "Media streaming") {
     System(app_jellyfin, "Jellyfin [NEW]", "Media server streaming the family's videos and music to TVs and phones.")
   }
   Rel(enterprise__bus_family, app_jellyfin, "Uses")
   Rel(app_jellyfin, dns__app_pihole, "Uses — DNS lookups")
+  Rel(app_jellyfin, events__app_mqtt_broker, "Playback events", "MQTT")
+  UpdateElementStyle(events__app_mqtt_broker, $borderColor="#2e7d32", $fontColor="#2e7d32")
   UpdateElementStyle(app_jellyfin, $borderColor="#2e7d32", $fontColor="#2e7d32")
   UpdateRelStyle(enterprise__bus_family, app_jellyfin, $textColor="#2e7d32", $lineColor="#2e7d32")
   UpdateRelStyle(app_jellyfin, dns__app_pihole, $textColor="#2e7d32", $lineColor="#2e7d32")
+  UpdateRelStyle(app_jellyfin, events__app_mqtt_broker, $textColor="#2e7d32", $lineColor="#2e7d32")
   UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
 ```
 
@@ -40,11 +44,13 @@ C4Context
   title Media streaming — system context
   Person(enterprise__bus_family, "Family", "[enterprise] Household members using files, photos and smart-home dashboards.")
   System_Ext(dns__app_pihole, "Pi-hole", "[dns] Network-wide DNS resolver with ad and tracker blocking.")
+  System_Ext(events__app_mqtt_broker, "MQTT broker", "[events] Shared publish/subscribe broker for device, media and system events.")
   Boundary(boundary_media, "Media streaming") {
     System(app_jellyfin, "Jellyfin", "Media server streaming the family's videos and music to TVs and phones.")
   }
   Rel(enterprise__bus_family, app_jellyfin, "Uses")
   Rel(app_jellyfin, dns__app_pihole, "Uses — DNS lookups")
+  Rel(app_jellyfin, events__app_mqtt_broker, "Playback events", "MQTT")
   UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
 ```
 
@@ -57,6 +63,7 @@ C4Context
 | Family (`enterprise/bus-family`) | BusinessActor | Business | person |  | Household members using files, photos and smart-home dashboards. |
 | Jellyfin (`app-jellyfin`) | ApplicationComponent | Application | system | new | Media server streaming the family's videos and music to TVs and phones. |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
+| MQTT broker (`events/app-mqtt-broker`) | ApplicationComponent | Application | system | new | Shared publish/subscribe broker for device, media and system events. |
 
 ## Related decisions
 

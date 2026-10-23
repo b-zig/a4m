@@ -15,6 +15,57 @@ flowchart TB
     app_home_assistant["Home Assistant<br/>«ApplicationComponent»"]
     app_svc_automation("Automations and dashboards<br/>«ApplicationService»")
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    events__app_svc_event_streaming("Event publish/subscribe<br/>«ApplicationService» · events<br/>NEW")
+  end
+  subgraph layer_infrastructure["Infrastructure"]
+    direction LR
+    infra_vm_haos["VM haos<br/>«Node»"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    compute__infra_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
+    network__infra_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork» · network"]
+  end
+  app_home_assistant -.->|"realizes"| app_svc_automation
+  app_svc_automation -.->|"realizes"| enterprise__bus_svc_automation
+  app_svc_automation -->|"serves"| enterprise__bus_role_user
+  dns__app_svc_dns -->|"DNS lookups"| app_home_assistant
+  events__app_svc_event_streaming -->|"Device and media events"| app_home_assistant
+  infra_vm_haos -.->|"realizes"| app_home_assistant
+  compute__infra_pve_01 -->|"composed of"| infra_vm_haos
+  compute__infra_svc_vm_hosting -->|"serves"| infra_vm_haos
+  infra_vm_haos ---|"associated with"| network__infra_net_iot
+  enterprise__bus_svc_automation -->|"serves"| enterprise__bus_role_user
+  classDef business fill:#FFFFB5,stroke:#555,color:#000
+  class enterprise__bus_role_user,enterprise__bus_svc_automation business
+  style layer_business fill:#fafafa,stroke:#bbb
+  classDef application fill:#B5FFFF,stroke:#555,color:#000
+  class app_home_assistant,app_svc_automation,dns__app_svc_dns,events__app_svc_event_streaming application
+  style layer_application fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_vm_haos,compute__infra_pve_01,compute__infra_svc_vm_hosting,network__infra_net_iot infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
+  classDef foreign stroke:#777,stroke-dasharray:3 3
+  class compute__infra_pve_01,compute__infra_svc_vm_hosting,dns__app_svc_dns,enterprise__bus_role_user,enterprise__bus_svc_automation,events__app_svc_event_streaming,network__infra_net_iot foreign
+  classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
+  class events__app_svc_event_streaming st_new
+  linkStyle 4 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
+```
+
+*Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
+
+<details><summary>Current state</summary>
+
+```mermaid
+flowchart TB
+  subgraph layer_business["Business"]
+    direction LR
+    enterprise__bus_role_user["Service user<br/>«BusinessRole» · enterprise"]
+    enterprise__bus_svc_automation("Home automation<br/>«BusinessService» · enterprise")
+  end
+  subgraph layer_application["Application"]
+    direction LR
+    app_home_assistant["Home Assistant<br/>«ApplicationComponent»"]
+    app_svc_automation("Automations and dashboards<br/>«ApplicationService»")
+    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
   end
   subgraph layer_infrastructure["Infrastructure"]
     direction LR
@@ -45,6 +96,56 @@ flowchart TB
   class compute__infra_pve_01,compute__infra_svc_vm_hosting,dns__app_svc_dns,enterprise__bus_role_user,enterprise__bus_svc_automation,network__infra_net_iot foreign
 ```
 
+</details>
+
+<details><summary>Target state</summary>
+
+```mermaid
+flowchart TB
+  subgraph layer_business["Business"]
+    direction LR
+    enterprise__bus_role_user["Service user<br/>«BusinessRole» · enterprise"]
+    enterprise__bus_svc_automation("Home automation<br/>«BusinessService» · enterprise")
+  end
+  subgraph layer_application["Application"]
+    direction LR
+    app_home_assistant["Home Assistant<br/>«ApplicationComponent»"]
+    app_svc_automation("Automations and dashboards<br/>«ApplicationService»")
+    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    events__app_svc_event_streaming("Event publish/subscribe<br/>«ApplicationService» · events")
+  end
+  subgraph layer_infrastructure["Infrastructure"]
+    direction LR
+    infra_vm_haos["VM haos<br/>«Node»"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    compute__infra_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
+    network__infra_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork» · network"]
+  end
+  app_home_assistant -.->|"realizes"| app_svc_automation
+  app_svc_automation -.->|"realizes"| enterprise__bus_svc_automation
+  app_svc_automation -->|"serves"| enterprise__bus_role_user
+  dns__app_svc_dns -->|"DNS lookups"| app_home_assistant
+  events__app_svc_event_streaming -->|"Device and media events"| app_home_assistant
+  infra_vm_haos -.->|"realizes"| app_home_assistant
+  compute__infra_pve_01 -->|"composed of"| infra_vm_haos
+  compute__infra_svc_vm_hosting -->|"serves"| infra_vm_haos
+  infra_vm_haos ---|"associated with"| network__infra_net_iot
+  enterprise__bus_svc_automation -->|"serves"| enterprise__bus_role_user
+  classDef business fill:#FFFFB5,stroke:#555,color:#000
+  class enterprise__bus_role_user,enterprise__bus_svc_automation business
+  style layer_business fill:#fafafa,stroke:#bbb
+  classDef application fill:#B5FFFF,stroke:#555,color:#000
+  class app_home_assistant,app_svc_automation,dns__app_svc_dns,events__app_svc_event_streaming application
+  style layer_application fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_vm_haos,compute__infra_pve_01,compute__infra_svc_vm_hosting,network__infra_net_iot infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
+  classDef foreign stroke:#777,stroke-dasharray:3 3
+  class compute__infra_pve_01,compute__infra_svc_vm_hosting,dns__app_svc_dns,enterprise__bus_role_user,enterprise__bus_svc_automation,events__app_svc_event_streaming,network__infra_net_iot foreign
+```
+
+</details>
+
 ## Elements
 
 | Element | Type | Layer | C4 | State | Description |
@@ -57,4 +158,5 @@ flowchart TB
 | DNS resolution and filtering (`dns/app-svc-dns`) | ApplicationService | Application |  |  |  |
 | Service user (`enterprise/bus-role-user`) | BusinessRole | Business |  |  |  |
 | Home automation (`enterprise/bus-svc-automation`) | BusinessService | Business |  |  |  |
+| Event publish/subscribe (`events/app-svc-event-streaming`) | ApplicationService | Application |  | new | Topics under home/<source>/<event>, TLS on port 8883, one account per client. |
 | IoT (VLAN 20) (`network/infra-net-iot`) | CommunicationNetwork | Infrastructure |  |  |  |

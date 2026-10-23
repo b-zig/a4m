@@ -16,3 +16,4 @@ relationships:
   - { type: Serving, source: app-svc-streaming, target: enterprise/bus-role-user, state: new }
   - { type: Access, source: app-jellyfin, target: nextcloud/data-files, access: read, name: Family videos, state: new }
   - { type: Serving, source: dns/app-svc-dns, target: app-jellyfin, name: DNS lookups, state: new }
+  - { type: Flow, source: app-jellyfin, target: events/app-mqtt-broker, name: Playback events, properties: { technology: MQTT }, state: new }

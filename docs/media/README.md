@@ -5,7 +5,7 @@
 
 Proposal: stream the family's videos and music with Jellyfin, deployed as a container on the shared Docker VM and reading media from the Nextcloud data on the NAS.
 
-3 elements · 6 relationships · 3 views · 1 decisions
+3 elements · 7 relationships · 3 views · 1 decisions
 
 Open in Archi: *File → Import → Open Exchange XML Model* → `build/media.oef.xml` (run `python3 -m a4m build media` first).
 
@@ -13,9 +13,9 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/media.oe
 
 | View | Kind | Elements |
 |---|---|---|
-| [Media streaming — overview](view-overview.md) | archimate | 7 |
-| [Media streaming — system context](c4-context.md) | c4-context | 3 |
-| [Media streaming — deployment](c4-deployment.md) | c4-deployment | 7 |
+| [Media streaming — overview](view-overview.md) | archimate | 8 |
+| [Media streaming — system context](c4-context.md) | c4-context | 4 |
+| [Media streaming — deployment](c4-deployment.md) | c4-deployment | 8 |
 
 ## Elements per layer
 
@@ -32,6 +32,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/media.oe
 | new | ApplicationService | Media streaming (`app-svc-streaming`) |
 | new | Artifact | jellyfin/jellyfin image (`infra-art-jellyfin`) |
 | new | Access | `app-jellyfin` → `nextcloud/data-files` — Family videos |
+| new | Flow | `app-jellyfin` → `events/app-mqtt-broker` — Playback events |
 | new | Realization | `app-jellyfin` → `app-svc-streaming` |
 | new | Serving | `app-svc-streaming` → `enterprise/bus-role-user` |
 | new | Assignment | `compute/infra-docker` → `infra-art-jellyfin` |
@@ -40,7 +41,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/media.oe
 
 ## Other solution architectures
 
-- **Uses:** [compute](../compute/README.md), [dns](../dns/README.md), [enterprise](../enterprise/README.md), [nextcloud](../nextcloud/README.md)
+- **Uses:** [compute](../compute/README.md), [dns](../dns/README.md), [enterprise](../enterprise/README.md), [events](../events/README.md), [nextcloud](../nextcloud/README.md)
 - **Exports** (`media/<id>`): `app-jellyfin`
 
 ## Decisions

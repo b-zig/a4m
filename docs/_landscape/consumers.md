@@ -10,6 +10,7 @@ Use `python3 -m a4m impact <sa>/<id>` before changing or retiring an exported el
 
 | Element | Used by | Relationship | State |
 |---|---|---|---|
+| Docker Engine (`compute/infra-docker`) | [events](../events/README.md) | Assignment `compute/infra-docker` → `events/infra-art-mosquitto` | new |
 | Docker Engine (`compute/infra-docker`) | [media](../media/README.md) | Assignment `compute/infra-docker` → `media/infra-art-jellyfin` | new |
 | Docker Engine (`compute/infra-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/infra-docker` → `nextcloud/infra-art-mariadb` |  |
 | Docker Engine (`compute/infra-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/infra-docker` → `nextcloud/infra-art-nextcloud` |  |
@@ -36,6 +37,7 @@ Use `python3 -m a4m impact <sa>/<id>` before changing or retiring an exported el
 | Back up family data (`enterprise/bus-proc-backup`) | [backup](../backup/README.md) | Serving `backup/app-svc-backup` → `enterprise/bus-proc-backup` |  |
 | Family photos and documents (`enterprise/bus-obj-photos`) | [nextcloud](../nextcloud/README.md) | Realization `nextcloud/data-files` → `enterprise/bus-obj-photos` |  |
 | File sharing (`enterprise/bus-svc-file-sharing`) | [nextcloud](../nextcloud/README.md) | Realization `nextcloud/app-svc-file-sync` → `enterprise/bus-svc-file-sharing` |  |
+| Home automation (`enterprise/bus-cap-home-automation`) | [events](../events/README.md) | Realization `events/app-svc-event-streaming` → `enterprise/bus-cap-home-automation` | new |
 | Home automation (`enterprise/bus-svc-automation`) | [home-automation](../home-automation/README.md) | Realization `home-automation/app-svc-automation` → `enterprise/bus-svc-automation` |  |
 | Home lab admin (`enterprise/bus-admin`) | [dns](../dns/README.md) | Serving `dns/app-svc-dns` → `enterprise/bus-admin` — Admin console |  |
 | Home lab hardware (`enterprise/bus-res-hardware`) | [compute](../compute/README.md) | Realization `compute/infra-nas` → `enterprise/bus-res-hardware` |  |
@@ -45,6 +47,13 @@ Use `python3 -m a4m impact <sa>/<id>` before changing or retiring an exported el
 | Service user (`enterprise/bus-role-user`) | [home-automation](../home-automation/README.md) | Serving `home-automation/app-svc-automation` → `enterprise/bus-role-user` |  |
 | Service user (`enterprise/bus-role-user`) | [media](../media/README.md) | Serving `media/app-svc-streaming` → `enterprise/bus-role-user` | new |
 | Share files and photos (`enterprise/bus-proc-share`) | [nextcloud](../nextcloud/README.md) | Serving `nextcloud/app-svc-file-sync` → `enterprise/bus-proc-share` |  |
+
+## Event fabric (MQTT) (`events`, platform)
+
+| Element | Used by | Relationship | State |
+|---|---|---|---|
+| Event publish/subscribe (`events/app-svc-event-streaming`) | [home-automation](../home-automation/README.md) | Serving `events/app-svc-event-streaming` → `home-automation/app-home-assistant` — Device and media events | new |
+| MQTT broker (`events/app-mqtt-broker`) | [media](../media/README.md) | Flow `media/app-jellyfin` → `events/app-mqtt-broker` — Playback events | new |
 
 ## Home network and rack (`network`, platform)
 

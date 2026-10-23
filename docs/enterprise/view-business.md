@@ -28,6 +28,7 @@ flowchart TB
     backup__app_svc_backup("Scheduled backup<br/>«ApplicationService» · backup")
     dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    events__app_svc_event_streaming("Event publish/subscribe<br/>«ApplicationService» · events<br/>NEW")
     home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
     media__app_svc_streaming("Media streaming<br/>«ApplicationService» · media<br/>NEW")
     nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
@@ -58,12 +59,12 @@ flowchart TB
   class nextcloud__data_files information
   style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync application
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,events__app_svc_event_streaming,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync application
   style layer_application fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync,nextcloud__data_files foreign
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,events__app_svc_event_streaming,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync,nextcloud__data_files foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
-  class media__app_svc_streaming st_new
+  class events__app_svc_event_streaming,media__app_svc_streaming st_new
   linkStyle 15 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
@@ -155,6 +156,7 @@ flowchart TB
     backup__app_svc_backup("Scheduled backup<br/>«ApplicationService» · backup")
     dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    events__app_svc_event_streaming("Event publish/subscribe<br/>«ApplicationService» · events")
     home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
     media__app_svc_streaming("Media streaming<br/>«ApplicationService» · media")
     nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
@@ -185,10 +187,10 @@ flowchart TB
   class nextcloud__data_files information
   style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync application
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,events__app_svc_event_streaming,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync application
   style layer_application fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync,nextcloud__data_files foreign
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,events__app_svc_event_streaming,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync,nextcloud__data_files foreign
 ```
 
 </details>
@@ -209,6 +211,7 @@ flowchart TB
 | Scheduled backup (`backup/app-svc-backup`) | ApplicationService | Application |  |  |  |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
 | DNS resolution and filtering (`dns/app-svc-dns`) | ApplicationService | Application |  |  |  |
+| Event publish/subscribe (`events/app-svc-event-streaming`) | ApplicationService | Application |  | new | Topics under home/<source>/<event>, TLS on port 8883, one account per client. |
 | Automations and dashboards (`home-automation/app-svc-automation`) | ApplicationService | Application |  |  |  |
 | Media streaming (`media/app-svc-streaming`) | ApplicationService | Application |  | new |  |
 | File sync and share (`nextcloud/app-svc-file-sync`) | ApplicationService | Application |  |  |  |
