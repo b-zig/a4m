@@ -9,28 +9,28 @@ The hypervisor, Docker VM and NAS, with the workloads other SAs run on them.
 flowchart TB
   subgraph layer_technology["Technology"]
     direction LR
-    tech_pve_01["Proxmox host 01<br/>«Node»"]
-    tech_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
-    tech_vm_docker["VM docker-01<br/>«Node»"]
-    tech_docker["Docker Engine<br/>«SystemSoftware»"]
-    tech_nas["NAS<br/>«Device»"]
-    tech_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
-    tech_svc_nfs("NFS storage<br/>«TechnologyService»")
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
-    media__tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media<br/>NEW"/]
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
-    nextcloud__tech_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
+    tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01" }
+    tech_proxmox_ve@{ shape: rect, label: "◉ Proxmox VE" }
+    tech_vm_docker@{ shape: rect, label: "⧈ VM docker-01" }
+    tech_docker@{ shape: rect, label: "◉ Docker Engine" }
+    tech_nas@{ shape: rect, label: "🖥 NAS" }
+    tech_svc_vm_hosting@{ shape: stadium, label: "VM hosting" }
+    tech_svc_nfs@{ shape: stadium, label: "NFS storage" }
+    dns__tech_lxc_pihole@{ shape: rect, label: "⧈ LXC pihole<br/>[dns]" }
+    home_automation__tech_vm_haos@{ shape: rect, label: "⧈ VM haos<br/>[home-automation]" }
+    media__tech_art_jellyfin@{ shape: notch-rect, label: "🗎 jellyfin/jellyfin image<br/>[media]<br/>NEW" }
+    network__tech_net_lan@{ shape: rect, label: "⇄ LAN (VLAN 10)<br/>[network]" }
+    nextcloud__tech_art_mariadb@{ shape: notch-rect, label: "🗎 mariadb:11 image<br/>[nextcloud]" }
+    nextcloud__tech_art_nextcloud@{ shape: notch-rect, label: "🗎 nextcloud:29-apache image<br/>[nextcloud]" }
+    nextcloud__tech_art_redis@{ shape: notch-rect, label: "🗎 redis:7 image<br/>[nextcloud]" }
   end
   subgraph layer_physical["Physical"]
     direction LR
-    network__phys_ups["UPS<br/>«Equipment» · network"]
+    network__phys_ups@{ shape: rect, label: "⚙ UPS<br/>[network]" }
   end
   subgraph layer_other["Other"]
     direction LR
-    network__oth_loc_home[["Home office rack<br/>«Location» · network"]]
+    network__oth_loc_home@{ shape: rect, label: "📍 Home office rack<br/>[network]" }
   end
   tech_pve_01 -->|"composed of"| tech_proxmox_ve
   tech_pve_01 -->|"composed of"| tech_vm_docker
@@ -71,6 +71,8 @@ flowchart TB
   linkStyle 18 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
+*Notation: 🗎 Artifact · ⇄ Communication network · 🖥 Device · ⧈ Node · ◉ System software · (pill) Technology service · ⚙ Equipment · 📍 Location*
+
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
 
 <details><summary>Current state</summary>
@@ -79,27 +81,27 @@ flowchart TB
 flowchart TB
   subgraph layer_technology["Technology"]
     direction LR
-    tech_pve_01["Proxmox host 01<br/>«Node»"]
-    tech_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
-    tech_vm_docker["VM docker-01<br/>«Node»"]
-    tech_docker["Docker Engine<br/>«SystemSoftware»"]
-    tech_nas["NAS<br/>«Device»"]
-    tech_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
-    tech_svc_nfs("NFS storage<br/>«TechnologyService»")
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
-    nextcloud__tech_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
+    tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01" }
+    tech_proxmox_ve@{ shape: rect, label: "◉ Proxmox VE" }
+    tech_vm_docker@{ shape: rect, label: "⧈ VM docker-01" }
+    tech_docker@{ shape: rect, label: "◉ Docker Engine" }
+    tech_nas@{ shape: rect, label: "🖥 NAS" }
+    tech_svc_vm_hosting@{ shape: stadium, label: "VM hosting" }
+    tech_svc_nfs@{ shape: stadium, label: "NFS storage" }
+    dns__tech_lxc_pihole@{ shape: rect, label: "⧈ LXC pihole<br/>[dns]" }
+    home_automation__tech_vm_haos@{ shape: rect, label: "⧈ VM haos<br/>[home-automation]" }
+    network__tech_net_lan@{ shape: rect, label: "⇄ LAN (VLAN 10)<br/>[network]" }
+    nextcloud__tech_art_mariadb@{ shape: notch-rect, label: "🗎 mariadb:11 image<br/>[nextcloud]" }
+    nextcloud__tech_art_nextcloud@{ shape: notch-rect, label: "🗎 nextcloud:29-apache image<br/>[nextcloud]" }
+    nextcloud__tech_art_redis@{ shape: notch-rect, label: "🗎 redis:7 image<br/>[nextcloud]" }
   end
   subgraph layer_physical["Physical"]
     direction LR
-    network__phys_ups["UPS<br/>«Equipment» · network"]
+    network__phys_ups@{ shape: rect, label: "⚙ UPS<br/>[network]" }
   end
   subgraph layer_other["Other"]
     direction LR
-    network__oth_loc_home[["Home office rack<br/>«Location» · network"]]
+    network__oth_loc_home@{ shape: rect, label: "📍 Home office rack<br/>[network]" }
   end
   tech_pve_01 -->|"composed of"| tech_proxmox_ve
   tech_pve_01 -->|"composed of"| tech_vm_docker
@@ -144,28 +146,28 @@ flowchart TB
 flowchart TB
   subgraph layer_technology["Technology"]
     direction LR
-    tech_pve_01["Proxmox host 01<br/>«Node»"]
-    tech_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
-    tech_vm_docker["VM docker-01<br/>«Node»"]
-    tech_docker["Docker Engine<br/>«SystemSoftware»"]
-    tech_nas["NAS<br/>«Device»"]
-    tech_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
-    tech_svc_nfs("NFS storage<br/>«TechnologyService»")
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
-    media__tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media"/]
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
-    nextcloud__tech_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
+    tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01" }
+    tech_proxmox_ve@{ shape: rect, label: "◉ Proxmox VE" }
+    tech_vm_docker@{ shape: rect, label: "⧈ VM docker-01" }
+    tech_docker@{ shape: rect, label: "◉ Docker Engine" }
+    tech_nas@{ shape: rect, label: "🖥 NAS" }
+    tech_svc_vm_hosting@{ shape: stadium, label: "VM hosting" }
+    tech_svc_nfs@{ shape: stadium, label: "NFS storage" }
+    dns__tech_lxc_pihole@{ shape: rect, label: "⧈ LXC pihole<br/>[dns]" }
+    home_automation__tech_vm_haos@{ shape: rect, label: "⧈ VM haos<br/>[home-automation]" }
+    media__tech_art_jellyfin@{ shape: notch-rect, label: "🗎 jellyfin/jellyfin image<br/>[media]" }
+    network__tech_net_lan@{ shape: rect, label: "⇄ LAN (VLAN 10)<br/>[network]" }
+    nextcloud__tech_art_mariadb@{ shape: notch-rect, label: "🗎 mariadb:11 image<br/>[nextcloud]" }
+    nextcloud__tech_art_nextcloud@{ shape: notch-rect, label: "🗎 nextcloud:29-apache image<br/>[nextcloud]" }
+    nextcloud__tech_art_redis@{ shape: notch-rect, label: "🗎 redis:7 image<br/>[nextcloud]" }
   end
   subgraph layer_physical["Physical"]
     direction LR
-    network__phys_ups["UPS<br/>«Equipment» · network"]
+    network__phys_ups@{ shape: rect, label: "⚙ UPS<br/>[network]" }
   end
   subgraph layer_other["Other"]
     direction LR
-    network__oth_loc_home[["Home office rack<br/>«Location» · network"]]
+    network__oth_loc_home@{ shape: rect, label: "📍 Home office rack<br/>[network]" }
   end
   tech_pve_01 -->|"composed of"| tech_proxmox_ve
   tech_pve_01 -->|"composed of"| tech_vm_docker

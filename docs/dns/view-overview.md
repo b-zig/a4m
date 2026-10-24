@@ -9,22 +9,22 @@ Pi-hole, the DNS service it offers, who uses it, and where it runs.
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_admin["Home lab admin<br/>«BusinessActor» · enterprise"]
+    enterprise__bus_admin@{ shape: rect, label: "👤 Home lab admin<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_pihole["Pi-hole<br/>«ApplicationComponent»"]
-    app_svc_dns("DNS resolution and filtering<br/>«ApplicationService»")
-    home_automation__app_home_assistant["Home Assistant<br/>«ApplicationComponent» · home-automation"]
-    media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media<br/>NEW"]
-    nextcloud__app_nextcloud["Nextcloud<br/>«ApplicationComponent» · nextcloud"]
+    app_pihole@{ shape: rect, label: "⧉ Pi-hole" }
+    app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering" }
+    home_automation__app_home_assistant@{ shape: rect, label: "⧉ Home Assistant<br/>[home-automation]" }
+    media__app_jellyfin@{ shape: rect, label: "⧉ Jellyfin<br/>[media]<br/>NEW" }
+    nextcloud__app_nextcloud@{ shape: rect, label: "⧉ Nextcloud<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_lxc_pihole["LXC pihole<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    tech_lxc_pihole@{ shape: rect, label: "⧈ LXC pihole" }
+    compute__tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01<br/>[compute]" }
+    compute__tech_svc_vm_hosting@{ shape: stadium, label: "VM hosting<br/>[compute]" }
+    network__tech_net_lan@{ shape: rect, label: "⇄ LAN (VLAN 10)<br/>[network]" }
   end
   app_pihole -.->|"realizes"| app_svc_dns
   app_svc_dns -->|"Admin console"| enterprise__bus_admin
@@ -52,6 +52,8 @@ flowchart TB
   linkStyle 8 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
+*Notation: 👤 Business actor · ⧉ Application component · (pill) Application service · ⇄ Communication network · ⧈ Node · (pill) Technology service*
+
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
 
 <details><summary>Current state</summary>
@@ -60,21 +62,21 @@ flowchart TB
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_admin["Home lab admin<br/>«BusinessActor» · enterprise"]
+    enterprise__bus_admin@{ shape: rect, label: "👤 Home lab admin<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_pihole["Pi-hole<br/>«ApplicationComponent»"]
-    app_svc_dns("DNS resolution and filtering<br/>«ApplicationService»")
-    home_automation__app_home_assistant["Home Assistant<br/>«ApplicationComponent» · home-automation"]
-    nextcloud__app_nextcloud["Nextcloud<br/>«ApplicationComponent» · nextcloud"]
+    app_pihole@{ shape: rect, label: "⧉ Pi-hole" }
+    app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering" }
+    home_automation__app_home_assistant@{ shape: rect, label: "⧉ Home Assistant<br/>[home-automation]" }
+    nextcloud__app_nextcloud@{ shape: rect, label: "⧉ Nextcloud<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_lxc_pihole["LXC pihole<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    tech_lxc_pihole@{ shape: rect, label: "⧈ LXC pihole" }
+    compute__tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01<br/>[compute]" }
+    compute__tech_svc_vm_hosting@{ shape: stadium, label: "VM hosting<br/>[compute]" }
+    network__tech_net_lan@{ shape: rect, label: "⇄ LAN (VLAN 10)<br/>[network]" }
   end
   app_pihole -.->|"realizes"| app_svc_dns
   app_svc_dns -->|"Admin console"| enterprise__bus_admin
@@ -106,22 +108,22 @@ flowchart TB
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_admin["Home lab admin<br/>«BusinessActor» · enterprise"]
+    enterprise__bus_admin@{ shape: rect, label: "👤 Home lab admin<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_pihole["Pi-hole<br/>«ApplicationComponent»"]
-    app_svc_dns("DNS resolution and filtering<br/>«ApplicationService»")
-    home_automation__app_home_assistant["Home Assistant<br/>«ApplicationComponent» · home-automation"]
-    media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media"]
-    nextcloud__app_nextcloud["Nextcloud<br/>«ApplicationComponent» · nextcloud"]
+    app_pihole@{ shape: rect, label: "⧉ Pi-hole" }
+    app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering" }
+    home_automation__app_home_assistant@{ shape: rect, label: "⧉ Home Assistant<br/>[home-automation]" }
+    media__app_jellyfin@{ shape: rect, label: "⧉ Jellyfin<br/>[media]" }
+    nextcloud__app_nextcloud@{ shape: rect, label: "⧉ Nextcloud<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_lxc_pihole["LXC pihole<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    tech_lxc_pihole@{ shape: rect, label: "⧈ LXC pihole" }
+    compute__tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01<br/>[compute]" }
+    compute__tech_svc_vm_hosting@{ shape: stadium, label: "VM hosting<br/>[compute]" }
+    network__tech_net_lan@{ shape: rect, label: "⇄ LAN (VLAN 10)<br/>[network]" }
   end
   app_pihole -.->|"realizes"| app_svc_dns
   app_svc_dns -->|"Admin console"| enterprise__bus_admin

@@ -35,6 +35,8 @@ class ElementType:
     name: str
     layer: str
     aspect: str
+    icon: str = ""
+    shape: str = ""
 
 
 class Rules:
@@ -45,8 +47,10 @@ class Rules:
         catalogue = yaml.safe_load((rules_dir / "elements.yaml").read_text(encoding="utf-8"))
         self.layers: dict[str, dict] = catalogue["layers"]
         self.types: dict[str, ElementType] = {
-            name: ElementType(name, spec["layer"], spec["aspect"]) for name, spec in catalogue["types"].items()
+            name: ElementType(name, spec["layer"], spec["aspect"], spec.get("icon", ""), spec.get("shape", ""))
+            for name, spec in catalogue["types"].items()
         }
+        self.aspects: dict[str, dict] = catalogue["aspects"]
         self.viewpoints: list[str] = catalogue["viewpoints"]
         self.c4: dict = yaml.safe_load((rules_dir / "c4.yaml").read_text(encoding="utf-8"))
         self.matrix = _load_matrix(rules_dir / f"archimate-{archimate_version}")
@@ -60,6 +64,12 @@ class Rules:
     def aspect_of(self, type_name: str) -> str:
         t = self.types.get(type_name)
         return t.aspect if t else "other"
+
+    def notation_of(self, type_name: str) -> tuple[str, str]:
+        """(Mermaid shape, glyph) standing in for the ArchiMate notation of a type."""
+        t = self.types.get(type_name)
+        aspect = t.aspect if t else "other"
+        return (t and t.shape) or self.aspects[aspect]["shape"], t.icon if t else ""
 
     def layer_order(self) -> list[str]:
         return sorted(self.layers, key=lambda layer: self.layers[layer]["order"])

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from .adr import adrs_affecting
 from .export_c4 import render_c4
-from .export_mermaid import render_archimate
+from .export_mermaid import notation_key, render_archimate
 from .export_oef import export_oef
 from .model import Model, View
 from .paths import workspace_root
@@ -79,6 +79,8 @@ def view_page(model: Model, view: View, rules: Rules, back: str = "README.md", u
     if view.documentation:
         out += [view.documentation.strip(), ""]
     out += ["```mermaid", render_view(model, view, rules).rstrip(), "```", ""]
+    if not view.is_c4:
+        out += [f"*{notation_key(model, members, rules)}*", ""]
     if view.state == "change" and view_has_changes(model, view, rules):
         out += [f"*{LEGEND}*", ""]
         for state, title in (("baseline", "Current state"), ("target", "Target state")):

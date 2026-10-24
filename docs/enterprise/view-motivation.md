@@ -9,31 +9,31 @@ Why the home lab exists, which capabilities it provides, and which solutions rea
 flowchart TB
   subgraph layer_motivation["Motivation"]
     direction LR
-    mot_family{{"Family<br/>«Stakeholder»"}}
-    mot_drv_privacy{{"Data privacy<br/>«Driver»"}}
-    mot_asm_single_host{{"Single hypervisor is a SPOF<br/>«Assessment»"}}
-    mot_goal_reliable{{"Reliable self-hosted services<br/>«Goal»"}}
-    mot_goal_portable{{"Portable to the office network<br/>«Goal»"}}
-    mot_pri_as_code{{"Architecture as code<br/>«Principle»"}}
-    mot_req_backup{{"Nightly off-site backups<br/>«Requirement»"}}
-    mot_req_dns_filter{{"Network-wide ad and tracker blocking<br/>«Requirement»"}}
+    mot_family@{ shape: hex, label: "◖ Family" }
+    mot_drv_privacy@{ shape: hex, label: "✲ Data privacy" }
+    mot_asm_single_host@{ shape: hex, label: "🔍 Single hypervisor is a SPOF" }
+    mot_goal_reliable@{ shape: hex, label: "◎ Reliable self-hosted services" }
+    mot_goal_portable@{ shape: hex, label: "◎ Portable to the office network" }
+    mot_pri_as_code@{ shape: hex, label: "❗ Architecture as code" }
+    mot_req_backup@{ shape: lean-r, label: "▱ Nightly off-site backups" }
+    mot_req_dns_filter@{ shape: lean-r, label: "▱ Network-wide ad and tracker blocking" }
   end
   subgraph layer_strategy["Strategy"]
     direction LR
-    str_cap_home_it("Home IT services<br/>«Capability»")
-    str_cap_file_sharing("File sharing and sync<br/>«Capability»")
-    str_cap_home_automation("Home automation<br/>«Capability»")
-    str_res_hardware["Home lab hardware<br/>«Resource»"]
+    str_cap_home_it@{ shape: rounded, label: "▟ Home IT services" }
+    str_cap_file_sharing@{ shape: rounded, label: "▟ File sharing and sync" }
+    str_cap_home_automation@{ shape: rounded, label: "▟ Home automation" }
+    str_res_hardware@{ shape: rect, label: "▣ Home lab hardware" }
   end
   subgraph layer_application["Application"]
     direction LR
-    dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
-    backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
+    dns__app_pihole@{ shape: rect, label: "⧉ Pi-hole<br/>[dns]" }
+    backup__app_backup@{ shape: rect, label: "⧉ Backup jobs<br/>[backup]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01<br/>[compute]" }
+    compute__tech_nas@{ shape: rect, label: "🖥 NAS<br/>[compute]" }
   end
   mot_family ---|"associated with"| mot_drv_privacy
   mot_drv_privacy -.->|"influences +"| mot_goal_reliable
@@ -66,6 +66,8 @@ flowchart TB
   classDef foreign stroke:#777,stroke-dasharray:3 3
   class dns__app_pihole,backup__app_backup,compute__tech_pve_01,compute__tech_nas foreign
 ```
+
+*Notation: 🔍 Assessment · ✲ Driver · ◎ Goal · ❗ Principle · ▱ Requirement · ◖ Stakeholder · ▟ Capability · ▣ Resource · ⧉ Application component · 🖥 Device · ⧈ Node*
 
 ## Elements
 

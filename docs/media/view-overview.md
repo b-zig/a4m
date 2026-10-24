@@ -7,19 +7,19 @@
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_role_user["Service user<br/>«BusinessRole» · enterprise"]
+    enterprise__bus_role_user@{ shape: rect, label: "◖ Service user<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_jellyfin["Jellyfin<br/>«ApplicationComponent»<br/>NEW"]
-    app_svc_streaming("Media streaming<br/>«ApplicationService»<br/>NEW")
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
+    app_jellyfin@{ shape: rect, label: "⧉ Jellyfin<br/>NEW" }
+    app_svc_streaming@{ shape: stadium, label: "Media streaming<br/>NEW" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact»<br/>NEW"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
+    tech_art_jellyfin@{ shape: notch-rect, label: "🗎 jellyfin/jellyfin image<br/>NEW" }
+    compute__tech_docker@{ shape: rect, label: "◉ Docker Engine<br/>[compute]" }
   end
   app_jellyfin -.->|"realizes"| app_svc_streaming
   app_svc_streaming -->|"serves"| enterprise__bus_role_user
@@ -48,6 +48,8 @@ flowchart TB
   linkStyle 5 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
+*Notation: ◖ Business role · ⧉ Application component · (pill) Application service · ▤ Data object · 🗎 Artifact · ◉ System software*
+
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
 
 <details><summary>Current state</summary>
@@ -64,19 +66,19 @@ flowchart TB
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_role_user["Service user<br/>«BusinessRole» · enterprise"]
+    enterprise__bus_role_user@{ shape: rect, label: "◖ Service user<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_jellyfin["Jellyfin<br/>«ApplicationComponent»"]
-    app_svc_streaming("Media streaming<br/>«ApplicationService»")
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
+    app_jellyfin@{ shape: rect, label: "⧉ Jellyfin" }
+    app_svc_streaming@{ shape: stadium, label: "Media streaming" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
+    tech_art_jellyfin@{ shape: notch-rect, label: "🗎 jellyfin/jellyfin image" }
+    compute__tech_docker@{ shape: rect, label: "◉ Docker Engine<br/>[compute]" }
   end
   app_jellyfin -.->|"realizes"| app_svc_streaming
   app_svc_streaming -->|"serves"| enterprise__bus_role_user

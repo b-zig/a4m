@@ -7,21 +7,21 @@
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_role_user["Service user<br/>«BusinessRole» · enterprise"]
-    enterprise__bus_svc_automation("Home automation<br/>«BusinessService» · enterprise")
+    enterprise__bus_role_user@{ shape: rect, label: "◖ Service user<br/>[enterprise]" }
+    enterprise__bus_svc_automation@{ shape: stadium, label: "Home automation<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_home_assistant["Home Assistant<br/>«ApplicationComponent»"]
-    app_svc_automation("Automations and dashboards<br/>«ApplicationService»")
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    app_home_assistant@{ shape: rect, label: "⧉ Home Assistant" }
+    app_svc_automation@{ shape: stadium, label: "Automations and dashboards" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_vm_haos["VM haos<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork» · network"]
+    tech_vm_haos@{ shape: rect, label: "⧈ VM haos" }
+    compute__tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01<br/>[compute]" }
+    compute__tech_svc_vm_hosting@{ shape: stadium, label: "VM hosting<br/>[compute]" }
+    network__tech_net_iot@{ shape: rect, label: "⇄ IoT (VLAN 20)<br/>[network]" }
   end
   app_home_assistant -.->|"realizes"| app_svc_automation
   app_svc_automation -.->|"realizes"| enterprise__bus_svc_automation
@@ -44,6 +44,8 @@ flowchart TB
   classDef foreign stroke:#777,stroke-dasharray:3 3
   class compute__tech_pve_01,compute__tech_svc_vm_hosting,dns__app_svc_dns,enterprise__bus_role_user,enterprise__bus_svc_automation,network__tech_net_iot foreign
 ```
+
+*Notation: ◖ Business role · (pill) Business service · ⧉ Application component · (pill) Application service · ⇄ Communication network · ⧈ Node · (pill) Technology service*
 
 ## Elements
 

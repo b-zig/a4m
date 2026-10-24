@@ -9,23 +9,23 @@ Network segments, rack and power, with the nodes other SAs connect to them.
 flowchart TB
   subgraph layer_technology["Technology"]
     direction LR
-    tech_router["Edge router<br/>«Device»"]
-    tech_switch["Core switch<br/>«Device»"]
-    tech_net_wan["Internet (ISP)<br/>«CommunicationNetwork»"]
-    tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork»"]
-    tech_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork»"]
-    compute__tech_nas["NAS<br/>«Device» · compute"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
+    tech_router@{ shape: rect, label: "🖥 Edge router" }
+    tech_switch@{ shape: rect, label: "🖥 Core switch" }
+    tech_net_wan@{ shape: rect, label: "⇄ Internet (ISP)" }
+    tech_net_lan@{ shape: rect, label: "⇄ LAN (VLAN 10)" }
+    tech_net_iot@{ shape: rect, label: "⇄ IoT (VLAN 20)" }
+    compute__tech_nas@{ shape: rect, label: "🖥 NAS<br/>[compute]" }
+    compute__tech_pve_01@{ shape: rect, label: "⧈ Proxmox host 01<br/>[compute]" }
+    dns__tech_lxc_pihole@{ shape: rect, label: "⧈ LXC pihole<br/>[dns]" }
+    home_automation__tech_vm_haos@{ shape: rect, label: "⧈ VM haos<br/>[home-automation]" }
   end
   subgraph layer_physical["Physical"]
     direction LR
-    phys_ups["UPS<br/>«Equipment»"]
+    phys_ups@{ shape: rect, label: "⚙ UPS" }
   end
   subgraph layer_other["Other"]
     direction LR
-    oth_loc_home[["Home office rack<br/>«Location»"]]
+    oth_loc_home@{ shape: rect, label: "📍 Home office rack" }
   end
   oth_loc_home -->|"aggregates"| tech_router
   oth_loc_home -->|"aggregates"| tech_switch
@@ -58,6 +58,8 @@ flowchart TB
   classDef foreign stroke:#777,stroke-dasharray:3 3
   class compute__tech_nas,compute__tech_pve_01,dns__tech_lxc_pihole,home_automation__tech_vm_haos foreign
 ```
+
+*Notation: ⇄ Communication network · 🖥 Device · ⧈ Node · ⚙ Equipment · 📍 Location*
 
 ## Elements
 

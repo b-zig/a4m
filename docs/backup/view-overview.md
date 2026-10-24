@@ -9,24 +9,24 @@ What is backed up, from where, and where the copies go (current → target).
 flowchart TB
   subgraph layer_motivation["Motivation"]
     direction LR
-    enterprise__mot_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
+    enterprise__mot_req_backup@{ shape: lean-r, label: "▱ Nightly off-site backups<br/>[enterprise]" }
   end
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_proc_backup("Back up family data<br/>«BusinessProcess» · enterprise")
+    enterprise__bus_proc_backup@{ shape: rounded, label: "➔ Back up family data<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_backup["Backup jobs<br/>«ApplicationComponent»"]
-    app_svc_backup("Scheduled backup<br/>«ApplicationService»")
-    app_offsite_b2["Backblaze B2<br/>«ApplicationComponent»<br/>RETIRING"]
-    app_offsite_hetzner["Hetzner Storage Box<br/>«ApplicationComponent»<br/>NEW"]
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
-    nextcloud__app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent» · nextcloud"]
+    app_backup@{ shape: rect, label: "⧉ Backup jobs" }
+    app_svc_backup@{ shape: stadium, label: "Scheduled backup" }
+    app_offsite_b2@{ shape: rect, label: "⧉ Backblaze B2<br/>RETIRING" }
+    app_offsite_hetzner@{ shape: rect, label: "⧉ Hetzner Storage Box<br/>NEW" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
+    nextcloud__app_nextcloud_db@{ shape: rect, label: "⧉ Nextcloud database<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__tech_nas@{ shape: rect, label: "🖥 NAS<br/>[compute]" }
   end
   app_backup -.->|"realizes"| app_svc_backup
   app_svc_backup -->|"serves"| enterprise__bus_proc_backup
@@ -58,6 +58,8 @@ flowchart TB
   linkStyle 7 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
+*Notation: ▱ Requirement · ➔ Business process · ⧉ Application component · (pill) Application service · ▤ Data object · 🖥 Device*
+
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
 
 <details><summary>Current state</summary>
@@ -66,23 +68,23 @@ flowchart TB
 flowchart TB
   subgraph layer_motivation["Motivation"]
     direction LR
-    enterprise__mot_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
+    enterprise__mot_req_backup@{ shape: lean-r, label: "▱ Nightly off-site backups<br/>[enterprise]" }
   end
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_proc_backup("Back up family data<br/>«BusinessProcess» · enterprise")
+    enterprise__bus_proc_backup@{ shape: rounded, label: "➔ Back up family data<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_backup["Backup jobs<br/>«ApplicationComponent»"]
-    app_svc_backup("Scheduled backup<br/>«ApplicationService»")
-    app_offsite_b2["Backblaze B2<br/>«ApplicationComponent»"]
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
-    nextcloud__app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent» · nextcloud"]
+    app_backup@{ shape: rect, label: "⧉ Backup jobs" }
+    app_svc_backup@{ shape: stadium, label: "Scheduled backup" }
+    app_offsite_b2@{ shape: rect, label: "⧉ Backblaze B2" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
+    nextcloud__app_nextcloud_db@{ shape: rect, label: "⧉ Nextcloud database<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__tech_nas@{ shape: rect, label: "🖥 NAS<br/>[compute]" }
   end
   app_backup -.->|"realizes"| app_svc_backup
   app_svc_backup -->|"serves"| enterprise__bus_proc_backup
@@ -115,23 +117,23 @@ flowchart TB
 flowchart TB
   subgraph layer_motivation["Motivation"]
     direction LR
-    enterprise__mot_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
+    enterprise__mot_req_backup@{ shape: lean-r, label: "▱ Nightly off-site backups<br/>[enterprise]" }
   end
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_proc_backup("Back up family data<br/>«BusinessProcess» · enterprise")
+    enterprise__bus_proc_backup@{ shape: rounded, label: "➔ Back up family data<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_backup["Backup jobs<br/>«ApplicationComponent»"]
-    app_svc_backup("Scheduled backup<br/>«ApplicationService»")
-    app_offsite_hetzner["Hetzner Storage Box<br/>«ApplicationComponent»"]
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
-    nextcloud__app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent» · nextcloud"]
+    app_backup@{ shape: rect, label: "⧉ Backup jobs" }
+    app_svc_backup@{ shape: stadium, label: "Scheduled backup" }
+    app_offsite_hetzner@{ shape: rect, label: "⧉ Hetzner Storage Box" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
+    nextcloud__app_nextcloud_db@{ shape: rect, label: "⧉ Nextcloud database<br/>[nextcloud]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__tech_nas@{ shape: rect, label: "🖥 NAS<br/>[compute]" }
   end
   app_backup -.->|"realizes"| app_svc_backup
   app_svc_backup -->|"serves"| enterprise__bus_proc_backup

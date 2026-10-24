@@ -9,25 +9,25 @@ Who uses the home lab and which application services of the solution architectur
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    bus_family["Family<br/>«BusinessActor»"]
-    bus_admin["Home lab admin<br/>«BusinessActor»"]
-    bus_role_user["Service user<br/>«BusinessRole»"]
-    bus_proc_share("Share files and photos<br/>«BusinessProcess»")
-    bus_proc_backup("Back up family data<br/>«BusinessProcess»")
-    bus_svc_file_sharing("File sharing<br/>«BusinessService»")
-    bus_svc_automation("Home automation<br/>«BusinessService»")
-    bus_obj_photos[/"Family photos and documents<br/>«BusinessObject»"/]
+    bus_family@{ shape: rect, label: "👤 Family" }
+    bus_admin@{ shape: rect, label: "👤 Home lab admin" }
+    bus_role_user@{ shape: rect, label: "◖ Service user" }
+    bus_proc_share@{ shape: rounded, label: "➔ Share files and photos" }
+    bus_proc_backup@{ shape: rounded, label: "➔ Back up family data" }
+    bus_svc_file_sharing@{ shape: stadium, label: "File sharing" }
+    bus_svc_automation@{ shape: stadium, label: "Home automation" }
+    bus_obj_photos@{ shape: div-rect, label: "▤ Family photos and documents" }
   end
   subgraph layer_application["Application"]
     direction LR
-    backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
-    backup__app_svc_backup("Scheduled backup<br/>«ApplicationService» · backup")
-    dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
-    media__app_svc_streaming("Media streaming<br/>«ApplicationService» · media<br/>NEW")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
-    nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
+    backup__app_backup@{ shape: rect, label: "⧉ Backup jobs<br/>[backup]" }
+    backup__app_svc_backup@{ shape: stadium, label: "Scheduled backup<br/>[backup]" }
+    dns__app_pihole@{ shape: rect, label: "⧉ Pi-hole<br/>[dns]" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
+    home_automation__app_svc_automation@{ shape: stadium, label: "Automations and dashboards<br/>[home-automation]" }
+    media__app_svc_streaming@{ shape: stadium, label: "Media streaming<br/>[media]<br/>NEW" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
+    nextcloud__app_svc_file_sync@{ shape: stadium, label: "File sync and share<br/>[nextcloud]" }
   end
   bus_family -->|"assigned to"| bus_role_user
   bus_role_user -->|"assigned to"| bus_proc_share
@@ -61,6 +61,8 @@ flowchart TB
   linkStyle 15 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
+*Notation: 👤 Business actor · ▤ Business object · ➔ Business process · ◖ Business role · (pill) Business service · ⧉ Application component · (pill) Application service · ▤ Data object*
+
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
 
 <details><summary>Current state</summary>
@@ -69,24 +71,24 @@ flowchart TB
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    bus_family["Family<br/>«BusinessActor»"]
-    bus_admin["Home lab admin<br/>«BusinessActor»"]
-    bus_role_user["Service user<br/>«BusinessRole»"]
-    bus_proc_share("Share files and photos<br/>«BusinessProcess»")
-    bus_proc_backup("Back up family data<br/>«BusinessProcess»")
-    bus_svc_file_sharing("File sharing<br/>«BusinessService»")
-    bus_svc_automation("Home automation<br/>«BusinessService»")
-    bus_obj_photos[/"Family photos and documents<br/>«BusinessObject»"/]
+    bus_family@{ shape: rect, label: "👤 Family" }
+    bus_admin@{ shape: rect, label: "👤 Home lab admin" }
+    bus_role_user@{ shape: rect, label: "◖ Service user" }
+    bus_proc_share@{ shape: rounded, label: "➔ Share files and photos" }
+    bus_proc_backup@{ shape: rounded, label: "➔ Back up family data" }
+    bus_svc_file_sharing@{ shape: stadium, label: "File sharing" }
+    bus_svc_automation@{ shape: stadium, label: "Home automation" }
+    bus_obj_photos@{ shape: div-rect, label: "▤ Family photos and documents" }
   end
   subgraph layer_application["Application"]
     direction LR
-    backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
-    backup__app_svc_backup("Scheduled backup<br/>«ApplicationService» · backup")
-    dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
-    nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
+    backup__app_backup@{ shape: rect, label: "⧉ Backup jobs<br/>[backup]" }
+    backup__app_svc_backup@{ shape: stadium, label: "Scheduled backup<br/>[backup]" }
+    dns__app_pihole@{ shape: rect, label: "⧉ Pi-hole<br/>[dns]" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
+    home_automation__app_svc_automation@{ shape: stadium, label: "Automations and dashboards<br/>[home-automation]" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
+    nextcloud__app_svc_file_sync@{ shape: stadium, label: "File sync and share<br/>[nextcloud]" }
   end
   bus_family -->|"assigned to"| bus_role_user
   bus_role_user -->|"assigned to"| bus_proc_share
@@ -124,25 +126,25 @@ flowchart TB
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    bus_family["Family<br/>«BusinessActor»"]
-    bus_admin["Home lab admin<br/>«BusinessActor»"]
-    bus_role_user["Service user<br/>«BusinessRole»"]
-    bus_proc_share("Share files and photos<br/>«BusinessProcess»")
-    bus_proc_backup("Back up family data<br/>«BusinessProcess»")
-    bus_svc_file_sharing("File sharing<br/>«BusinessService»")
-    bus_svc_automation("Home automation<br/>«BusinessService»")
-    bus_obj_photos[/"Family photos and documents<br/>«BusinessObject»"/]
+    bus_family@{ shape: rect, label: "👤 Family" }
+    bus_admin@{ shape: rect, label: "👤 Home lab admin" }
+    bus_role_user@{ shape: rect, label: "◖ Service user" }
+    bus_proc_share@{ shape: rounded, label: "➔ Share files and photos" }
+    bus_proc_backup@{ shape: rounded, label: "➔ Back up family data" }
+    bus_svc_file_sharing@{ shape: stadium, label: "File sharing" }
+    bus_svc_automation@{ shape: stadium, label: "Home automation" }
+    bus_obj_photos@{ shape: div-rect, label: "▤ Family photos and documents" }
   end
   subgraph layer_application["Application"]
     direction LR
-    backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
-    backup__app_svc_backup("Scheduled backup<br/>«ApplicationService» · backup")
-    dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
-    media__app_svc_streaming("Media streaming<br/>«ApplicationService» · media")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
-    nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
+    backup__app_backup@{ shape: rect, label: "⧉ Backup jobs<br/>[backup]" }
+    backup__app_svc_backup@{ shape: stadium, label: "Scheduled backup<br/>[backup]" }
+    dns__app_pihole@{ shape: rect, label: "⧉ Pi-hole<br/>[dns]" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
+    home_automation__app_svc_automation@{ shape: stadium, label: "Automations and dashboards<br/>[home-automation]" }
+    media__app_svc_streaming@{ shape: stadium, label: "Media streaming<br/>[media]" }
+    nextcloud__app_data_files@{ shape: div-rect, label: "▤ User files<br/>[nextcloud]" }
+    nextcloud__app_svc_file_sync@{ shape: stadium, label: "File sync and share<br/>[nextcloud]" }
   end
   bus_family -->|"assigned to"| bus_role_user
   bus_role_user -->|"assigned to"| bus_proc_share

@@ -7,15 +7,15 @@
 flowchart TB
   subgraph layer_motivation["Motivation"]
     direction LR
-    mot_goal_portable{{"Portable to the office network<br/>«Goal»"}}
+    mot_goal_portable@{ shape: hex, label: "◎ Portable to the office network" }
   end
   subgraph layer_implementation["Implementation & Migration"]
     direction LR
-    impl_plateau_homelab[["Baseline: home lab<br/>«Plateau»"]]
-    impl_plateau_office[["Target: office network<br/>«Plateau»"]]
-    impl_gap_identity[/"No central identity (SSO)<br/>«Gap»"/]
-    impl_wp_office("Port the home lab model to the office<br/>«WorkPackage»")
-    impl_del_office_model[/"Office solution architectures<br/>«Deliverable»"/]
+    impl_plateau_homelab@{ shape: fr-rect, label: "☰ Baseline: home lab" }
+    impl_plateau_office@{ shape: fr-rect, label: "☰ Target: office network" }
+    impl_gap_identity@{ shape: div-rect, label: "⊘ No central identity (SSO)" }
+    impl_wp_office@{ shape: rounded, label: "↻ Port the home lab model to the office" }
+    impl_del_office_model@{ shape: doc, label: "Office solution architectures" }
   end
   impl_plateau_homelab ==>|"triggers"| impl_plateau_office
   impl_gap_identity ---|"associated with"| impl_plateau_homelab
@@ -30,6 +30,8 @@ flowchart TB
   class impl_plateau_homelab,impl_plateau_office,impl_gap_identity,impl_wp_office,impl_del_office_model implementation
   style layer_implementation fill:#fafafa,stroke:#bbb
 ```
+
+*Notation: ◎ Goal · (wavy bottom) Deliverable · ⊘ Gap · ☰ Plateau · ↻ Work package*
 
 ## Elements
 

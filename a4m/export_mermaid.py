@@ -1,25 +1,22 @@
 """ArchiMate view -> Mermaid flowchart (one subgraph per layer, Archi layer colours).
 
-Mermaid cannot draw true ArchiMate notation, so relationship *types* are conveyed with
-line styles + verbs, and element types with a «Type» caption and shape per aspect.
+Mermaid cannot draw true ArchiMate notation, so element types are approximated with a shape
+(square = structure, rounded = behaviour, pill = service, …) and a glyph standing in for the
+ArchiMate icon (both from rules/elements.yaml), and relationship types with line styles + verbs.
+Uses Mermaid 11.3+ shape syntax: `id@{ shape: rect, label: "…" }`.
 """
 
 from __future__ import annotations
+
+import re
 
 from .model import Model, View
 from .rules import Rules, load_rules
 from .state import STATE_COLORS, STATE_LABELS, display_state
 from .views import view_members, view_relationships
 
-# Mermaid node shape per ArchiMate aspect: (open, close)
-SHAPES = {
-    "active": ('["', '"]'),
-    "behavior": ('("', '")'),
-    "passive": ('[/"', '"/]'),
-    "motivation": ('{{"', '"}}'),
-    "composite": ('[["', '"]]'),
-    "other": ('(("', '"))'),
-}
+# how shapes without a glyph are described in the notation key
+SHAPE_NAMES = {"stadium": "pill", "doc": "wavy bottom", "odd": "notched", "sm-circ": "dot", "rect": "plain box"}
 
 # relationship type -> (arrow, verb)
 ARROWS = {
@@ -63,12 +60,14 @@ def render_archimate(model: Model, view: View, rules: Rules | None = None, style
         lines.append("    direction LR")
         for element_id in ids:
             el = model.elements[element_id]
-            open_, close = SHAPES[rules.aspect_of(el.type)]
-            caption = f"«{el.type}»" + (f" · {el.sa}" if el.foreign else "")
+            shape, icon = rules.notation_of(el.type)
+            label = (f"{icon} " if icon else "") + escape(el.name)
+            if el.foreign:
+                label += f"<br/>[{el.sa}]"
             state = display_state(model, el)
             if styled and state in STATE_COLORS:
-                caption += f"<br/>{STATE_LABELS[state]}"
-            lines.append(f"    {mermaid_id(el.id)}{open_}{escape(el.name)}<br/>{caption}{close}")
+                label += f"<br/>{STATE_LABELS[state]}"
+            lines.append(f'    {mermaid_id(el.id)}@{{ shape: {shape}, label: "{label}" }}')
         lines.append("  end")
 
     link_styles = []
@@ -106,3 +105,17 @@ def render_archimate(model: Model, view: View, rules: Rules | None = None, style
                 lines.append(f"  class {','.join(mermaid_id(i) for i in ids)} st_{state}")
     lines += link_styles
     return "\n".join(lines) + "\n"
+
+
+def type_label(type_name: str) -> str:
+    """ApplicationComponent -> Application component."""
+    return re.sub(r"(?<!^)([A-Z])", lambda m: " " + m.group(1).lower(), type_name)
+
+
+def notation_key(model: Model, members: list[str], rules: Rules) -> str:
+    """One line explaining the glyph or shape of each element type in a view."""
+    entries = []
+    for type_name in sorted({model.elements[m].type for m in members}, key=lambda t: (rules.layer_order().index(rules.layer_of(t)), t)):
+        shape, icon = rules.notation_of(type_name)
+        entries.append(f"{icon or '(' + SHAPE_NAMES.get(shape, shape) + ')'} {type_label(type_name)}")
+    return "Notation: " + " · ".join(entries)

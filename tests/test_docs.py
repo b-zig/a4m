@@ -7,7 +7,7 @@ from contextlib import redirect_stdout
 from a4m import cli
 from a4m.adr import new_adr
 from a4m.build import MARKER, build, render_view
-from a4m.export_mermaid import render_archimate
+from a4m.export_mermaid import notation_key, render_archimate
 from a4m.landscape import build_landscape
 from a4m.mcp_server import handle
 from a4m.paths import SCHEMA_PATH
@@ -32,8 +32,22 @@ class MermaidTest(unittest.TestCase):
         self.assertEqual(len(edges), len(view_relationships(model, members)))
         self.assertIn('app_nextcloud_web -.->|"reads/writes"| app_data_files', text)
         # other SAs' elements are captioned with their SA and drawn dashed
-        self.assertIn('dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")', text)
+        self.assertIn('dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }', text)
         self.assertRegex(text, r"class .*dns__app_svc_dns.* foreign")
+        # ArchiMate notation is approximated by shape + glyph from rules/elements.yaml
+        self.assertIn('app_nextcloud_web@{ shape: rect, label: "⧉ Nextcloud web" }', text)
+        self.assertIn('app_data_files@{ shape: div-rect, label: "▤ ', text)
+        self.assertNotIn("«", text)
+
+    def test_notation_key(self):
+        model = load_sample("nextcloud")
+        rules = load_rules()
+        members = view_members(model, model.views["view-layered"], rules)
+        key = notation_key(model, members, rules)
+        self.assertTrue(key.startswith("Notation: "))
+        self.assertIn("⧉ Application component", key)
+        self.assertIn("(pill) Application service", key)
+        self.assertLess(key.index("Business"), key.index("Application"))  # layer order
 
     def test_quotes_are_escaped(self):
         model = load_sample("nextcloud")
@@ -45,7 +59,7 @@ class MermaidTest(unittest.TestCase):
         model = load_sample("backup")
         view = model.views["view-overview"]
         styled = render_view(model, view)
-        self.assertIn("Backblaze B2<br/>«ApplicationComponent»<br/>RETIRING", styled)
+        self.assertIn('app_offsite_b2@{ shape: rect, label: "⧉ Backblaze B2<br/>RETIRING" }', styled)
         self.assertIn("class app_offsite_hetzner st_new", styled)
         self.assertRegex(styled, r"linkStyle \d+ stroke:#c62828")
         baseline, target = render_view(model, view, state="baseline"), render_view(model, view, state="target")

@@ -9,29 +9,29 @@ The business it supports, the application, and the platform it runs on.
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_obj_photos[/"Family photos and documents<br/>«BusinessObject» · enterprise"/]
-    enterprise__bus_proc_share("Share files and photos<br/>«BusinessProcess» · enterprise")
-    enterprise__bus_svc_file_sharing("File sharing<br/>«BusinessService» · enterprise")
+    enterprise__bus_obj_photos@{ shape: div-rect, label: "▤ Family photos and documents<br/>[enterprise]" }
+    enterprise__bus_proc_share@{ shape: rounded, label: "➔ Share files and photos<br/>[enterprise]" }
+    enterprise__bus_svc_file_sharing@{ shape: stadium, label: "File sharing<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_nextcloud["Nextcloud<br/>«ApplicationComponent»"]
-    app_nextcloud_web["Nextcloud web<br/>«ApplicationComponent»"]
-    app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent»"]
-    app_nextcloud_cache["Nextcloud cache<br/>«ApplicationComponent»"]
-    app_svc_file_sync("File sync and share<br/>«ApplicationService»")
-    app_data_files[/"User files<br/>«DataObject»"/]
-    backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media<br/>NEW"]
+    app_nextcloud@{ shape: rect, label: "⧉ Nextcloud" }
+    app_nextcloud_web@{ shape: rect, label: "⧉ Nextcloud web" }
+    app_nextcloud_db@{ shape: rect, label: "⧉ Nextcloud database" }
+    app_nextcloud_cache@{ shape: rect, label: "⧉ Nextcloud cache" }
+    app_svc_file_sync@{ shape: stadium, label: "File sync and share" }
+    app_data_files@{ shape: div-rect, label: "▤ User files" }
+    backup__app_backup@{ shape: rect, label: "⧉ Backup jobs<br/>[backup]" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
+    media__app_jellyfin@{ shape: rect, label: "⧉ Jellyfin<br/>[media]<br/>NEW" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
-    tech_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
-    tech_art_redis[/"redis:7 image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
-    compute__tech_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
+    tech_art_nextcloud@{ shape: notch-rect, label: "🗎 nextcloud:29-apache image" }
+    tech_art_mariadb@{ shape: notch-rect, label: "🗎 mariadb:11 image" }
+    tech_art_redis@{ shape: notch-rect, label: "🗎 redis:7 image" }
+    compute__tech_docker@{ shape: rect, label: "◉ Docker Engine<br/>[compute]" }
+    compute__tech_svc_nfs@{ shape: stadium, label: "NFS storage<br/>[compute]" }
   end
   app_nextcloud -->|"composed of"| app_nextcloud_web
   app_nextcloud -->|"composed of"| app_nextcloud_db
@@ -74,6 +74,8 @@ flowchart TB
   linkStyle 23 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
+*Notation: ▤ Business object · ➔ Business process · (pill) Business service · ⧉ Application component · (pill) Application service · ▤ Data object · 🗎 Artifact · ◉ System software · (pill) Technology service*
+
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
 
 <details><summary>Current state</summary>
@@ -82,28 +84,28 @@ flowchart TB
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_obj_photos[/"Family photos and documents<br/>«BusinessObject» · enterprise"/]
-    enterprise__bus_proc_share("Share files and photos<br/>«BusinessProcess» · enterprise")
-    enterprise__bus_svc_file_sharing("File sharing<br/>«BusinessService» · enterprise")
+    enterprise__bus_obj_photos@{ shape: div-rect, label: "▤ Family photos and documents<br/>[enterprise]" }
+    enterprise__bus_proc_share@{ shape: rounded, label: "➔ Share files and photos<br/>[enterprise]" }
+    enterprise__bus_svc_file_sharing@{ shape: stadium, label: "File sharing<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_nextcloud["Nextcloud<br/>«ApplicationComponent»"]
-    app_nextcloud_web["Nextcloud web<br/>«ApplicationComponent»"]
-    app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent»"]
-    app_nextcloud_cache["Nextcloud cache<br/>«ApplicationComponent»"]
-    app_svc_file_sync("File sync and share<br/>«ApplicationService»")
-    app_data_files[/"User files<br/>«DataObject»"/]
-    backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
+    app_nextcloud@{ shape: rect, label: "⧉ Nextcloud" }
+    app_nextcloud_web@{ shape: rect, label: "⧉ Nextcloud web" }
+    app_nextcloud_db@{ shape: rect, label: "⧉ Nextcloud database" }
+    app_nextcloud_cache@{ shape: rect, label: "⧉ Nextcloud cache" }
+    app_svc_file_sync@{ shape: stadium, label: "File sync and share" }
+    app_data_files@{ shape: div-rect, label: "▤ User files" }
+    backup__app_backup@{ shape: rect, label: "⧉ Backup jobs<br/>[backup]" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
-    tech_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
-    tech_art_redis[/"redis:7 image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
-    compute__tech_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
+    tech_art_nextcloud@{ shape: notch-rect, label: "🗎 nextcloud:29-apache image" }
+    tech_art_mariadb@{ shape: notch-rect, label: "🗎 mariadb:11 image" }
+    tech_art_redis@{ shape: notch-rect, label: "🗎 redis:7 image" }
+    compute__tech_docker@{ shape: rect, label: "◉ Docker Engine<br/>[compute]" }
+    compute__tech_svc_nfs@{ shape: stadium, label: "NFS storage<br/>[compute]" }
   end
   app_nextcloud -->|"composed of"| app_nextcloud_web
   app_nextcloud -->|"composed of"| app_nextcloud_db
@@ -148,29 +150,29 @@ flowchart TB
 flowchart TB
   subgraph layer_business["Business"]
     direction LR
-    enterprise__bus_obj_photos[/"Family photos and documents<br/>«BusinessObject» · enterprise"/]
-    enterprise__bus_proc_share("Share files and photos<br/>«BusinessProcess» · enterprise")
-    enterprise__bus_svc_file_sharing("File sharing<br/>«BusinessService» · enterprise")
+    enterprise__bus_obj_photos@{ shape: div-rect, label: "▤ Family photos and documents<br/>[enterprise]" }
+    enterprise__bus_proc_share@{ shape: rounded, label: "➔ Share files and photos<br/>[enterprise]" }
+    enterprise__bus_svc_file_sharing@{ shape: stadium, label: "File sharing<br/>[enterprise]" }
   end
   subgraph layer_application["Application"]
     direction LR
-    app_nextcloud["Nextcloud<br/>«ApplicationComponent»"]
-    app_nextcloud_web["Nextcloud web<br/>«ApplicationComponent»"]
-    app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent»"]
-    app_nextcloud_cache["Nextcloud cache<br/>«ApplicationComponent»"]
-    app_svc_file_sync("File sync and share<br/>«ApplicationService»")
-    app_data_files[/"User files<br/>«DataObject»"/]
-    backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
-    dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media"]
+    app_nextcloud@{ shape: rect, label: "⧉ Nextcloud" }
+    app_nextcloud_web@{ shape: rect, label: "⧉ Nextcloud web" }
+    app_nextcloud_db@{ shape: rect, label: "⧉ Nextcloud database" }
+    app_nextcloud_cache@{ shape: rect, label: "⧉ Nextcloud cache" }
+    app_svc_file_sync@{ shape: stadium, label: "File sync and share" }
+    app_data_files@{ shape: div-rect, label: "▤ User files" }
+    backup__app_backup@{ shape: rect, label: "⧉ Backup jobs<br/>[backup]" }
+    dns__app_svc_dns@{ shape: stadium, label: "DNS resolution and filtering<br/>[dns]" }
+    media__app_jellyfin@{ shape: rect, label: "⧉ Jellyfin<br/>[media]" }
   end
   subgraph layer_technology["Technology"]
     direction LR
-    tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
-    tech_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
-    tech_art_redis[/"redis:7 image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
-    compute__tech_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
+    tech_art_nextcloud@{ shape: notch-rect, label: "🗎 nextcloud:29-apache image" }
+    tech_art_mariadb@{ shape: notch-rect, label: "🗎 mariadb:11 image" }
+    tech_art_redis@{ shape: notch-rect, label: "🗎 redis:7 image" }
+    compute__tech_docker@{ shape: rect, label: "◉ Docker Engine<br/>[compute]" }
+    compute__tech_svc_nfs@{ shape: stadium, label: "NFS storage<br/>[compute]" }
   end
   app_nextcloud -->|"composed of"| app_nextcloud_web
   app_nextcloud -->|"composed of"| app_nextcloud_db

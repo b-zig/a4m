@@ -4,7 +4,8 @@ Architecture as **YAML in git**: one folder per **solution architecture (SA)**. 
 other's elements, and together they make the **enterprise landscape**. Everything is checked against the
 **ArchiMate 3.2 rules Archi itself uses** and rendered to **Archi** (Open Exchange XML) and to
 **Mermaid** docs (ArchiMate-style flowcharts and **C4** diagrams) that GitHub and VS Code display
-natively. Each SA shows its **current and target state**. Built to be driven by an LLM (Claude Code,
+natively. The flowcharts approximate ArchiMate notation: each type gets a shape and a glyph
+(`rules/elements.yaml`), and every page has a key to them. Each SA shows its **current and target state**. Built to be driven by an LLM (Claude Code,
 GitHub Copilot, or a local model) through a validate-and-fix loop.
 
 ```

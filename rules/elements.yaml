@@ -1,6 +1,8 @@
 # ArchiMate 3.2 element catalogue used by a4m.
 # layer  -> drives folder placement, view layout rows, colours and the ID prefix convention
-# aspect -> active | behavior | passive | motivation | composite | other (drives Mermaid shapes and in-row ordering)
+# aspect -> active | behavior | passive | motivation | composite | other (drives in-row ordering and the default shape)
+# icon   -> glyph drawn before the name in Mermaid, standing in for ArchiMate's type icon
+# shape  -> Mermaid shape (11.3+ names) when it differs from the aspect's default below
 # Colours follow Archi's defaults so Mermaid output looks familiar next to Archi.
 
 layers:
@@ -13,75 +15,85 @@ layers:
   implementation: { label: Implementation & Migration, order: 7, prefix: impl, color: "#FFE0E0" }
   other:          { label: Other,                    order: 8, prefix: oth,  color: "#FFFFFF" }
 
+# Mermaid shape per aspect, mimicking ArchiMate: square corners = structure, rounded = behaviour,
+# pill = service, cut corners = motivation.
+aspects:
+  active:     { shape: rect }
+  behavior:   { shape: rounded }
+  passive:    { shape: div-rect }
+  motivation: { shape: hex }
+  composite:  { shape: fr-rect }
+  other:      { shape: sm-circ }
+
 types:
   # Motivation
-  Stakeholder:              { layer: motivation, aspect: motivation }
-  Driver:                   { layer: motivation, aspect: motivation }
-  Assessment:               { layer: motivation, aspect: motivation }
-  Goal:                     { layer: motivation, aspect: motivation }
-  Outcome:                  { layer: motivation, aspect: motivation }
-  Principle:                { layer: motivation, aspect: motivation }
-  Requirement:              { layer: motivation, aspect: motivation }
-  Constraint:               { layer: motivation, aspect: motivation }
-  Meaning:                  { layer: motivation, aspect: motivation }
-  Value:                    { layer: motivation, aspect: motivation }
+  Stakeholder:              { layer: motivation, aspect: motivation, icon: "◖" }
+  Driver:                   { layer: motivation, aspect: motivation, icon: "✲" }
+  Assessment:               { layer: motivation, aspect: motivation, icon: "🔍" }
+  Goal:                     { layer: motivation, aspect: motivation, icon: "◎" }
+  Outcome:                  { layer: motivation, aspect: motivation, icon: "🎯" }
+  Principle:                { layer: motivation, aspect: motivation, icon: "❗" }
+  Requirement:              { layer: motivation, aspect: motivation, icon: "▱", shape: lean-r }
+  Constraint:               { layer: motivation, aspect: motivation, icon: "▱", shape: lean-r }
+  Meaning:                  { layer: motivation, aspect: motivation, icon: "💬" }
+  Value:                    { layer: motivation, aspect: motivation, icon: "⬭", shape: stadium }
   # Strategy
-  Resource:                 { layer: strategy, aspect: active }
-  Capability:               { layer: strategy, aspect: behavior }
-  ValueStream:              { layer: strategy, aspect: behavior }
-  CourseOfAction:           { layer: strategy, aspect: behavior }
+  Resource:                 { layer: strategy, aspect: active, icon: "▣" }
+  Capability:               { layer: strategy, aspect: behavior, icon: "▟" }
+  ValueStream:              { layer: strategy, aspect: behavior, icon: "➤", shape: notch-pent }
+  CourseOfAction:           { layer: strategy, aspect: behavior, icon: "➹" }
   # Business
-  BusinessActor:            { layer: business, aspect: active }
-  BusinessRole:             { layer: business, aspect: active }
-  BusinessCollaboration:    { layer: business, aspect: active }
-  BusinessInterface:        { layer: business, aspect: active }
-  BusinessProcess:          { layer: business, aspect: behavior }
-  BusinessFunction:         { layer: business, aspect: behavior }
-  BusinessInteraction:      { layer: business, aspect: behavior }
-  BusinessEvent:            { layer: business, aspect: behavior }
-  BusinessService:          { layer: business, aspect: behavior }
-  BusinessObject:           { layer: business, aspect: passive }
-  Contract:                 { layer: business, aspect: passive }
-  Representation:           { layer: business, aspect: passive }
-  Product:                  { layer: business, aspect: composite }
+  BusinessActor:            { layer: business, aspect: active, icon: "👤" }
+  BusinessRole:             { layer: business, aspect: active, icon: "◖" }
+  BusinessCollaboration:    { layer: business, aspect: active, icon: "⚭" }
+  BusinessInterface:        { layer: business, aspect: active, icon: "⊸" }
+  BusinessProcess:          { layer: business, aspect: behavior, icon: "➔" }
+  BusinessFunction:         { layer: business, aspect: behavior, icon: "⌃" }
+  BusinessInteraction:      { layer: business, aspect: behavior, icon: "◐" }
+  BusinessEvent:            { layer: business, aspect: behavior, icon: "⚡", shape: odd }
+  BusinessService:          { layer: business, aspect: behavior, shape: stadium }
+  BusinessObject:           { layer: business, aspect: passive, icon: "▤" }
+  Contract:                 { layer: business, aspect: passive, icon: "▤" }
+  Representation:           { layer: business, aspect: passive, shape: doc }
+  Product:                  { layer: business, aspect: composite, icon: "▣", shape: lin-rect }
   # Application
-  ApplicationComponent:     { layer: application, aspect: active }
-  ApplicationCollaboration: { layer: application, aspect: active }
-  ApplicationInterface:     { layer: application, aspect: active }
-  ApplicationFunction:      { layer: application, aspect: behavior }
-  ApplicationInteraction:   { layer: application, aspect: behavior }
-  ApplicationProcess:       { layer: application, aspect: behavior }
-  ApplicationEvent:         { layer: application, aspect: behavior }
-  ApplicationService:       { layer: application, aspect: behavior }
-  DataObject:               { layer: application, aspect: passive }
+  ApplicationComponent:     { layer: application, aspect: active, icon: "⧉" }
+  ApplicationCollaboration: { layer: application, aspect: active, icon: "⚭" }
+  ApplicationInterface:     { layer: application, aspect: active, icon: "⊸" }
+  ApplicationFunction:      { layer: application, aspect: behavior, icon: "⌃" }
+  ApplicationInteraction:   { layer: application, aspect: behavior, icon: "◐" }
+  ApplicationProcess:       { layer: application, aspect: behavior, icon: "➔" }
+  ApplicationEvent:         { layer: application, aspect: behavior, icon: "⚡", shape: odd }
+  ApplicationService:       { layer: application, aspect: behavior, shape: stadium }
+  DataObject:               { layer: application, aspect: passive, icon: "▤" }
   # Technology
-  Node:                     { layer: technology, aspect: active }
-  Device:                   { layer: technology, aspect: active }
-  SystemSoftware:           { layer: technology, aspect: active }
-  TechnologyCollaboration:  { layer: technology, aspect: active }
-  TechnologyInterface:      { layer: technology, aspect: active }
-  Path:                     { layer: technology, aspect: active }
-  CommunicationNetwork:     { layer: technology, aspect: active }
-  TechnologyFunction:       { layer: technology, aspect: behavior }
-  TechnologyProcess:        { layer: technology, aspect: behavior }
-  TechnologyInteraction:    { layer: technology, aspect: behavior }
-  TechnologyEvent:          { layer: technology, aspect: behavior }
-  TechnologyService:        { layer: technology, aspect: behavior }
-  Artifact:                 { layer: technology, aspect: passive }
+  Node:                     { layer: technology, aspect: active, icon: "⧈" }
+  Device:                   { layer: technology, aspect: active, icon: "🖥" }
+  SystemSoftware:           { layer: technology, aspect: active, icon: "◉" }
+  TechnologyCollaboration:  { layer: technology, aspect: active, icon: "⚭" }
+  TechnologyInterface:      { layer: technology, aspect: active, icon: "⊸" }
+  Path:                     { layer: technology, aspect: active, icon: "⇢" }
+  CommunicationNetwork:     { layer: technology, aspect: active, icon: "⇄" }
+  TechnologyFunction:       { layer: technology, aspect: behavior, icon: "⌃" }
+  TechnologyProcess:        { layer: technology, aspect: behavior, icon: "➔" }
+  TechnologyInteraction:    { layer: technology, aspect: behavior, icon: "◐" }
+  TechnologyEvent:          { layer: technology, aspect: behavior, icon: "⚡", shape: odd }
+  TechnologyService:        { layer: technology, aspect: behavior, shape: stadium }
+  Artifact:                 { layer: technology, aspect: passive, icon: "🗎", shape: notch-rect }
   # Physical
-  Equipment:                { layer: physical, aspect: active }
-  Facility:                 { layer: physical, aspect: active }
-  DistributionNetwork:      { layer: physical, aspect: active }
-  Material:                 { layer: physical, aspect: passive }
+  Equipment:                { layer: physical, aspect: active, icon: "⚙" }
+  Facility:                 { layer: physical, aspect: active, icon: "🏭" }
+  DistributionNetwork:      { layer: physical, aspect: active, icon: "⇄" }
+  Material:                 { layer: physical, aspect: passive, icon: "⬡", shape: hex }
   # Implementation & Migration
-  WorkPackage:              { layer: implementation, aspect: behavior }
-  ImplementationEvent:      { layer: implementation, aspect: behavior }
-  Deliverable:              { layer: implementation, aspect: passive }
-  Plateau:                  { layer: implementation, aspect: composite }
-  Gap:                      { layer: implementation, aspect: passive }
+  WorkPackage:              { layer: implementation, aspect: behavior, icon: "↻" }
+  ImplementationEvent:      { layer: implementation, aspect: behavior, icon: "⚡", shape: odd }
+  Deliverable:              { layer: implementation, aspect: passive, shape: doc }
+  Plateau:                  { layer: implementation, aspect: composite, icon: "☰" }
+  Gap:                      { layer: implementation, aspect: passive, icon: "⊘" }
   # Other
-  Grouping:                 { layer: other, aspect: composite }
-  Location:                 { layer: other, aspect: composite }
+  Grouping:                 { layer: other, aspect: composite, shape: rect }
+  Location:                 { layer: other, aspect: composite, icon: "📍", shape: rect }
   Junction:                 { layer: other, aspect: other }
 
 # OEF viewpoint names Archi understands (org.opengroup.archimate.xmlexchange.XMLTypeMapper).
