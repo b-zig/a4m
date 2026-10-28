@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="model-media" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd">
+  <name xml:lang="en">Media streaming</name>
+  <documentation xml:lang="en">Proposal: stream the family's videos and music with Jellyfin, deployed as a container on the shared Docker VM and reading media from the Nextcloud data on the NAS.</documentation>
+  <elements>
+    <element identifier="app-jellyfin" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Jellyfin</name>
+      <documentation xml:lang="en">Media server streaming the family's videos and music to TVs and phones.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Jellyfin 10</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="app-svc-streaming" xsi:type="ApplicationService">
+      <name xml:lang="en">Media streaming</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="infra-art-jellyfin" xsi:type="Artifact">
+      <name xml:lang="en">jellyfin/jellyfin image</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-docker" xsi:type="SystemSoftware">
+      <name xml:lang="en">Docker Engine</name>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Docker Compose</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-pve-01" xsi:type="Node">
+      <name xml:lang="en">Proxmox host 01</name>
+      <documentation xml:lang="en">Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Proxmox VE 8</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">10.0.10.11</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">8 cores</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">64 GB</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-vm-docker" xsi:type="Node">
+      <name xml:lang="en">VM docker-01</name>
+      <documentation xml:lang="en">Shared Docker host for containerised solutions.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Debian 12 VM</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">10.0.10.21</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.app-pihole" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Pi-hole</name>
+      <documentation xml:lang="en">Network-wide DNS resolver with ad and tracker blocking.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.app-svc-dns" xsi:type="ApplicationService">
+      <name xml:lang="en">DNS resolution and filtering</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.infra-lxc-pihole" xsi:type="Node">
+      <name xml:lang="en">LXC pihole</name>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Debian 12 LXC</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">10.0.10.53</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-family" xsi:type="BusinessActor">
+      <name xml:lang="en">Family</name>
+      <documentation xml:lang="en">Household members using files, photos and smart-home dashboards.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">person</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-role-user" xsi:type="BusinessRole">
+      <name xml:lang="en">Service user</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="network.infra-loc-home" xsi:type="Location">
+      <name xml:lang="en">Home office rack</name>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">network</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.data-files" xsi:type="DataObject">
+      <name xml:lang="en">User files</name>
+      <documentation xml:lang="en">Family files and photos, stored on the NAS over NFS.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="rel-app-jellyfin-realization-app-svc-streaming" source="app-jellyfin" target="app-svc-streaming" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="rel-app-svc-streaming-serving-enterprise.bus-role-user" source="app-svc-streaming" target="enterprise.bus-role-user" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="rel-app-jellyfin-access-nextcloud.data-files" source="app-jellyfin" target="nextcloud.data-files" xsi:type="Access" accessType="Read">
+      <name xml:lang="en">Family videos</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="rel-dns.app-svc-dns-serving-app-jellyfin" source="dns.app-svc-dns" target="app-jellyfin" xsi:type="Serving">
+      <name xml:lang="en">DNS lookups</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="rel-compute.infra-docker-assignment-infra-art-jellyfin" source="compute.infra-docker" target="infra-art-jellyfin" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="rel-infra-art-jellyfin-realization-app-jellyfin" source="infra-art-jellyfin" target="app-jellyfin" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-pve-01-composition-infra-vm-docker" source="compute.infra-pve-01" target="compute.infra-vm-docker" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-vm-docker-assignment-infra-docker" source="compute.infra-vm-docker" target="compute.infra-docker" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" source="network.infra-loc-home" target="compute.infra-pve-01" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-app-pihole-realization-app-svc-dns" source="dns.app-pihole" target="dns.app-svc-dns" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-infra-lxc-pihole-realization-app-pihole" source="dns.infra-lxc-pihole" target="dns.app-pihole" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" source="compute.infra-pve-01" target="dns.infra-lxc-pihole" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="enterprise.rel-bus-family-assignment-bus-role-user" source="enterprise.bus-family" target="enterprise.bus-role-user" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </relationship>
+  </relationships>
+  <propertyDefinitions>
+    <propertyDefinition identifier="propid-1" type="string">
+      <name xml:lang="en">a4m:c4</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-2" type="string">
+      <name xml:lang="en">a4m:sa</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-3" type="string">
+      <name xml:lang="en">a4m:state</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-4" type="string">
+      <name xml:lang="en">cpu</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-5" type="string">
+      <name xml:lang="en">ip</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-6" type="string">
+      <name xml:lang="en">ram</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-7" type="string">
+      <name xml:lang="en">technology</name>
+    </propertyDefinition>
+  </propertyDefinitions>
+  <views>
+    <diagrams>
+      <view identifier="view-overview" xsi:type="Diagram" viewpoint="Layered">
+        <name xml:lang="en">Media streaming — overview</name>
+        <node identifier="g-view-overview-business" xsi:type="Container" x="20" y="20" w="460" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-enterprise.bus-role-user" elementRef="enterprise.bus-role-user" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-information" xsi:type="Container" x="20" y="150" w="460" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="175" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-application" xsi:type="Container" x="20" y="280" w="460" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-app-jellyfin" elementRef="app-jellyfin" xsi:type="Element" x="40" y="305" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+          <node identifier="n-view-overview-app-svc-streaming" elementRef="app-svc-streaming" xsi:type="Element" x="190" y="305" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+          <node identifier="n-view-overview-dns.app-svc-dns" elementRef="dns.app-svc-dns" xsi:type="Element" x="340" y="305" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-infrastructure" xsi:type="Container" x="20" y="410" w="460" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-compute.infra-docker" elementRef="compute.infra-docker" xsi:type="Element" x="40" y="435" w="120" h="55" />
+          <node identifier="n-view-overview-infra-art-jellyfin" elementRef="infra-art-jellyfin" xsi:type="Element" x="190" y="435" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+        </node>
+        <connection identifier="c-view-overview-rel-app-jellyfin-realization-app-svc-streaming" relationshipRef="rel-app-jellyfin-realization-app-svc-streaming" xsi:type="Relationship" source="n-view-overview-app-jellyfin" target="n-view-overview-app-svc-streaming">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+        <connection identifier="c-view-overview-rel-app-svc-streaming-serving-enterprise.bus-role-user" relationshipRef="rel-app-svc-streaming-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-overview-app-svc-streaming" target="n-view-overview-enterprise.bus-role-user">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+        <connection identifier="c-view-overview-rel-app-jellyfin-access-nextcloud.data-files" relationshipRef="rel-app-jellyfin-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-overview-app-jellyfin" target="n-view-overview-nextcloud.data-files">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+        <connection identifier="c-view-overview-rel-dns.app-svc-dns-serving-app-jellyfin" relationshipRef="rel-dns.app-svc-dns-serving-app-jellyfin" xsi:type="Relationship" source="n-view-overview-dns.app-svc-dns" target="n-view-overview-app-jellyfin">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+        <connection identifier="c-view-overview-rel-compute.infra-docker-assignment-infra-art-jellyfin" relationshipRef="rel-compute.infra-docker-assignment-infra-art-jellyfin" xsi:type="Relationship" source="n-view-overview-compute.infra-docker" target="n-view-overview-infra-art-jellyfin">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+        <connection identifier="c-view-overview-rel-infra-art-jellyfin-realization-app-jellyfin" relationshipRef="rel-infra-art-jellyfin-realization-app-jellyfin" xsi:type="Relationship" source="n-view-overview-infra-art-jellyfin" target="n-view-overview-app-jellyfin">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+      </view>
+      <view identifier="view-overview--baseline" xsi:type="Diagram" viewpoint="Layered">
+        <name xml:lang="en">Media streaming — overview (current state)</name>
+      </view>
+      <view identifier="view-overview--target" xsi:type="Diagram" viewpoint="Layered">
+        <name xml:lang="en">Media streaming — overview (target state)</name>
+        <node identifier="g-view-overview--target-business" xsi:type="Container" x="20" y="20" w="460" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-enterprise.bus-role-user" elementRef="enterprise.bus-role-user" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--target-information" xsi:type="Container" x="20" y="150" w="460" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="175" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--target-application" xsi:type="Container" x="20" y="280" w="460" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-app-jellyfin" elementRef="app-jellyfin" xsi:type="Element" x="40" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--target-app-svc-streaming" elementRef="app-svc-streaming" xsi:type="Element" x="190" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--target-dns.app-svc-dns" elementRef="dns.app-svc-dns" xsi:type="Element" x="340" y="305" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--target-infrastructure" xsi:type="Container" x="20" y="410" w="460" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-compute.infra-docker" elementRef="compute.infra-docker" xsi:type="Element" x="40" y="435" w="120" h="55" />
+          <node identifier="n-view-overview--target-infra-art-jellyfin" elementRef="infra-art-jellyfin" xsi:type="Element" x="190" y="435" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-overview--target-rel-app-jellyfin-realization-app-svc-streaming" relationshipRef="rel-app-jellyfin-realization-app-svc-streaming" xsi:type="Relationship" source="n-view-overview--target-app-jellyfin" target="n-view-overview--target-app-svc-streaming" />
+        <connection identifier="c-view-overview--target-rel-app-svc-streaming-serving-enterprise.bus-role-user" relationshipRef="rel-app-svc-streaming-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-overview--target-app-svc-streaming" target="n-view-overview--target-enterprise.bus-role-user" />
+        <connection identifier="c-view-overview--target-rel-app-jellyfin-access-nextcloud.data-files" relationshipRef="rel-app-jellyfin-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-overview--target-app-jellyfin" target="n-view-overview--target-nextcloud.data-files" />
+        <connection identifier="c-view-overview--target-rel-dns.app-svc-dns-serving-app-jellyfin" relationshipRef="rel-dns.app-svc-dns-serving-app-jellyfin" xsi:type="Relationship" source="n-view-overview--target-dns.app-svc-dns" target="n-view-overview--target-app-jellyfin" />
+        <connection identifier="c-view-overview--target-rel-compute.infra-docker-assignment-infra-art-jellyfin" relationshipRef="rel-compute.infra-docker-assignment-infra-art-jellyfin" xsi:type="Relationship" source="n-view-overview--target-compute.infra-docker" target="n-view-overview--target-infra-art-jellyfin" />
+        <connection identifier="c-view-overview--target-rel-infra-art-jellyfin-realization-app-jellyfin" relationshipRef="rel-infra-art-jellyfin-realization-app-jellyfin" xsi:type="Relationship" source="n-view-overview--target-infra-art-jellyfin" target="n-view-overview--target-app-jellyfin" />
+      </view>
+      <view identifier="c4-context" xsi:type="Diagram">
+        <name xml:lang="en">Media streaming — system context</name>
+        <node identifier="g-c4-context-business" xsi:type="Container" x="20" y="20" w="310" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context-enterprise.bus-family" elementRef="enterprise.bus-family" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-context-application" xsi:type="Container" x="20" y="150" w="310" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context-app-jellyfin" elementRef="app-jellyfin" xsi:type="Element" x="40" y="175" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+          <node identifier="n-c4-context-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="175" w="120" h="55" />
+        </node>
+      </view>
+      <view identifier="c4-context--baseline" xsi:type="Diagram">
+        <name xml:lang="en">Media streaming — system context (current state)</name>
+        <node identifier="g-c4-context--baseline-business" xsi:type="Container" x="20" y="20" w="160" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--baseline-enterprise.bus-family" elementRef="enterprise.bus-family" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-context--baseline-application" xsi:type="Container" x="20" y="150" w="160" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--baseline-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="40" y="175" w="120" h="55" />
+        </node>
+      </view>
+      <view identifier="c4-context--target" xsi:type="Diagram">
+        <name xml:lang="en">Media streaming — system context (target state)</name>
+        <node identifier="g-c4-context--target-business" xsi:type="Container" x="20" y="20" w="310" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--target-enterprise.bus-family" elementRef="enterprise.bus-family" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-context--target-application" xsi:type="Container" x="20" y="150" w="310" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--target-app-jellyfin" elementRef="app-jellyfin" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-c4-context--target-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="175" w="120" h="55" />
+        </node>
+      </view>
+      <view identifier="c4-deployment" xsi:type="Diagram">
+        <name xml:lang="en">Media streaming — deployment</name>
+        <node identifier="g-c4-deployment-application" xsi:type="Container" x="20" y="20" w="760" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-deployment-app-jellyfin" elementRef="app-jellyfin" xsi:type="Element" x="40" y="45" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+          <node identifier="n-c4-deployment-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-deployment-infrastructure" xsi:type="Container" x="20" y="150" w="760" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-deployment-compute.infra-pve-01" elementRef="compute.infra-pve-01" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment-compute.infra-vm-docker" elementRef="compute.infra-vm-docker" xsi:type="Element" x="190" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment-compute.infra-docker" elementRef="compute.infra-docker" xsi:type="Element" x="340" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment-dns.infra-lxc-pihole" elementRef="dns.infra-lxc-pihole" xsi:type="Element" x="490" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment-network.infra-loc-home" elementRef="network.infra-loc-home" xsi:type="Element" x="640" y="175" w="120" h="55" />
+        </node>
+        <connection identifier="c-c4-deployment-compute.rel-infra-pve-01-composition-infra-vm-docker" relationshipRef="compute.rel-infra-pve-01-composition-infra-vm-docker" xsi:type="Relationship" source="n-c4-deployment-compute.infra-pve-01" target="n-c4-deployment-compute.infra-vm-docker" />
+        <connection identifier="c-c4-deployment-compute.rel-infra-vm-docker-assignment-infra-docker" relationshipRef="compute.rel-infra-vm-docker-assignment-infra-docker" xsi:type="Relationship" source="n-c4-deployment-compute.infra-vm-docker" target="n-c4-deployment-compute.infra-docker" />
+        <connection identifier="c-c4-deployment-compute.rel-network.infra-loc-home-aggregation-infra-pve-01" relationshipRef="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" xsi:type="Relationship" source="n-c4-deployment-network.infra-loc-home" target="n-c4-deployment-compute.infra-pve-01" />
+        <connection identifier="c-c4-deployment-dns.rel-infra-lxc-pihole-realization-app-pihole" relationshipRef="dns.rel-infra-lxc-pihole-realization-app-pihole" xsi:type="Relationship" source="n-c4-deployment-dns.infra-lxc-pihole" target="n-c4-deployment-dns.app-pihole" />
+        <connection identifier="c-c4-deployment-dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" relationshipRef="dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" xsi:type="Relationship" source="n-c4-deployment-compute.infra-pve-01" target="n-c4-deployment-dns.infra-lxc-pihole" />
+      </view>
+      <view identifier="c4-deployment--baseline" xsi:type="Diagram">
+        <name xml:lang="en">Media streaming — deployment (current state)</name>
+      </view>
+      <view identifier="c4-deployment--target" xsi:type="Diagram">
+        <name xml:lang="en">Media streaming — deployment (target state)</name>
+        <node identifier="g-c4-deployment--target-application" xsi:type="Container" x="20" y="20" w="760" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-deployment--target-app-jellyfin" elementRef="app-jellyfin" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-c4-deployment--target-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-deployment--target-infrastructure" xsi:type="Container" x="20" y="150" w="760" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-deployment--target-compute.infra-pve-01" elementRef="compute.infra-pve-01" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment--target-compute.infra-vm-docker" elementRef="compute.infra-vm-docker" xsi:type="Element" x="190" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment--target-compute.infra-docker" elementRef="compute.infra-docker" xsi:type="Element" x="340" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment--target-dns.infra-lxc-pihole" elementRef="dns.infra-lxc-pihole" xsi:type="Element" x="490" y="175" w="120" h="55" />
+          <node identifier="n-c4-deployment--target-network.infra-loc-home" elementRef="network.infra-loc-home" xsi:type="Element" x="640" y="175" w="120" h="55" />
+        </node>
+        <connection identifier="c-c4-deployment--target-compute.rel-infra-pve-01-composition-infra-vm-docker" relationshipRef="compute.rel-infra-pve-01-composition-infra-vm-docker" xsi:type="Relationship" source="n-c4-deployment--target-compute.infra-pve-01" target="n-c4-deployment--target-compute.infra-vm-docker" />
+        <connection identifier="c-c4-deployment--target-compute.rel-infra-vm-docker-assignment-infra-docker" relationshipRef="compute.rel-infra-vm-docker-assignment-infra-docker" xsi:type="Relationship" source="n-c4-deployment--target-compute.infra-vm-docker" target="n-c4-deployment--target-compute.infra-docker" />
+        <connection identifier="c-c4-deployment--target-compute.rel-network.infra-loc-home-aggregation-infra-pve-01" relationshipRef="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" xsi:type="Relationship" source="n-c4-deployment--target-network.infra-loc-home" target="n-c4-deployment--target-compute.infra-pve-01" />
+        <connection identifier="c-c4-deployment--target-dns.rel-infra-lxc-pihole-realization-app-pihole" relationshipRef="dns.rel-infra-lxc-pihole-realization-app-pihole" xsi:type="Relationship" source="n-c4-deployment--target-dns.infra-lxc-pihole" target="n-c4-deployment--target-dns.app-pihole" />
+        <connection identifier="c-c4-deployment--target-dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" relationshipRef="dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" xsi:type="Relationship" source="n-c4-deployment--target-compute.infra-pve-01" target="n-c4-deployment--target-dns.infra-lxc-pihole" />
+      </view>
+    </diagrams>
+  </views>
+</model>

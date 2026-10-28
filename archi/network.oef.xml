@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="model-network" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd">
+  <name xml:lang="en">Home network and rack</name>
+  <documentation xml:lang="en">Edge router, core switch, VLANs, the rack location and its UPS. Other SAs attach their nodes to the networks and place them in the rack.</documentation>
+  <elements>
+    <element identifier="infra-loc-home" xsi:type="Location">
+      <name xml:lang="en">Home office rack</name>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="infra-router" xsi:type="Device">
+      <name xml:lang="en">Edge router</name>
+      <properties>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">OPNsense</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.10.1</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="infra-switch" xsi:type="Device">
+      <name xml:lang="en">Core switch</name>
+      <properties>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">8-port managed PoE</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="infra-net-wan" xsi:type="CommunicationNetwork">
+      <name xml:lang="en">Internet (ISP)</name>
+    </element>
+    <element identifier="infra-net-lan" xsi:type="CommunicationNetwork">
+      <name xml:lang="en">LAN (VLAN 10)</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">10</value>
+        </property>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">10.0.10.0/24</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="infra-net-iot" xsi:type="CommunicationNetwork">
+      <name xml:lang="en">IoT (VLAN 20)</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">20</value>
+        </property>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">10.0.20.0/24</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="infra-ups" xsi:type="Equipment">
+      <name xml:lang="en">UPS</name>
+      <documentation xml:lang="en">900 VA line-interactive UPS; ~20 minutes runtime for host, NAS and network.</documentation>
+    </element>
+    <element identifier="compute.infra-nas" xsi:type="Device">
+      <name xml:lang="en">NAS</name>
+      <documentation xml:lang="en">Synology NAS holding solution data (NFS) and running backup jobs.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">Synology DSM 7</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.10.5</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-pve-01" xsi:type="Node">
+      <name xml:lang="en">Proxmox host 01</name>
+      <documentation xml:lang="en">Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">Proxmox VE 8</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.10.11</value>
+        </property>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">8 cores</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">64 GB</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.infra-lxc-pihole" xsi:type="Node">
+      <name xml:lang="en">LXC pihole</name>
+      <properties>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">Debian 12 LXC</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.10.53</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="home-automation.infra-vm-haos" xsi:type="Node">
+      <name xml:lang="en">VM haos</name>
+      <properties>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">Home Assistant OS VM</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.20.10</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="rel-infra-loc-home-aggregation-infra-router" source="infra-loc-home" target="infra-router" xsi:type="Aggregation" />
+    <relationship identifier="rel-infra-loc-home-aggregation-infra-switch" source="infra-loc-home" target="infra-switch" xsi:type="Aggregation" />
+    <relationship identifier="rel-infra-loc-home-aggregation-infra-ups" source="infra-loc-home" target="infra-ups" xsi:type="Aggregation" />
+    <relationship identifier="rel-infra-router-association-infra-net-wan" source="infra-router" target="infra-net-wan" xsi:type="Association" />
+    <relationship identifier="rel-infra-router-association-infra-net-lan" source="infra-router" target="infra-net-lan" xsi:type="Association" />
+    <relationship identifier="rel-infra-router-association-infra-net-iot" source="infra-router" target="infra-net-iot" xsi:type="Association" />
+    <relationship identifier="rel-infra-switch-association-infra-net-lan" source="infra-switch" target="infra-net-lan" xsi:type="Association" />
+    <relationship identifier="rel-infra-switch-association-infra-net-iot" source="infra-switch" target="infra-net-iot" xsi:type="Association" />
+    <relationship identifier="rel-infra-ups-serving-infra-router" source="infra-ups" target="infra-router" xsi:type="Serving" />
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" source="infra-loc-home" target="compute.infra-pve-01" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-nas" source="infra-loc-home" target="compute.infra-nas" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-ups-serving-infra-pve-01" source="infra-ups" target="compute.infra-pve-01" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-ups-serving-infra-nas" source="infra-ups" target="compute.infra-nas" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-pve-01-association-network.infra-net-lan" source="compute.infra-pve-01" target="infra-net-lan" xsi:type="Association">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-nas-association-network.infra-net-lan" source="compute.infra-nas" target="infra-net-lan" xsi:type="Association">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" source="compute.infra-pve-01" target="dns.infra-lxc-pihole" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-infra-lxc-pihole-association-network.infra-net-lan" source="dns.infra-lxc-pihole" target="infra-net-lan" xsi:type="Association">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-compute.infra-pve-01-composition-infra-vm-haos" source="compute.infra-pve-01" target="home-automation.infra-vm-haos" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-infra-vm-haos-association-network.infra-net-iot" source="home-automation.infra-vm-haos" target="infra-net-iot" xsi:type="Association">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+  </relationships>
+  <propertyDefinitions>
+    <propertyDefinition identifier="propid-1" type="string">
+      <name xml:lang="en">a4m:c4</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-2" type="string">
+      <name xml:lang="en">a4m:sa</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-3" type="string">
+      <name xml:lang="en">cpu</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-4" type="string">
+      <name xml:lang="en">ip</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-5" type="string">
+      <name xml:lang="en">model</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-6" type="string">
+      <name xml:lang="en">ram</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-7" type="string">
+      <name xml:lang="en">subnet</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-8" type="string">
+      <name xml:lang="en">technology</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-9" type="string">
+      <name xml:lang="en">vlan</name>
+    </propertyDefinition>
+  </propertyDefinitions>
+  <views>
+    <diagrams>
+      <view identifier="view-network" xsi:type="Diagram">
+        <name xml:lang="en">Network, rack and power</name>
+        <documentation xml:lang="en">Network segments, rack and power, with the nodes other SAs connect to them.</documentation>
+        <node identifier="g-view-network-infrastructure" xsi:type="Container" x="20" y="20" w="910" h="185">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-network-infra-router" elementRef="infra-router" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-network-infra-switch" elementRef="infra-switch" xsi:type="Element" x="190" y="45" w="120" h="55" />
+          <node identifier="n-view-network-infra-net-wan" elementRef="infra-net-wan" xsi:type="Element" x="340" y="45" w="120" h="55" />
+          <node identifier="n-view-network-infra-net-lan" elementRef="infra-net-lan" xsi:type="Element" x="490" y="45" w="120" h="55" />
+          <node identifier="n-view-network-infra-net-iot" elementRef="infra-net-iot" xsi:type="Element" x="640" y="45" w="120" h="55" />
+          <node identifier="n-view-network-infra-ups" elementRef="infra-ups" xsi:type="Element" x="790" y="45" w="120" h="55" />
+          <node identifier="n-view-network-compute.infra-nas" elementRef="compute.infra-nas" xsi:type="Element" x="40" y="130" w="120" h="55" />
+          <node identifier="n-view-network-compute.infra-pve-01" elementRef="compute.infra-pve-01" xsi:type="Element" x="190" y="130" w="120" h="55" />
+          <node identifier="n-view-network-dns.infra-lxc-pihole" elementRef="dns.infra-lxc-pihole" xsi:type="Element" x="340" y="130" w="120" h="55" />
+          <node identifier="n-view-network-home-automation.infra-vm-haos" elementRef="home-automation.infra-vm-haos" xsi:type="Element" x="490" y="130" w="120" h="55" />
+          <node identifier="n-view-network-infra-loc-home" elementRef="infra-loc-home" xsi:type="Element" x="640" y="130" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-network-rel-infra-loc-home-aggregation-infra-router" relationshipRef="rel-infra-loc-home-aggregation-infra-router" xsi:type="Relationship" source="n-view-network-infra-loc-home" target="n-view-network-infra-router" />
+        <connection identifier="c-view-network-rel-infra-loc-home-aggregation-infra-switch" relationshipRef="rel-infra-loc-home-aggregation-infra-switch" xsi:type="Relationship" source="n-view-network-infra-loc-home" target="n-view-network-infra-switch" />
+        <connection identifier="c-view-network-rel-infra-loc-home-aggregation-infra-ups" relationshipRef="rel-infra-loc-home-aggregation-infra-ups" xsi:type="Relationship" source="n-view-network-infra-loc-home" target="n-view-network-infra-ups" />
+        <connection identifier="c-view-network-rel-infra-router-association-infra-net-wan" relationshipRef="rel-infra-router-association-infra-net-wan" xsi:type="Relationship" source="n-view-network-infra-router" target="n-view-network-infra-net-wan" />
+        <connection identifier="c-view-network-rel-infra-router-association-infra-net-lan" relationshipRef="rel-infra-router-association-infra-net-lan" xsi:type="Relationship" source="n-view-network-infra-router" target="n-view-network-infra-net-lan" />
+        <connection identifier="c-view-network-rel-infra-router-association-infra-net-iot" relationshipRef="rel-infra-router-association-infra-net-iot" xsi:type="Relationship" source="n-view-network-infra-router" target="n-view-network-infra-net-iot" />
+        <connection identifier="c-view-network-rel-infra-switch-association-infra-net-lan" relationshipRef="rel-infra-switch-association-infra-net-lan" xsi:type="Relationship" source="n-view-network-infra-switch" target="n-view-network-infra-net-lan" />
+        <connection identifier="c-view-network-rel-infra-switch-association-infra-net-iot" relationshipRef="rel-infra-switch-association-infra-net-iot" xsi:type="Relationship" source="n-view-network-infra-switch" target="n-view-network-infra-net-iot" />
+        <connection identifier="c-view-network-rel-infra-ups-serving-infra-router" relationshipRef="rel-infra-ups-serving-infra-router" xsi:type="Relationship" source="n-view-network-infra-ups" target="n-view-network-infra-router" />
+        <connection identifier="c-view-network-compute.rel-network.infra-loc-home-aggregation-infra-pve-01" relationshipRef="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" xsi:type="Relationship" source="n-view-network-infra-loc-home" target="n-view-network-compute.infra-pve-01" />
+        <connection identifier="c-view-network-compute.rel-network.infra-loc-home-aggregation-infra-nas" relationshipRef="compute.rel-network.infra-loc-home-aggregation-infra-nas" xsi:type="Relationship" source="n-view-network-infra-loc-home" target="n-view-network-compute.infra-nas" />
+        <connection identifier="c-view-network-compute.rel-network.infra-ups-serving-infra-pve-01" relationshipRef="compute.rel-network.infra-ups-serving-infra-pve-01" xsi:type="Relationship" source="n-view-network-infra-ups" target="n-view-network-compute.infra-pve-01" />
+        <connection identifier="c-view-network-compute.rel-network.infra-ups-serving-infra-nas" relationshipRef="compute.rel-network.infra-ups-serving-infra-nas" xsi:type="Relationship" source="n-view-network-infra-ups" target="n-view-network-compute.infra-nas" />
+        <connection identifier="c-view-network-compute.rel-infra-pve-01-association-network.infra-net-lan" relationshipRef="compute.rel-infra-pve-01-association-network.infra-net-lan" xsi:type="Relationship" source="n-view-network-compute.infra-pve-01" target="n-view-network-infra-net-lan" />
+        <connection identifier="c-view-network-compute.rel-infra-nas-association-network.infra-net-lan" relationshipRef="compute.rel-infra-nas-association-network.infra-net-lan" xsi:type="Relationship" source="n-view-network-compute.infra-nas" target="n-view-network-infra-net-lan" />
+        <connection identifier="c-view-network-dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" relationshipRef="dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" xsi:type="Relationship" source="n-view-network-compute.infra-pve-01" target="n-view-network-dns.infra-lxc-pihole" />
+        <connection identifier="c-view-network-dns.rel-infra-lxc-pihole-association-network.infra-net-lan" relationshipRef="dns.rel-infra-lxc-pihole-association-network.infra-net-lan" xsi:type="Relationship" source="n-view-network-dns.infra-lxc-pihole" target="n-view-network-infra-net-lan" />
+        <connection identifier="c-view-network-home-automation.rel-compute.infra-pve-01-composition-infra-vm-haos" relationshipRef="home-automation.rel-compute.infra-pve-01-composition-infra-vm-haos" xsi:type="Relationship" source="n-view-network-compute.infra-pve-01" target="n-view-network-home-automation.infra-vm-haos" />
+        <connection identifier="c-view-network-home-automation.rel-infra-vm-haos-association-network.infra-net-iot" relationshipRef="home-automation.rel-infra-vm-haos-association-network.infra-net-iot" xsi:type="Relationship" source="n-view-network-home-automation.infra-vm-haos" target="n-view-network-infra-net-iot" />
+      </view>
+    </diagrams>
+  </views>
+</model>

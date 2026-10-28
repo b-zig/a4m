@@ -1,0 +1,998 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="model-enterprise" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd">
+  <name xml:lang="en">Home Lab</name>
+  <documentation xml:lang="en">The home lab as an enterprise: why it exists (motivation), what it can do (capabilities), who uses it (business) and the roadmap. Every solution architecture under models/ builds on these elements; it is the test bed for the a4m workflow before the office network.</documentation>
+  <properties>
+    <property propertyDefinitionRef="propid-5">
+      <value xml:lang="en">home.lan</value>
+    </property>
+    <property propertyDefinitionRef="propid-7">
+      <value xml:lang="en">10.0.10.0/24</value>
+    </property>
+  </properties>
+  <elements>
+    <element identifier="bus-cap-home-it" xsi:type="Capability">
+      <name xml:lang="en">Home IT services</name>
+    </element>
+    <element identifier="bus-cap-file-sharing" xsi:type="Capability">
+      <name xml:lang="en">File sharing and sync</name>
+    </element>
+    <element identifier="bus-cap-home-automation" xsi:type="Capability">
+      <name xml:lang="en">Home automation</name>
+    </element>
+    <element identifier="bus-res-hardware" xsi:type="Resource">
+      <name xml:lang="en">Home lab hardware</name>
+      <documentation xml:lang="en">Hypervisor, NAS, network gear and UPS (see the compute and network SAs).</documentation>
+    </element>
+    <element identifier="bus-family" xsi:type="BusinessActor">
+      <name xml:lang="en">Family</name>
+      <documentation xml:lang="en">Household members using files, photos and smart-home dashboards.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">person</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="bus-admin" xsi:type="BusinessActor">
+      <name xml:lang="en">Home lab admin</name>
+      <documentation xml:lang="en">Runs and maintains the home lab.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">person</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="bus-role-user" xsi:type="BusinessRole">
+      <name xml:lang="en">Service user</name>
+    </element>
+    <element identifier="bus-proc-share" xsi:type="BusinessProcess">
+      <name xml:lang="en">Share files and photos</name>
+    </element>
+    <element identifier="bus-proc-backup" xsi:type="BusinessProcess">
+      <name xml:lang="en">Back up family data</name>
+    </element>
+    <element identifier="bus-svc-file-sharing" xsi:type="BusinessService">
+      <name xml:lang="en">File sharing</name>
+    </element>
+    <element identifier="bus-svc-automation" xsi:type="BusinessService">
+      <name xml:lang="en">Home automation</name>
+    </element>
+    <element identifier="bus-obj-photos" xsi:type="BusinessObject">
+      <name xml:lang="en">Family photos and documents</name>
+    </element>
+    <element identifier="bus-plateau-homelab" xsi:type="Plateau">
+      <name xml:lang="en">Baseline: home lab</name>
+    </element>
+    <element identifier="bus-plateau-office" xsi:type="Plateau">
+      <name xml:lang="en">Target: office network</name>
+    </element>
+    <element identifier="bus-gap-identity" xsi:type="Gap">
+      <name xml:lang="en">No central identity (SSO)</name>
+    </element>
+    <element identifier="bus-wp-office" xsi:type="WorkPackage">
+      <name xml:lang="en">Port the home lab model to the office</name>
+      <documentation xml:lang="en">Copy the repo, model the office SAs under models/, switch the LLM assistant to GitHub Copilot.</documentation>
+    </element>
+    <element identifier="bus-del-office-model" xsi:type="Deliverable">
+      <name xml:lang="en">Office solution architectures</name>
+    </element>
+    <element identifier="bus-stk-family" xsi:type="Stakeholder">
+      <name xml:lang="en">Family</name>
+      <documentation xml:lang="en">Everyone in the household who relies on the self-hosted services.</documentation>
+    </element>
+    <element identifier="bus-drv-privacy" xsi:type="Driver">
+      <name xml:lang="en">Data privacy</name>
+      <documentation xml:lang="en">Keep family photos, documents and smart-home data off third-party clouds.</documentation>
+    </element>
+    <element identifier="bus-asm-single-host" xsi:type="Assessment">
+      <name xml:lang="en">Single hypervisor is a SPOF</name>
+      <documentation xml:lang="en">All VMs run on one Proxmox host; a hardware failure takes every service down.</documentation>
+    </element>
+    <element identifier="bus-goal-reliable" xsi:type="Goal">
+      <name xml:lang="en">Reliable self-hosted services</name>
+    </element>
+    <element identifier="bus-goal-portable" xsi:type="Goal">
+      <name xml:lang="en">Portable to the office network</name>
+      <documentation xml:lang="en">The same tooling and patterns must be reusable for the office environment.</documentation>
+    </element>
+    <element identifier="bus-pri-as-code" xsi:type="Principle">
+      <name xml:lang="en">Architecture as code</name>
+      <documentation xml:lang="en">The architecture lives in git as validated ArchiMate YAML; diagrams are generated.</documentation>
+    </element>
+    <element identifier="bus-req-backup" xsi:type="Requirement">
+      <name xml:lang="en">Nightly off-site backups</name>
+    </element>
+    <element identifier="bus-req-dns-filter" xsi:type="Requirement">
+      <name xml:lang="en">Network-wide ad and tracker blocking</name>
+    </element>
+    <element identifier="backup.app-backup" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Backup jobs</name>
+      <documentation xml:lang="en">Nightly restic snapshots of Nextcloud data and its database.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">restic</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">backup</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="backup.app-svc-backup" xsi:type="ApplicationService">
+      <name xml:lang="en">Scheduled backup</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">backup</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-docker" xsi:type="SystemSoftware">
+      <name xml:lang="en">Docker Engine</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Docker Compose</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-nas" xsi:type="Device">
+      <name xml:lang="en">NAS</name>
+      <documentation xml:lang="en">Synology NAS holding solution data (NFS) and running backup jobs.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Synology DSM 7</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">10.0.10.5</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-pve-01" xsi:type="Node">
+      <name xml:lang="en">Proxmox host 01</name>
+      <documentation xml:lang="en">Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Proxmox VE 8</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">10.0.10.11</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">8 cores</value>
+        </property>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">64 GB</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-vm-docker" xsi:type="Node">
+      <name xml:lang="en">VM docker-01</name>
+      <documentation xml:lang="en">Shared Docker host for containerised solutions.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Debian 12 VM</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">10.0.10.21</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.app-pihole" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Pi-hole</name>
+      <documentation xml:lang="en">Network-wide DNS resolver with ad and tracker blocking.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.app-svc-dns" xsi:type="ApplicationService">
+      <name xml:lang="en">DNS resolution and filtering</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.infra-lxc-pihole" xsi:type="Node">
+      <name xml:lang="en">LXC pihole</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Debian 12 LXC</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">10.0.10.53</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="home-automation.app-home-assistant" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Home Assistant</name>
+      <documentation xml:lang="en">Smart-home automation, dashboards and device integrations.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Home Assistant OS</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="home-automation.app-svc-automation" xsi:type="ApplicationService">
+      <name xml:lang="en">Automations and dashboards</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="home-automation.infra-vm-haos" xsi:type="Node">
+      <name xml:lang="en">VM haos</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Home Assistant OS VM</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">10.0.20.10</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="media.app-jellyfin" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Jellyfin</name>
+      <documentation xml:lang="en">Media server streaming the family's videos and music to TVs and phones.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Jellyfin 10</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="media.app-svc-streaming" xsi:type="ApplicationService">
+      <name xml:lang="en">Media streaming</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="media.infra-art-jellyfin" xsi:type="Artifact">
+      <name xml:lang="en">jellyfin/jellyfin image</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="network.infra-loc-home" xsi:type="Location">
+      <name xml:lang="en">Home office rack</name>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">network</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.app-nextcloud" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Nextcloud</name>
+      <documentation xml:lang="en">Self-hosted file sync, sharing and photo backup for the family.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.app-nextcloud-web" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Nextcloud web</name>
+      <documentation xml:lang="en">Web UI, WebDAV and mobile sync endpoints.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">PHP 8 / Apache</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">container</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.app-svc-file-sync" xsi:type="ApplicationService">
+      <name xml:lang="en">File sync and share</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.data-files" xsi:type="DataObject">
+      <name xml:lang="en">User files</name>
+      <documentation xml:lang="en">Family files and photos, stored on the NAS over NFS.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.infra-art-nextcloud" xsi:type="Artifact">
+      <name xml:lang="en">nextcloud:29-apache image</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="rel-bus-cap-home-it-composition-bus-cap-file-sharing" source="bus-cap-home-it" target="bus-cap-file-sharing" xsi:type="Composition" />
+    <relationship identifier="rel-bus-cap-home-it-composition-bus-cap-home-automation" source="bus-cap-home-it" target="bus-cap-home-automation" xsi:type="Composition" />
+    <relationship identifier="rel-bus-cap-home-it-realization-bus-goal-reliable" source="bus-cap-home-it" target="bus-goal-reliable" xsi:type="Realization" />
+    <relationship identifier="rel-bus-res-hardware-assignment-bus-cap-home-it" source="bus-res-hardware" target="bus-cap-home-it" xsi:type="Assignment" />
+    <relationship identifier="rel-bus-family-assignment-bus-role-user" source="bus-family" target="bus-role-user" xsi:type="Assignment" />
+    <relationship identifier="rel-bus-role-user-assignment-bus-proc-share" source="bus-role-user" target="bus-proc-share" xsi:type="Assignment" />
+    <relationship identifier="rel-bus-admin-assignment-bus-proc-backup" source="bus-admin" target="bus-proc-backup" xsi:type="Assignment" />
+    <relationship identifier="rel-bus-proc-share-realization-bus-svc-file-sharing" source="bus-proc-share" target="bus-svc-file-sharing" xsi:type="Realization" />
+    <relationship identifier="rel-bus-svc-file-sharing-serving-bus-role-user" source="bus-svc-file-sharing" target="bus-role-user" xsi:type="Serving" />
+    <relationship identifier="rel-bus-svc-automation-serving-bus-role-user" source="bus-svc-automation" target="bus-role-user" xsi:type="Serving" />
+    <relationship identifier="rel-bus-proc-share-access-bus-obj-photos" source="bus-proc-share" target="bus-obj-photos" xsi:type="Access" accessType="ReadWrite" />
+    <relationship identifier="rel-bus-proc-backup-access-bus-obj-photos" source="bus-proc-backup" target="bus-obj-photos" xsi:type="Access" accessType="Read" />
+    <relationship identifier="rel-bus-svc-file-sharing-realization-bus-cap-file-sharing" source="bus-svc-file-sharing" target="bus-cap-file-sharing" xsi:type="Realization" />
+    <relationship identifier="rel-bus-svc-automation-realization-bus-cap-home-automation" source="bus-svc-automation" target="bus-cap-home-automation" xsi:type="Realization" />
+    <relationship identifier="rel-bus-family-association-bus-stk-family" source="bus-family" target="bus-stk-family" xsi:type="Association">
+      <name xml:lang="en">represented by</name>
+    </relationship>
+    <relationship identifier="rel-bus-plateau-homelab-triggering-bus-plateau-office" source="bus-plateau-homelab" target="bus-plateau-office" xsi:type="Triggering" />
+    <relationship identifier="rel-bus-gap-identity-association-bus-plateau-homelab" source="bus-gap-identity" target="bus-plateau-homelab" xsi:type="Association" />
+    <relationship identifier="rel-bus-gap-identity-association-bus-plateau-office" source="bus-gap-identity" target="bus-plateau-office" xsi:type="Association" />
+    <relationship identifier="rel-bus-wp-office-realization-bus-del-office-model" source="bus-wp-office" target="bus-del-office-model" xsi:type="Realization" />
+    <relationship identifier="rel-bus-del-office-model-realization-bus-plateau-office" source="bus-del-office-model" target="bus-plateau-office" xsi:type="Realization" />
+    <relationship identifier="rel-bus-wp-office-realization-bus-goal-portable" source="bus-wp-office" target="bus-goal-portable" xsi:type="Realization" />
+    <relationship identifier="rel-bus-stk-family-association-bus-drv-privacy" source="bus-stk-family" target="bus-drv-privacy" xsi:type="Association" />
+    <relationship identifier="rel-bus-drv-privacy-influence-bus-goal-reliable" source="bus-drv-privacy" target="bus-goal-reliable" xsi:type="Influence" modifier="+" />
+    <relationship identifier="rel-bus-asm-single-host-association-bus-drv-privacy" source="bus-asm-single-host" target="bus-drv-privacy" xsi:type="Association" />
+    <relationship identifier="rel-bus-asm-single-host-influence-bus-goal-reliable" source="bus-asm-single-host" target="bus-goal-reliable" xsi:type="Influence" modifier="-" />
+    <relationship identifier="rel-bus-pri-as-code-realization-bus-goal-portable" source="bus-pri-as-code" target="bus-goal-portable" xsi:type="Realization" />
+    <relationship identifier="rel-bus-req-backup-realization-bus-goal-reliable" source="bus-req-backup" target="bus-goal-reliable" xsi:type="Realization" />
+    <relationship identifier="rel-bus-req-dns-filter-realization-bus-goal-reliable" source="bus-req-dns-filter" target="bus-goal-reliable" xsi:type="Realization" />
+    <relationship identifier="backup.rel-app-backup-realization-app-svc-backup" source="backup.app-backup" target="backup.app-svc-backup" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">backup</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="backup.rel-app-svc-backup-serving-enterprise.bus-proc-backup" source="backup.app-svc-backup" target="bus-proc-backup" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">backup</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="backup.rel-app-backup-realization-enterprise.bus-req-backup" source="backup.app-backup" target="bus-req-backup" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">backup</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="backup.rel-compute.infra-nas-realization-app-backup" source="compute.infra-nas" target="backup.app-backup" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">backup</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="backup.rel-app-backup-access-nextcloud.data-files" source="backup.app-backup" target="nextcloud.data-files" xsi:type="Access" accessType="Read">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">backup</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-pve-01-composition-infra-vm-docker" source="compute.infra-pve-01" target="compute.infra-vm-docker" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-vm-docker-assignment-infra-docker" source="compute.infra-vm-docker" target="compute.infra-docker" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" source="network.infra-loc-home" target="compute.infra-pve-01" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-nas" source="network.infra-loc-home" target="compute.infra-nas" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-pve-01-realization-enterprise.bus-res-hardware" source="compute.infra-pve-01" target="bus-res-hardware" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-nas-realization-enterprise.bus-res-hardware" source="compute.infra-nas" target="bus-res-hardware" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-app-pihole-realization-app-svc-dns" source="dns.app-pihole" target="dns.app-svc-dns" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-app-pihole-realization-enterprise.bus-req-dns-filter" source="dns.app-pihole" target="bus-req-dns-filter" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-app-svc-dns-serving-enterprise.bus-admin" source="dns.app-svc-dns" target="bus-admin" xsi:type="Serving">
+      <name xml:lang="en">Admin console</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-infra-lxc-pihole-realization-app-pihole" source="dns.infra-lxc-pihole" target="dns.app-pihole" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" source="compute.infra-pve-01" target="dns.infra-lxc-pihole" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-app-home-assistant-realization-app-svc-automation" source="home-automation.app-home-assistant" target="home-automation.app-svc-automation" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-app-svc-automation-realization-enterprise.bus-svc-automation" source="home-automation.app-svc-automation" target="bus-svc-automation" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-app-svc-automation-serving-enterprise.bus-role-user" source="home-automation.app-svc-automation" target="bus-role-user" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-dns.app-svc-dns-serving-app-home-assistant" source="dns.app-svc-dns" target="home-automation.app-home-assistant" xsi:type="Serving">
+      <name xml:lang="en">DNS lookups</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-infra-vm-haos-realization-app-home-assistant" source="home-automation.infra-vm-haos" target="home-automation.app-home-assistant" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="home-automation.rel-compute.infra-pve-01-composition-infra-vm-haos" source="compute.infra-pve-01" target="home-automation.infra-vm-haos" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">home-automation</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="media.rel-app-jellyfin-realization-app-svc-streaming" source="media.app-jellyfin" target="media.app-svc-streaming" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="media.rel-app-svc-streaming-serving-enterprise.bus-role-user" source="media.app-svc-streaming" target="bus-role-user" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="media.rel-app-jellyfin-access-nextcloud.data-files" source="media.app-jellyfin" target="nextcloud.data-files" xsi:type="Access" accessType="Read">
+      <name xml:lang="en">Family videos</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="media.rel-dns.app-svc-dns-serving-app-jellyfin" source="dns.app-svc-dns" target="media.app-jellyfin" xsi:type="Serving">
+      <name xml:lang="en">DNS lookups</name>
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="media.rel-compute.infra-docker-assignment-infra-art-jellyfin" source="compute.infra-docker" target="media.infra-art-jellyfin" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="media.rel-infra-art-jellyfin-realization-app-jellyfin" source="media.infra-art-jellyfin" target="media.app-jellyfin" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">new</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">media</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-app-nextcloud-composition-app-nextcloud-web" source="nextcloud.app-nextcloud" target="nextcloud.app-nextcloud-web" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-app-nextcloud-web-realization-app-svc-file-sync" source="nextcloud.app-nextcloud-web" target="nextcloud.app-svc-file-sync" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-app-nextcloud-web-access-data-files" source="nextcloud.app-nextcloud-web" target="nextcloud.data-files" xsi:type="Access" accessType="ReadWrite">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-app-svc-file-sync-serving-enterprise.bus-proc-share" source="nextcloud.app-svc-file-sync" target="bus-proc-share" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-app-svc-file-sync-realization-enterprise.bus-svc-file-sharing" source="nextcloud.app-svc-file-sync" target="bus-svc-file-sharing" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-dns.app-svc-dns-serving-app-nextcloud" source="dns.app-svc-dns" target="nextcloud.app-nextcloud" xsi:type="Serving">
+      <name xml:lang="en">DNS lookups</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-data-files-realization-enterprise.bus-obj-photos" source="nextcloud.data-files" target="bus-obj-photos" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-compute.infra-docker-assignment-infra-art-nextcloud" source="compute.infra-docker" target="nextcloud.infra-art-nextcloud" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-infra-art-nextcloud-realization-app-nextcloud-web" source="nextcloud.infra-art-nextcloud" target="nextcloud.app-nextcloud-web" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+  </relationships>
+  <propertyDefinitions>
+    <propertyDefinition identifier="propid-1" type="string">
+      <name xml:lang="en">a4m:c4</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-2" type="string">
+      <name xml:lang="en">a4m:sa</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-3" type="string">
+      <name xml:lang="en">a4m:state</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-4" type="string">
+      <name xml:lang="en">cpu</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-5" type="string">
+      <name xml:lang="en">dns_domain</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-6" type="string">
+      <name xml:lang="en">ip</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-7" type="string">
+      <name xml:lang="en">lan_subnet</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-8" type="string">
+      <name xml:lang="en">ram</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-9" type="string">
+      <name xml:lang="en">technology</name>
+    </propertyDefinition>
+  </propertyDefinitions>
+  <views>
+    <diagrams>
+      <view identifier="view-motivation" xsi:type="Diagram">
+        <name xml:lang="en">Motivation and strategy</name>
+        <documentation xml:lang="en">Why the home lab exists, which capabilities it provides, and which solutions realize the requirements.</documentation>
+        <node identifier="g-view-motivation-business" xsi:type="Container" x="20" y="20" w="910" h="185">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-motivation-bus-res-hardware" elementRef="bus-res-hardware" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-cap-home-it" elementRef="bus-cap-home-it" xsi:type="Element" x="190" y="45" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-cap-file-sharing" elementRef="bus-cap-file-sharing" xsi:type="Element" x="340" y="45" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-cap-home-automation" elementRef="bus-cap-home-automation" xsi:type="Element" x="490" y="45" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-stk-family" elementRef="bus-stk-family" xsi:type="Element" x="640" y="45" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-drv-privacy" elementRef="bus-drv-privacy" xsi:type="Element" x="790" y="45" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-asm-single-host" elementRef="bus-asm-single-host" xsi:type="Element" x="40" y="130" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-goal-reliable" elementRef="bus-goal-reliable" xsi:type="Element" x="190" y="130" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-goal-portable" elementRef="bus-goal-portable" xsi:type="Element" x="340" y="130" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-pri-as-code" elementRef="bus-pri-as-code" xsi:type="Element" x="490" y="130" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-req-backup" elementRef="bus-req-backup" xsi:type="Element" x="640" y="130" w="120" h="55" />
+          <node identifier="n-view-motivation-bus-req-dns-filter" elementRef="bus-req-dns-filter" xsi:type="Element" x="790" y="130" w="120" h="55" />
+        </node>
+        <node identifier="g-view-motivation-application" xsi:type="Container" x="20" y="235" w="910" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-motivation-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="40" y="260" w="120" h="55" />
+          <node identifier="n-view-motivation-backup.app-backup" elementRef="backup.app-backup" xsi:type="Element" x="190" y="260" w="120" h="55" />
+        </node>
+        <node identifier="g-view-motivation-infrastructure" xsi:type="Container" x="20" y="365" w="910" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-motivation-compute.infra-pve-01" elementRef="compute.infra-pve-01" xsi:type="Element" x="40" y="390" w="120" h="55" />
+          <node identifier="n-view-motivation-compute.infra-nas" elementRef="compute.infra-nas" xsi:type="Element" x="190" y="390" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-motivation-rel-bus-cap-home-it-composition-bus-cap-file-sharing" relationshipRef="rel-bus-cap-home-it-composition-bus-cap-file-sharing" xsi:type="Relationship" source="n-view-motivation-bus-cap-home-it" target="n-view-motivation-bus-cap-file-sharing" />
+        <connection identifier="c-view-motivation-rel-bus-cap-home-it-composition-bus-cap-home-automation" relationshipRef="rel-bus-cap-home-it-composition-bus-cap-home-automation" xsi:type="Relationship" source="n-view-motivation-bus-cap-home-it" target="n-view-motivation-bus-cap-home-automation" />
+        <connection identifier="c-view-motivation-rel-bus-cap-home-it-realization-bus-goal-reliable" relationshipRef="rel-bus-cap-home-it-realization-bus-goal-reliable" xsi:type="Relationship" source="n-view-motivation-bus-cap-home-it" target="n-view-motivation-bus-goal-reliable" />
+        <connection identifier="c-view-motivation-rel-bus-res-hardware-assignment-bus-cap-home-it" relationshipRef="rel-bus-res-hardware-assignment-bus-cap-home-it" xsi:type="Relationship" source="n-view-motivation-bus-res-hardware" target="n-view-motivation-bus-cap-home-it" />
+        <connection identifier="c-view-motivation-rel-bus-stk-family-association-bus-drv-privacy" relationshipRef="rel-bus-stk-family-association-bus-drv-privacy" xsi:type="Relationship" source="n-view-motivation-bus-stk-family" target="n-view-motivation-bus-drv-privacy" />
+        <connection identifier="c-view-motivation-rel-bus-drv-privacy-influence-bus-goal-reliable" relationshipRef="rel-bus-drv-privacy-influence-bus-goal-reliable" xsi:type="Relationship" source="n-view-motivation-bus-drv-privacy" target="n-view-motivation-bus-goal-reliable" />
+        <connection identifier="c-view-motivation-rel-bus-asm-single-host-association-bus-drv-privacy" relationshipRef="rel-bus-asm-single-host-association-bus-drv-privacy" xsi:type="Relationship" source="n-view-motivation-bus-asm-single-host" target="n-view-motivation-bus-drv-privacy" />
+        <connection identifier="c-view-motivation-rel-bus-asm-single-host-influence-bus-goal-reliable" relationshipRef="rel-bus-asm-single-host-influence-bus-goal-reliable" xsi:type="Relationship" source="n-view-motivation-bus-asm-single-host" target="n-view-motivation-bus-goal-reliable" />
+        <connection identifier="c-view-motivation-rel-bus-pri-as-code-realization-bus-goal-portable" relationshipRef="rel-bus-pri-as-code-realization-bus-goal-portable" xsi:type="Relationship" source="n-view-motivation-bus-pri-as-code" target="n-view-motivation-bus-goal-portable" />
+        <connection identifier="c-view-motivation-rel-bus-req-backup-realization-bus-goal-reliable" relationshipRef="rel-bus-req-backup-realization-bus-goal-reliable" xsi:type="Relationship" source="n-view-motivation-bus-req-backup" target="n-view-motivation-bus-goal-reliable" />
+        <connection identifier="c-view-motivation-rel-bus-req-dns-filter-realization-bus-goal-reliable" relationshipRef="rel-bus-req-dns-filter-realization-bus-goal-reliable" xsi:type="Relationship" source="n-view-motivation-bus-req-dns-filter" target="n-view-motivation-bus-goal-reliable" />
+        <connection identifier="c-view-motivation-backup.rel-app-backup-realization-enterprise.bus-req-backup" relationshipRef="backup.rel-app-backup-realization-enterprise.bus-req-backup" xsi:type="Relationship" source="n-view-motivation-backup.app-backup" target="n-view-motivation-bus-req-backup" />
+        <connection identifier="c-view-motivation-backup.rel-compute.infra-nas-realization-app-backup" relationshipRef="backup.rel-compute.infra-nas-realization-app-backup" xsi:type="Relationship" source="n-view-motivation-compute.infra-nas" target="n-view-motivation-backup.app-backup" />
+        <connection identifier="c-view-motivation-compute.rel-infra-pve-01-realization-enterprise.bus-res-hardware" relationshipRef="compute.rel-infra-pve-01-realization-enterprise.bus-res-hardware" xsi:type="Relationship" source="n-view-motivation-compute.infra-pve-01" target="n-view-motivation-bus-res-hardware" />
+        <connection identifier="c-view-motivation-compute.rel-infra-nas-realization-enterprise.bus-res-hardware" relationshipRef="compute.rel-infra-nas-realization-enterprise.bus-res-hardware" xsi:type="Relationship" source="n-view-motivation-compute.infra-nas" target="n-view-motivation-bus-res-hardware" />
+        <connection identifier="c-view-motivation-dns.rel-app-pihole-realization-enterprise.bus-req-dns-filter" relationshipRef="dns.rel-app-pihole-realization-enterprise.bus-req-dns-filter" xsi:type="Relationship" source="n-view-motivation-dns.app-pihole" target="n-view-motivation-bus-req-dns-filter" />
+      </view>
+      <view identifier="view-business" xsi:type="Diagram">
+        <name xml:lang="en">Business and supporting services</name>
+        <documentation xml:lang="en">Who uses the home lab and which application services of the solution architectures support them.</documentation>
+        <node identifier="g-view-business-business" xsi:type="Container" x="20" y="20" w="910" h="185">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business-bus-family" elementRef="bus-family" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-business-bus-admin" elementRef="bus-admin" xsi:type="Element" x="190" y="45" w="120" h="55" />
+          <node identifier="n-view-business-bus-role-user" elementRef="bus-role-user" xsi:type="Element" x="340" y="45" w="120" h="55" />
+          <node identifier="n-view-business-bus-proc-share" elementRef="bus-proc-share" xsi:type="Element" x="490" y="45" w="120" h="55" />
+          <node identifier="n-view-business-bus-proc-backup" elementRef="bus-proc-backup" xsi:type="Element" x="640" y="45" w="120" h="55" />
+          <node identifier="n-view-business-bus-svc-file-sharing" elementRef="bus-svc-file-sharing" xsi:type="Element" x="790" y="45" w="120" h="55" />
+          <node identifier="n-view-business-bus-svc-automation" elementRef="bus-svc-automation" xsi:type="Element" x="40" y="130" w="120" h="55" />
+          <node identifier="n-view-business-bus-obj-photos" elementRef="bus-obj-photos" xsi:type="Element" x="190" y="130" w="120" h="55" />
+        </node>
+        <node identifier="g-view-business-information" xsi:type="Container" x="20" y="235" w="910" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="260" w="120" h="55" />
+        </node>
+        <node identifier="g-view-business-application" xsi:type="Container" x="20" y="365" w="910" h="185">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business-backup.app-backup" elementRef="backup.app-backup" xsi:type="Element" x="40" y="390" w="120" h="55" />
+          <node identifier="n-view-business-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="390" w="120" h="55" />
+          <node identifier="n-view-business-backup.app-svc-backup" elementRef="backup.app-svc-backup" xsi:type="Element" x="340" y="390" w="120" h="55" />
+          <node identifier="n-view-business-dns.app-svc-dns" elementRef="dns.app-svc-dns" xsi:type="Element" x="490" y="390" w="120" h="55" />
+          <node identifier="n-view-business-home-automation.app-svc-automation" elementRef="home-automation.app-svc-automation" xsi:type="Element" x="640" y="390" w="120" h="55" />
+          <node identifier="n-view-business-media.app-svc-streaming" elementRef="media.app-svc-streaming" xsi:type="Element" x="790" y="390" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+          <node identifier="n-view-business-nextcloud.app-svc-file-sync" elementRef="nextcloud.app-svc-file-sync" xsi:type="Element" x="40" y="475" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-business-rel-bus-family-assignment-bus-role-user" relationshipRef="rel-bus-family-assignment-bus-role-user" xsi:type="Relationship" source="n-view-business-bus-family" target="n-view-business-bus-role-user" />
+        <connection identifier="c-view-business-rel-bus-role-user-assignment-bus-proc-share" relationshipRef="rel-bus-role-user-assignment-bus-proc-share" xsi:type="Relationship" source="n-view-business-bus-role-user" target="n-view-business-bus-proc-share" />
+        <connection identifier="c-view-business-rel-bus-admin-assignment-bus-proc-backup" relationshipRef="rel-bus-admin-assignment-bus-proc-backup" xsi:type="Relationship" source="n-view-business-bus-admin" target="n-view-business-bus-proc-backup" />
+        <connection identifier="c-view-business-rel-bus-proc-share-realization-bus-svc-file-sharing" relationshipRef="rel-bus-proc-share-realization-bus-svc-file-sharing" xsi:type="Relationship" source="n-view-business-bus-proc-share" target="n-view-business-bus-svc-file-sharing" />
+        <connection identifier="c-view-business-rel-bus-svc-file-sharing-serving-bus-role-user" relationshipRef="rel-bus-svc-file-sharing-serving-bus-role-user" xsi:type="Relationship" source="n-view-business-bus-svc-file-sharing" target="n-view-business-bus-role-user" />
+        <connection identifier="c-view-business-rel-bus-svc-automation-serving-bus-role-user" relationshipRef="rel-bus-svc-automation-serving-bus-role-user" xsi:type="Relationship" source="n-view-business-bus-svc-automation" target="n-view-business-bus-role-user" />
+        <connection identifier="c-view-business-rel-bus-proc-share-access-bus-obj-photos" relationshipRef="rel-bus-proc-share-access-bus-obj-photos" xsi:type="Relationship" source="n-view-business-bus-proc-share" target="n-view-business-bus-obj-photos" />
+        <connection identifier="c-view-business-rel-bus-proc-backup-access-bus-obj-photos" relationshipRef="rel-bus-proc-backup-access-bus-obj-photos" xsi:type="Relationship" source="n-view-business-bus-proc-backup" target="n-view-business-bus-obj-photos" />
+        <connection identifier="c-view-business-backup.rel-app-backup-realization-app-svc-backup" relationshipRef="backup.rel-app-backup-realization-app-svc-backup" xsi:type="Relationship" source="n-view-business-backup.app-backup" target="n-view-business-backup.app-svc-backup" />
+        <connection identifier="c-view-business-backup.rel-app-svc-backup-serving-enterprise.bus-proc-backup" relationshipRef="backup.rel-app-svc-backup-serving-enterprise.bus-proc-backup" xsi:type="Relationship" source="n-view-business-backup.app-svc-backup" target="n-view-business-bus-proc-backup" />
+        <connection identifier="c-view-business-backup.rel-app-backup-access-nextcloud.data-files" relationshipRef="backup.rel-app-backup-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-business-backup.app-backup" target="n-view-business-nextcloud.data-files" />
+        <connection identifier="c-view-business-dns.rel-app-pihole-realization-app-svc-dns" relationshipRef="dns.rel-app-pihole-realization-app-svc-dns" xsi:type="Relationship" source="n-view-business-dns.app-pihole" target="n-view-business-dns.app-svc-dns" />
+        <connection identifier="c-view-business-dns.rel-app-svc-dns-serving-enterprise.bus-admin" relationshipRef="dns.rel-app-svc-dns-serving-enterprise.bus-admin" xsi:type="Relationship" source="n-view-business-dns.app-svc-dns" target="n-view-business-bus-admin" />
+        <connection identifier="c-view-business-home-automation.rel-app-svc-automation-realization-enterprise.bus-svc-automation" relationshipRef="home-automation.rel-app-svc-automation-realization-enterprise.bus-svc-automation" xsi:type="Relationship" source="n-view-business-home-automation.app-svc-automation" target="n-view-business-bus-svc-automation" />
+        <connection identifier="c-view-business-home-automation.rel-app-svc-automation-serving-enterprise.bus-role-user" relationshipRef="home-automation.rel-app-svc-automation-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-business-home-automation.app-svc-automation" target="n-view-business-bus-role-user" />
+        <connection identifier="c-view-business-media.rel-app-svc-streaming-serving-enterprise.bus-role-user" relationshipRef="media.rel-app-svc-streaming-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-business-media.app-svc-streaming" target="n-view-business-bus-role-user">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+        <connection identifier="c-view-business-nextcloud.rel-app-svc-file-sync-serving-enterprise.bus-proc-share" relationshipRef="nextcloud.rel-app-svc-file-sync-serving-enterprise.bus-proc-share" xsi:type="Relationship" source="n-view-business-nextcloud.app-svc-file-sync" target="n-view-business-bus-proc-share" />
+        <connection identifier="c-view-business-nextcloud.rel-app-svc-file-sync-realization-enterprise.bus-svc-file-sharing" relationshipRef="nextcloud.rel-app-svc-file-sync-realization-enterprise.bus-svc-file-sharing" xsi:type="Relationship" source="n-view-business-nextcloud.app-svc-file-sync" target="n-view-business-bus-svc-file-sharing" />
+        <connection identifier="c-view-business-nextcloud.rel-data-files-realization-enterprise.bus-obj-photos" relationshipRef="nextcloud.rel-data-files-realization-enterprise.bus-obj-photos" xsi:type="Relationship" source="n-view-business-nextcloud.data-files" target="n-view-business-bus-obj-photos" />
+      </view>
+      <view identifier="view-business--baseline" xsi:type="Diagram">
+        <name xml:lang="en">Business and supporting services (current state)</name>
+        <documentation xml:lang="en">Who uses the home lab and which application services of the solution architectures support them.</documentation>
+        <node identifier="g-view-business--baseline-business" xsi:type="Container" x="20" y="20" w="910" h="185">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business--baseline-bus-family" elementRef="bus-family" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-business--baseline-bus-admin" elementRef="bus-admin" xsi:type="Element" x="190" y="45" w="120" h="55" />
+          <node identifier="n-view-business--baseline-bus-role-user" elementRef="bus-role-user" xsi:type="Element" x="340" y="45" w="120" h="55" />
+          <node identifier="n-view-business--baseline-bus-proc-share" elementRef="bus-proc-share" xsi:type="Element" x="490" y="45" w="120" h="55" />
+          <node identifier="n-view-business--baseline-bus-proc-backup" elementRef="bus-proc-backup" xsi:type="Element" x="640" y="45" w="120" h="55" />
+          <node identifier="n-view-business--baseline-bus-svc-file-sharing" elementRef="bus-svc-file-sharing" xsi:type="Element" x="790" y="45" w="120" h="55" />
+          <node identifier="n-view-business--baseline-bus-svc-automation" elementRef="bus-svc-automation" xsi:type="Element" x="40" y="130" w="120" h="55" />
+          <node identifier="n-view-business--baseline-bus-obj-photos" elementRef="bus-obj-photos" xsi:type="Element" x="190" y="130" w="120" h="55" />
+        </node>
+        <node identifier="g-view-business--baseline-information" xsi:type="Container" x="20" y="235" w="910" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business--baseline-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="260" w="120" h="55" />
+        </node>
+        <node identifier="g-view-business--baseline-application" xsi:type="Container" x="20" y="365" w="910" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business--baseline-backup.app-backup" elementRef="backup.app-backup" xsi:type="Element" x="40" y="390" w="120" h="55" />
+          <node identifier="n-view-business--baseline-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="390" w="120" h="55" />
+          <node identifier="n-view-business--baseline-backup.app-svc-backup" elementRef="backup.app-svc-backup" xsi:type="Element" x="340" y="390" w="120" h="55" />
+          <node identifier="n-view-business--baseline-dns.app-svc-dns" elementRef="dns.app-svc-dns" xsi:type="Element" x="490" y="390" w="120" h="55" />
+          <node identifier="n-view-business--baseline-home-automation.app-svc-automation" elementRef="home-automation.app-svc-automation" xsi:type="Element" x="640" y="390" w="120" h="55" />
+          <node identifier="n-view-business--baseline-nextcloud.app-svc-file-sync" elementRef="nextcloud.app-svc-file-sync" xsi:type="Element" x="790" y="390" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-business--baseline-rel-bus-family-assignment-bus-role-user" relationshipRef="rel-bus-family-assignment-bus-role-user" xsi:type="Relationship" source="n-view-business--baseline-bus-family" target="n-view-business--baseline-bus-role-user" />
+        <connection identifier="c-view-business--baseline-rel-bus-role-user-assignment-bus-proc-share" relationshipRef="rel-bus-role-user-assignment-bus-proc-share" xsi:type="Relationship" source="n-view-business--baseline-bus-role-user" target="n-view-business--baseline-bus-proc-share" />
+        <connection identifier="c-view-business--baseline-rel-bus-admin-assignment-bus-proc-backup" relationshipRef="rel-bus-admin-assignment-bus-proc-backup" xsi:type="Relationship" source="n-view-business--baseline-bus-admin" target="n-view-business--baseline-bus-proc-backup" />
+        <connection identifier="c-view-business--baseline-rel-bus-proc-share-realization-bus-svc-file-sharing" relationshipRef="rel-bus-proc-share-realization-bus-svc-file-sharing" xsi:type="Relationship" source="n-view-business--baseline-bus-proc-share" target="n-view-business--baseline-bus-svc-file-sharing" />
+        <connection identifier="c-view-business--baseline-rel-bus-svc-file-sharing-serving-bus-role-user" relationshipRef="rel-bus-svc-file-sharing-serving-bus-role-user" xsi:type="Relationship" source="n-view-business--baseline-bus-svc-file-sharing" target="n-view-business--baseline-bus-role-user" />
+        <connection identifier="c-view-business--baseline-rel-bus-svc-automation-serving-bus-role-user" relationshipRef="rel-bus-svc-automation-serving-bus-role-user" xsi:type="Relationship" source="n-view-business--baseline-bus-svc-automation" target="n-view-business--baseline-bus-role-user" />
+        <connection identifier="c-view-business--baseline-rel-bus-proc-share-access-bus-obj-photos" relationshipRef="rel-bus-proc-share-access-bus-obj-photos" xsi:type="Relationship" source="n-view-business--baseline-bus-proc-share" target="n-view-business--baseline-bus-obj-photos" />
+        <connection identifier="c-view-business--baseline-rel-bus-proc-backup-access-bus-obj-photos" relationshipRef="rel-bus-proc-backup-access-bus-obj-photos" xsi:type="Relationship" source="n-view-business--baseline-bus-proc-backup" target="n-view-business--baseline-bus-obj-photos" />
+        <connection identifier="c-view-business--baseline-backup.rel-app-backup-realization-app-svc-backup" relationshipRef="backup.rel-app-backup-realization-app-svc-backup" xsi:type="Relationship" source="n-view-business--baseline-backup.app-backup" target="n-view-business--baseline-backup.app-svc-backup" />
+        <connection identifier="c-view-business--baseline-backup.rel-app-svc-backup-serving-enterprise.bus-proc-backup" relationshipRef="backup.rel-app-svc-backup-serving-enterprise.bus-proc-backup" xsi:type="Relationship" source="n-view-business--baseline-backup.app-svc-backup" target="n-view-business--baseline-bus-proc-backup" />
+        <connection identifier="c-view-business--baseline-backup.rel-app-backup-access-nextcloud.data-files" relationshipRef="backup.rel-app-backup-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-business--baseline-backup.app-backup" target="n-view-business--baseline-nextcloud.data-files" />
+        <connection identifier="c-view-business--baseline-dns.rel-app-pihole-realization-app-svc-dns" relationshipRef="dns.rel-app-pihole-realization-app-svc-dns" xsi:type="Relationship" source="n-view-business--baseline-dns.app-pihole" target="n-view-business--baseline-dns.app-svc-dns" />
+        <connection identifier="c-view-business--baseline-dns.rel-app-svc-dns-serving-enterprise.bus-admin" relationshipRef="dns.rel-app-svc-dns-serving-enterprise.bus-admin" xsi:type="Relationship" source="n-view-business--baseline-dns.app-svc-dns" target="n-view-business--baseline-bus-admin" />
+        <connection identifier="c-view-business--baseline-home-automation.rel-app-svc-automation-realization-enterprise.bus-svc-automation" relationshipRef="home-automation.rel-app-svc-automation-realization-enterprise.bus-svc-automation" xsi:type="Relationship" source="n-view-business--baseline-home-automation.app-svc-automation" target="n-view-business--baseline-bus-svc-automation" />
+        <connection identifier="c-view-business--baseline-home-automation.rel-app-svc-automation-serving-enterprise.bus-role-user" relationshipRef="home-automation.rel-app-svc-automation-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-business--baseline-home-automation.app-svc-automation" target="n-view-business--baseline-bus-role-user" />
+        <connection identifier="c-view-business--baseline-nextcloud.rel-app-svc-file-sync-serving-enterprise.bus-proc-share" relationshipRef="nextcloud.rel-app-svc-file-sync-serving-enterprise.bus-proc-share" xsi:type="Relationship" source="n-view-business--baseline-nextcloud.app-svc-file-sync" target="n-view-business--baseline-bus-proc-share" />
+        <connection identifier="c-view-business--baseline-nextcloud.rel-app-svc-file-sync-realization-enterprise.bus-svc-file-sharing" relationshipRef="nextcloud.rel-app-svc-file-sync-realization-enterprise.bus-svc-file-sharing" xsi:type="Relationship" source="n-view-business--baseline-nextcloud.app-svc-file-sync" target="n-view-business--baseline-bus-svc-file-sharing" />
+        <connection identifier="c-view-business--baseline-nextcloud.rel-data-files-realization-enterprise.bus-obj-photos" relationshipRef="nextcloud.rel-data-files-realization-enterprise.bus-obj-photos" xsi:type="Relationship" source="n-view-business--baseline-nextcloud.data-files" target="n-view-business--baseline-bus-obj-photos" />
+      </view>
+      <view identifier="view-business--target" xsi:type="Diagram">
+        <name xml:lang="en">Business and supporting services (target state)</name>
+        <documentation xml:lang="en">Who uses the home lab and which application services of the solution architectures support them.</documentation>
+        <node identifier="g-view-business--target-business" xsi:type="Container" x="20" y="20" w="910" h="185">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business--target-bus-family" elementRef="bus-family" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-business--target-bus-admin" elementRef="bus-admin" xsi:type="Element" x="190" y="45" w="120" h="55" />
+          <node identifier="n-view-business--target-bus-role-user" elementRef="bus-role-user" xsi:type="Element" x="340" y="45" w="120" h="55" />
+          <node identifier="n-view-business--target-bus-proc-share" elementRef="bus-proc-share" xsi:type="Element" x="490" y="45" w="120" h="55" />
+          <node identifier="n-view-business--target-bus-proc-backup" elementRef="bus-proc-backup" xsi:type="Element" x="640" y="45" w="120" h="55" />
+          <node identifier="n-view-business--target-bus-svc-file-sharing" elementRef="bus-svc-file-sharing" xsi:type="Element" x="790" y="45" w="120" h="55" />
+          <node identifier="n-view-business--target-bus-svc-automation" elementRef="bus-svc-automation" xsi:type="Element" x="40" y="130" w="120" h="55" />
+          <node identifier="n-view-business--target-bus-obj-photos" elementRef="bus-obj-photos" xsi:type="Element" x="190" y="130" w="120" h="55" />
+        </node>
+        <node identifier="g-view-business--target-information" xsi:type="Container" x="20" y="235" w="910" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business--target-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="260" w="120" h="55" />
+        </node>
+        <node identifier="g-view-business--target-application" xsi:type="Container" x="20" y="365" w="910" h="185">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-business--target-backup.app-backup" elementRef="backup.app-backup" xsi:type="Element" x="40" y="390" w="120" h="55" />
+          <node identifier="n-view-business--target-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="390" w="120" h="55" />
+          <node identifier="n-view-business--target-backup.app-svc-backup" elementRef="backup.app-svc-backup" xsi:type="Element" x="340" y="390" w="120" h="55" />
+          <node identifier="n-view-business--target-dns.app-svc-dns" elementRef="dns.app-svc-dns" xsi:type="Element" x="490" y="390" w="120" h="55" />
+          <node identifier="n-view-business--target-home-automation.app-svc-automation" elementRef="home-automation.app-svc-automation" xsi:type="Element" x="640" y="390" w="120" h="55" />
+          <node identifier="n-view-business--target-media.app-svc-streaming" elementRef="media.app-svc-streaming" xsi:type="Element" x="790" y="390" w="120" h="55" />
+          <node identifier="n-view-business--target-nextcloud.app-svc-file-sync" elementRef="nextcloud.app-svc-file-sync" xsi:type="Element" x="40" y="475" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-business--target-rel-bus-family-assignment-bus-role-user" relationshipRef="rel-bus-family-assignment-bus-role-user" xsi:type="Relationship" source="n-view-business--target-bus-family" target="n-view-business--target-bus-role-user" />
+        <connection identifier="c-view-business--target-rel-bus-role-user-assignment-bus-proc-share" relationshipRef="rel-bus-role-user-assignment-bus-proc-share" xsi:type="Relationship" source="n-view-business--target-bus-role-user" target="n-view-business--target-bus-proc-share" />
+        <connection identifier="c-view-business--target-rel-bus-admin-assignment-bus-proc-backup" relationshipRef="rel-bus-admin-assignment-bus-proc-backup" xsi:type="Relationship" source="n-view-business--target-bus-admin" target="n-view-business--target-bus-proc-backup" />
+        <connection identifier="c-view-business--target-rel-bus-proc-share-realization-bus-svc-file-sharing" relationshipRef="rel-bus-proc-share-realization-bus-svc-file-sharing" xsi:type="Relationship" source="n-view-business--target-bus-proc-share" target="n-view-business--target-bus-svc-file-sharing" />
+        <connection identifier="c-view-business--target-rel-bus-svc-file-sharing-serving-bus-role-user" relationshipRef="rel-bus-svc-file-sharing-serving-bus-role-user" xsi:type="Relationship" source="n-view-business--target-bus-svc-file-sharing" target="n-view-business--target-bus-role-user" />
+        <connection identifier="c-view-business--target-rel-bus-svc-automation-serving-bus-role-user" relationshipRef="rel-bus-svc-automation-serving-bus-role-user" xsi:type="Relationship" source="n-view-business--target-bus-svc-automation" target="n-view-business--target-bus-role-user" />
+        <connection identifier="c-view-business--target-rel-bus-proc-share-access-bus-obj-photos" relationshipRef="rel-bus-proc-share-access-bus-obj-photos" xsi:type="Relationship" source="n-view-business--target-bus-proc-share" target="n-view-business--target-bus-obj-photos" />
+        <connection identifier="c-view-business--target-rel-bus-proc-backup-access-bus-obj-photos" relationshipRef="rel-bus-proc-backup-access-bus-obj-photos" xsi:type="Relationship" source="n-view-business--target-bus-proc-backup" target="n-view-business--target-bus-obj-photos" />
+        <connection identifier="c-view-business--target-backup.rel-app-backup-realization-app-svc-backup" relationshipRef="backup.rel-app-backup-realization-app-svc-backup" xsi:type="Relationship" source="n-view-business--target-backup.app-backup" target="n-view-business--target-backup.app-svc-backup" />
+        <connection identifier="c-view-business--target-backup.rel-app-svc-backup-serving-enterprise.bus-proc-backup" relationshipRef="backup.rel-app-svc-backup-serving-enterprise.bus-proc-backup" xsi:type="Relationship" source="n-view-business--target-backup.app-svc-backup" target="n-view-business--target-bus-proc-backup" />
+        <connection identifier="c-view-business--target-backup.rel-app-backup-access-nextcloud.data-files" relationshipRef="backup.rel-app-backup-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-business--target-backup.app-backup" target="n-view-business--target-nextcloud.data-files" />
+        <connection identifier="c-view-business--target-dns.rel-app-pihole-realization-app-svc-dns" relationshipRef="dns.rel-app-pihole-realization-app-svc-dns" xsi:type="Relationship" source="n-view-business--target-dns.app-pihole" target="n-view-business--target-dns.app-svc-dns" />
+        <connection identifier="c-view-business--target-dns.rel-app-svc-dns-serving-enterprise.bus-admin" relationshipRef="dns.rel-app-svc-dns-serving-enterprise.bus-admin" xsi:type="Relationship" source="n-view-business--target-dns.app-svc-dns" target="n-view-business--target-bus-admin" />
+        <connection identifier="c-view-business--target-home-automation.rel-app-svc-automation-realization-enterprise.bus-svc-automation" relationshipRef="home-automation.rel-app-svc-automation-realization-enterprise.bus-svc-automation" xsi:type="Relationship" source="n-view-business--target-home-automation.app-svc-automation" target="n-view-business--target-bus-svc-automation" />
+        <connection identifier="c-view-business--target-home-automation.rel-app-svc-automation-serving-enterprise.bus-role-user" relationshipRef="home-automation.rel-app-svc-automation-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-business--target-home-automation.app-svc-automation" target="n-view-business--target-bus-role-user" />
+        <connection identifier="c-view-business--target-media.rel-app-svc-streaming-serving-enterprise.bus-role-user" relationshipRef="media.rel-app-svc-streaming-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-business--target-media.app-svc-streaming" target="n-view-business--target-bus-role-user" />
+        <connection identifier="c-view-business--target-nextcloud.rel-app-svc-file-sync-serving-enterprise.bus-proc-share" relationshipRef="nextcloud.rel-app-svc-file-sync-serving-enterprise.bus-proc-share" xsi:type="Relationship" source="n-view-business--target-nextcloud.app-svc-file-sync" target="n-view-business--target-bus-proc-share" />
+        <connection identifier="c-view-business--target-nextcloud.rel-app-svc-file-sync-realization-enterprise.bus-svc-file-sharing" relationshipRef="nextcloud.rel-app-svc-file-sync-realization-enterprise.bus-svc-file-sharing" xsi:type="Relationship" source="n-view-business--target-nextcloud.app-svc-file-sync" target="n-view-business--target-bus-svc-file-sharing" />
+        <connection identifier="c-view-business--target-nextcloud.rel-data-files-realization-enterprise.bus-obj-photos" relationshipRef="nextcloud.rel-data-files-realization-enterprise.bus-obj-photos" xsi:type="Relationship" source="n-view-business--target-nextcloud.data-files" target="n-view-business--target-bus-obj-photos" />
+      </view>
+      <view identifier="view-migration" xsi:type="Diagram" viewpoint="Implementation and Migration">
+        <name xml:lang="en">Office migration roadmap</name>
+        <node identifier="g-view-migration-business" xsi:type="Container" x="20" y="20" w="910" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-migration-bus-wp-office" elementRef="bus-wp-office" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-migration-bus-gap-identity" elementRef="bus-gap-identity" xsi:type="Element" x="190" y="45" w="120" h="55" />
+          <node identifier="n-view-migration-bus-del-office-model" elementRef="bus-del-office-model" xsi:type="Element" x="340" y="45" w="120" h="55" />
+          <node identifier="n-view-migration-bus-goal-portable" elementRef="bus-goal-portable" xsi:type="Element" x="490" y="45" w="120" h="55" />
+          <node identifier="n-view-migration-bus-plateau-homelab" elementRef="bus-plateau-homelab" xsi:type="Element" x="640" y="45" w="120" h="55" />
+          <node identifier="n-view-migration-bus-plateau-office" elementRef="bus-plateau-office" xsi:type="Element" x="790" y="45" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-migration-rel-bus-plateau-homelab-triggering-bus-plateau-office" relationshipRef="rel-bus-plateau-homelab-triggering-bus-plateau-office" xsi:type="Relationship" source="n-view-migration-bus-plateau-homelab" target="n-view-migration-bus-plateau-office" />
+        <connection identifier="c-view-migration-rel-bus-gap-identity-association-bus-plateau-homelab" relationshipRef="rel-bus-gap-identity-association-bus-plateau-homelab" xsi:type="Relationship" source="n-view-migration-bus-gap-identity" target="n-view-migration-bus-plateau-homelab" />
+        <connection identifier="c-view-migration-rel-bus-gap-identity-association-bus-plateau-office" relationshipRef="rel-bus-gap-identity-association-bus-plateau-office" xsi:type="Relationship" source="n-view-migration-bus-gap-identity" target="n-view-migration-bus-plateau-office" />
+        <connection identifier="c-view-migration-rel-bus-wp-office-realization-bus-del-office-model" relationshipRef="rel-bus-wp-office-realization-bus-del-office-model" xsi:type="Relationship" source="n-view-migration-bus-wp-office" target="n-view-migration-bus-del-office-model" />
+        <connection identifier="c-view-migration-rel-bus-del-office-model-realization-bus-plateau-office" relationshipRef="rel-bus-del-office-model-realization-bus-plateau-office" xsi:type="Relationship" source="n-view-migration-bus-del-office-model" target="n-view-migration-bus-plateau-office" />
+        <connection identifier="c-view-migration-rel-bus-wp-office-realization-bus-goal-portable" relationshipRef="rel-bus-wp-office-realization-bus-goal-portable" xsi:type="Relationship" source="n-view-migration-bus-wp-office" target="n-view-migration-bus-goal-portable" />
+      </view>
+    </diagrams>
+  </views>
+</model>

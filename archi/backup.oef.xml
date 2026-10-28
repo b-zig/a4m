@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="model-backup" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd">
+  <name xml:lang="en">Backup</name>
+  <documentation xml:lang="en">Nightly restic snapshots of Nextcloud data and the database, copied off-site. Approved change (ADR-0001): move the off-site copy from Backblaze B2 to a Hetzner Storage Box.</documentation>
+  <elements>
+    <element identifier="app-backup" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Backup jobs</name>
+      <documentation xml:lang="en">Nightly restic snapshots of Nextcloud data and its database.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">restic</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="app-svc-backup" xsi:type="ApplicationService">
+      <name xml:lang="en">Scheduled backup</name>
+    </element>
+    <element identifier="app-offsite-b2" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Backblaze B2</name>
+      <documentation xml:lang="en">Off-site object storage for encrypted backup snapshots (being replaced).</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">true</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">retiring</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="app-offsite-hetzner" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Hetzner Storage Box</name>
+      <documentation xml:lang="en">Off-site storage for encrypted restic snapshots, EU-hosted, flat price.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">true</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-docker" xsi:type="SystemSoftware">
+      <name xml:lang="en">Docker Engine</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Docker Compose</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-nas" xsi:type="Device">
+      <name xml:lang="en">NAS</name>
+      <documentation xml:lang="en">Synology NAS holding solution data (NFS) and running backup jobs.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Synology DSM 7</value>
+        </property>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">10.0.10.5</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-pve-01" xsi:type="Node">
+      <name xml:lang="en">Proxmox host 01</name>
+      <documentation xml:lang="en">Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Proxmox VE 8</value>
+        </property>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">10.0.10.11</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">8 cores</value>
+        </property>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">64 GB</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-vm-docker" xsi:type="Node">
+      <name xml:lang="en">VM docker-01</name>
+      <documentation xml:lang="en">Shared Docker host for containerised solutions.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">Debian 12 VM</value>
+        </property>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">10.0.10.21</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-admin" xsi:type="BusinessActor">
+      <name xml:lang="en">Home lab admin</name>
+      <documentation xml:lang="en">Runs and maintains the home lab.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">person</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-proc-backup" xsi:type="BusinessProcess">
+      <name xml:lang="en">Back up family data</name>
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-req-backup" xsi:type="Requirement">
+      <name xml:lang="en">Nightly off-site backups</name>
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="network.infra-loc-home" xsi:type="Location">
+      <name xml:lang="en">Home office rack</name>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">network</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.app-nextcloud" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Nextcloud</name>
+      <documentation xml:lang="en">Self-hosted file sync, sharing and photo backup for the family.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.app-nextcloud-db" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Nextcloud database</name>
+      <documentation xml:lang="en">Metadata, shares and user accounts.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">MariaDB 11</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">container</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">database</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.data-files" xsi:type="DataObject">
+      <name xml:lang="en">User files</name>
+      <documentation xml:lang="en">Family files and photos, stored on the NAS over NFS.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="nextcloud.infra-art-mariadb" xsi:type="Artifact">
+      <name xml:lang="en">mariadb:11 image</name>
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="rel-app-backup-realization-app-svc-backup" source="app-backup" target="app-svc-backup" xsi:type="Realization" />
+    <relationship identifier="rel-app-svc-backup-serving-enterprise.bus-proc-backup" source="app-svc-backup" target="enterprise.bus-proc-backup" xsi:type="Serving" />
+    <relationship identifier="rel-app-backup-realization-enterprise.bus-req-backup" source="app-backup" target="enterprise.bus-req-backup" xsi:type="Realization" />
+    <relationship identifier="rel-compute.infra-nas-realization-app-backup" source="compute.infra-nas" target="app-backup" xsi:type="Realization" />
+    <relationship identifier="rel-app-backup-access-nextcloud.data-files" source="app-backup" target="nextcloud.data-files" xsi:type="Access" accessType="Read" />
+    <relationship identifier="rel-nextcloud.app-nextcloud-db-flow-app-backup" source="nextcloud.app-nextcloud-db" target="app-backup" xsi:type="Flow">
+      <name xml:lang="en">Nightly dump</name>
+    </relationship>
+    <relationship identifier="rel-app-backup-flow-app-offsite-b2" source="app-backup" target="app-offsite-b2" xsi:type="Flow">
+      <name xml:lang="en">Encrypted snapshots</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">S3 over HTTPS</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">retiring</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="rel-app-backup-flow-app-offsite-hetzner" source="app-backup" target="app-offsite-hetzner" xsi:type="Flow">
+      <name xml:lang="en">Encrypted snapshots</name>
+      <properties>
+        <property propertyDefinitionRef="propid-9">
+          <value xml:lang="en">restic over SFTP</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">new</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-pve-01-composition-infra-vm-docker" source="compute.infra-pve-01" target="compute.infra-vm-docker" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-vm-docker-assignment-infra-docker" source="compute.infra-vm-docker" target="compute.infra-docker" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" source="network.infra-loc-home" target="compute.infra-pve-01" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-nas" source="network.infra-loc-home" target="compute.infra-nas" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="enterprise.rel-bus-admin-assignment-bus-proc-backup" source="enterprise.bus-admin" target="enterprise.bus-proc-backup" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-app-nextcloud-composition-app-nextcloud-db" source="nextcloud.app-nextcloud" target="nextcloud.app-nextcloud-db" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-compute.infra-docker-assignment-infra-art-mariadb" source="compute.infra-docker" target="nextcloud.infra-art-mariadb" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="nextcloud.rel-infra-art-mariadb-realization-app-nextcloud-db" source="nextcloud.infra-art-mariadb" target="nextcloud.app-nextcloud-db" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">nextcloud</value>
+        </property>
+      </properties>
+    </relationship>
+  </relationships>
+  <propertyDefinitions>
+    <propertyDefinition identifier="propid-1" type="string">
+      <name xml:lang="en">a4m:c4</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-2" type="string">
+      <name xml:lang="en">a4m:c4_shape</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-3" type="string">
+      <name xml:lang="en">a4m:external</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-4" type="string">
+      <name xml:lang="en">a4m:sa</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-5" type="string">
+      <name xml:lang="en">a4m:state</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-6" type="string">
+      <name xml:lang="en">cpu</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-7" type="string">
+      <name xml:lang="en">ip</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-8" type="string">
+      <name xml:lang="en">ram</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-9" type="string">
+      <name xml:lang="en">technology</name>
+    </propertyDefinition>
+  </propertyDefinitions>
+  <views>
+    <diagrams>
+      <view identifier="view-overview" xsi:type="Diagram">
+        <name xml:lang="en">Backup — overview</name>
+        <documentation xml:lang="en">What is backed up, from where, and where the copies go (current → target).</documentation>
+        <node identifier="g-view-overview-business" xsi:type="Container" x="20" y="20" w="760" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-enterprise.bus-proc-backup" elementRef="enterprise.bus-proc-backup" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-overview-enterprise.bus-req-backup" elementRef="enterprise.bus-req-backup" xsi:type="Element" x="190" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-information" xsi:type="Container" x="20" y="150" w="760" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="175" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-application" xsi:type="Container" x="20" y="280" w="760" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-app-backup" elementRef="app-backup" xsi:type="Element" x="40" y="305" w="120" h="55" />
+          <node identifier="n-view-overview-app-offsite-b2" elementRef="app-offsite-b2" xsi:type="Element" x="190" y="305" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="198" g="40" b="40" />
+            </style>
+          </node>
+          <node identifier="n-view-overview-app-offsite-hetzner" elementRef="app-offsite-hetzner" xsi:type="Element" x="340" y="305" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+          <node identifier="n-view-overview-nextcloud.app-nextcloud-db" elementRef="nextcloud.app-nextcloud-db" xsi:type="Element" x="490" y="305" w="120" h="55" />
+          <node identifier="n-view-overview-app-svc-backup" elementRef="app-svc-backup" xsi:type="Element" x="640" y="305" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-infrastructure" xsi:type="Container" x="20" y="410" w="760" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-compute.infra-nas" elementRef="compute.infra-nas" xsi:type="Element" x="40" y="435" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-overview-rel-app-backup-realization-app-svc-backup" relationshipRef="rel-app-backup-realization-app-svc-backup" xsi:type="Relationship" source="n-view-overview-app-backup" target="n-view-overview-app-svc-backup" />
+        <connection identifier="c-view-overview-rel-app-svc-backup-serving-enterprise.bus-proc-backup" relationshipRef="rel-app-svc-backup-serving-enterprise.bus-proc-backup" xsi:type="Relationship" source="n-view-overview-app-svc-backup" target="n-view-overview-enterprise.bus-proc-backup" />
+        <connection identifier="c-view-overview-rel-app-backup-realization-enterprise.bus-req-backup" relationshipRef="rel-app-backup-realization-enterprise.bus-req-backup" xsi:type="Relationship" source="n-view-overview-app-backup" target="n-view-overview-enterprise.bus-req-backup" />
+        <connection identifier="c-view-overview-rel-compute.infra-nas-realization-app-backup" relationshipRef="rel-compute.infra-nas-realization-app-backup" xsi:type="Relationship" source="n-view-overview-compute.infra-nas" target="n-view-overview-app-backup" />
+        <connection identifier="c-view-overview-rel-app-backup-access-nextcloud.data-files" relationshipRef="rel-app-backup-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-overview-app-backup" target="n-view-overview-nextcloud.data-files" />
+        <connection identifier="c-view-overview-rel-nextcloud.app-nextcloud-db-flow-app-backup" relationshipRef="rel-nextcloud.app-nextcloud-db-flow-app-backup" xsi:type="Relationship" source="n-view-overview-nextcloud.app-nextcloud-db" target="n-view-overview-app-backup" />
+        <connection identifier="c-view-overview-rel-app-backup-flow-app-offsite-b2" relationshipRef="rel-app-backup-flow-app-offsite-b2" xsi:type="Relationship" source="n-view-overview-app-backup" target="n-view-overview-app-offsite-b2">
+          <style lineWidth="2">
+            <lineColor r="198" g="40" b="40" />
+          </style>
+        </connection>
+        <connection identifier="c-view-overview-rel-app-backup-flow-app-offsite-hetzner" relationshipRef="rel-app-backup-flow-app-offsite-hetzner" xsi:type="Relationship" source="n-view-overview-app-backup" target="n-view-overview-app-offsite-hetzner">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+      </view>
+      <view identifier="view-overview--baseline" xsi:type="Diagram">
+        <name xml:lang="en">Backup — overview (current state)</name>
+        <documentation xml:lang="en">What is backed up, from where, and where the copies go (current → target).</documentation>
+        <node identifier="g-view-overview--baseline-business" xsi:type="Container" x="20" y="20" w="610" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--baseline-enterprise.bus-proc-backup" elementRef="enterprise.bus-proc-backup" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-overview--baseline-enterprise.bus-req-backup" elementRef="enterprise.bus-req-backup" xsi:type="Element" x="190" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--baseline-information" xsi:type="Container" x="20" y="150" w="610" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--baseline-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="175" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--baseline-application" xsi:type="Container" x="20" y="280" w="610" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--baseline-app-backup" elementRef="app-backup" xsi:type="Element" x="40" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--baseline-app-offsite-b2" elementRef="app-offsite-b2" xsi:type="Element" x="190" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--baseline-nextcloud.app-nextcloud-db" elementRef="nextcloud.app-nextcloud-db" xsi:type="Element" x="340" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--baseline-app-svc-backup" elementRef="app-svc-backup" xsi:type="Element" x="490" y="305" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--baseline-infrastructure" xsi:type="Container" x="20" y="410" w="610" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--baseline-compute.infra-nas" elementRef="compute.infra-nas" xsi:type="Element" x="40" y="435" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-overview--baseline-rel-app-backup-realization-app-svc-backup" relationshipRef="rel-app-backup-realization-app-svc-backup" xsi:type="Relationship" source="n-view-overview--baseline-app-backup" target="n-view-overview--baseline-app-svc-backup" />
+        <connection identifier="c-view-overview--baseline-rel-app-svc-backup-serving-enterprise.bus-proc-backup" relationshipRef="rel-app-svc-backup-serving-enterprise.bus-proc-backup" xsi:type="Relationship" source="n-view-overview--baseline-app-svc-backup" target="n-view-overview--baseline-enterprise.bus-proc-backup" />
+        <connection identifier="c-view-overview--baseline-rel-app-backup-realization-enterprise.bus-req-backup" relationshipRef="rel-app-backup-realization-enterprise.bus-req-backup" xsi:type="Relationship" source="n-view-overview--baseline-app-backup" target="n-view-overview--baseline-enterprise.bus-req-backup" />
+        <connection identifier="c-view-overview--baseline-rel-compute.infra-nas-realization-app-backup" relationshipRef="rel-compute.infra-nas-realization-app-backup" xsi:type="Relationship" source="n-view-overview--baseline-compute.infra-nas" target="n-view-overview--baseline-app-backup" />
+        <connection identifier="c-view-overview--baseline-rel-app-backup-access-nextcloud.data-files" relationshipRef="rel-app-backup-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-overview--baseline-app-backup" target="n-view-overview--baseline-nextcloud.data-files" />
+        <connection identifier="c-view-overview--baseline-rel-nextcloud.app-nextcloud-db-flow-app-backup" relationshipRef="rel-nextcloud.app-nextcloud-db-flow-app-backup" xsi:type="Relationship" source="n-view-overview--baseline-nextcloud.app-nextcloud-db" target="n-view-overview--baseline-app-backup" />
+        <connection identifier="c-view-overview--baseline-rel-app-backup-flow-app-offsite-b2" relationshipRef="rel-app-backup-flow-app-offsite-b2" xsi:type="Relationship" source="n-view-overview--baseline-app-backup" target="n-view-overview--baseline-app-offsite-b2" />
+      </view>
+      <view identifier="view-overview--target" xsi:type="Diagram">
+        <name xml:lang="en">Backup — overview (target state)</name>
+        <documentation xml:lang="en">What is backed up, from where, and where the copies go (current → target).</documentation>
+        <node identifier="g-view-overview--target-business" xsi:type="Container" x="20" y="20" w="610" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-enterprise.bus-proc-backup" elementRef="enterprise.bus-proc-backup" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-overview--target-enterprise.bus-req-backup" elementRef="enterprise.bus-req-backup" xsi:type="Element" x="190" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--target-information" xsi:type="Container" x="20" y="150" w="610" h="100">
+          <label xml:lang="en">Information</label>
+          <style>
+            <fillColor r="227" g="215" b="244" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-nextcloud.data-files" elementRef="nextcloud.data-files" xsi:type="Element" x="40" y="175" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--target-application" xsi:type="Container" x="20" y="280" w="610" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-app-backup" elementRef="app-backup" xsi:type="Element" x="40" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--target-app-offsite-hetzner" elementRef="app-offsite-hetzner" xsi:type="Element" x="190" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--target-nextcloud.app-nextcloud-db" elementRef="nextcloud.app-nextcloud-db" xsi:type="Element" x="340" y="305" w="120" h="55" />
+          <node identifier="n-view-overview--target-app-svc-backup" elementRef="app-svc-backup" xsi:type="Element" x="490" y="305" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview--target-infrastructure" xsi:type="Container" x="20" y="410" w="610" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview--target-compute.infra-nas" elementRef="compute.infra-nas" xsi:type="Element" x="40" y="435" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-overview--target-rel-app-backup-realization-app-svc-backup" relationshipRef="rel-app-backup-realization-app-svc-backup" xsi:type="Relationship" source="n-view-overview--target-app-backup" target="n-view-overview--target-app-svc-backup" />
+        <connection identifier="c-view-overview--target-rel-app-svc-backup-serving-enterprise.bus-proc-backup" relationshipRef="rel-app-svc-backup-serving-enterprise.bus-proc-backup" xsi:type="Relationship" source="n-view-overview--target-app-svc-backup" target="n-view-overview--target-enterprise.bus-proc-backup" />
+        <connection identifier="c-view-overview--target-rel-app-backup-realization-enterprise.bus-req-backup" relationshipRef="rel-app-backup-realization-enterprise.bus-req-backup" xsi:type="Relationship" source="n-view-overview--target-app-backup" target="n-view-overview--target-enterprise.bus-req-backup" />
+        <connection identifier="c-view-overview--target-rel-compute.infra-nas-realization-app-backup" relationshipRef="rel-compute.infra-nas-realization-app-backup" xsi:type="Relationship" source="n-view-overview--target-compute.infra-nas" target="n-view-overview--target-app-backup" />
+        <connection identifier="c-view-overview--target-rel-app-backup-access-nextcloud.data-files" relationshipRef="rel-app-backup-access-nextcloud.data-files" xsi:type="Relationship" source="n-view-overview--target-app-backup" target="n-view-overview--target-nextcloud.data-files" />
+        <connection identifier="c-view-overview--target-rel-nextcloud.app-nextcloud-db-flow-app-backup" relationshipRef="rel-nextcloud.app-nextcloud-db-flow-app-backup" xsi:type="Relationship" source="n-view-overview--target-nextcloud.app-nextcloud-db" target="n-view-overview--target-app-backup" />
+        <connection identifier="c-view-overview--target-rel-app-backup-flow-app-offsite-hetzner" relationshipRef="rel-app-backup-flow-app-offsite-hetzner" xsi:type="Relationship" source="n-view-overview--target-app-backup" target="n-view-overview--target-app-offsite-hetzner" />
+      </view>
+      <view identifier="c4-context" xsi:type="Diagram">
+        <name xml:lang="en">Backup — system context</name>
+        <node identifier="g-c4-context-business" xsi:type="Container" x="20" y="20" w="610" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context-enterprise.bus-admin" elementRef="enterprise.bus-admin" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-context-application" xsi:type="Container" x="20" y="150" w="610" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context-app-backup" elementRef="app-backup" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-c4-context-app-offsite-b2" elementRef="app-offsite-b2" xsi:type="Element" x="190" y="175" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="198" g="40" b="40" />
+            </style>
+          </node>
+          <node identifier="n-c4-context-app-offsite-hetzner" elementRef="app-offsite-hetzner" xsi:type="Element" x="340" y="175" w="120" h="55">
+            <style lineWidth="3">
+              <lineColor r="46" g="125" b="50" />
+            </style>
+          </node>
+          <node identifier="n-c4-context-nextcloud.app-nextcloud" elementRef="nextcloud.app-nextcloud" xsi:type="Element" x="490" y="175" w="120" h="55" />
+        </node>
+        <connection identifier="c-c4-context-rel-app-backup-flow-app-offsite-b2" relationshipRef="rel-app-backup-flow-app-offsite-b2" xsi:type="Relationship" source="n-c4-context-app-backup" target="n-c4-context-app-offsite-b2">
+          <style lineWidth="2">
+            <lineColor r="198" g="40" b="40" />
+          </style>
+        </connection>
+        <connection identifier="c-c4-context-rel-app-backup-flow-app-offsite-hetzner" relationshipRef="rel-app-backup-flow-app-offsite-hetzner" xsi:type="Relationship" source="n-c4-context-app-backup" target="n-c4-context-app-offsite-hetzner">
+          <style lineWidth="2">
+            <lineColor r="46" g="125" b="50" />
+          </style>
+        </connection>
+      </view>
+      <view identifier="c4-context--baseline" xsi:type="Diagram">
+        <name xml:lang="en">Backup — system context (current state)</name>
+        <node identifier="g-c4-context--baseline-business" xsi:type="Container" x="20" y="20" w="460" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--baseline-enterprise.bus-admin" elementRef="enterprise.bus-admin" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-context--baseline-application" xsi:type="Container" x="20" y="150" w="460" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--baseline-app-backup" elementRef="app-backup" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-c4-context--baseline-app-offsite-b2" elementRef="app-offsite-b2" xsi:type="Element" x="190" y="175" w="120" h="55" />
+          <node identifier="n-c4-context--baseline-nextcloud.app-nextcloud" elementRef="nextcloud.app-nextcloud" xsi:type="Element" x="340" y="175" w="120" h="55" />
+        </node>
+        <connection identifier="c-c4-context--baseline-rel-app-backup-flow-app-offsite-b2" relationshipRef="rel-app-backup-flow-app-offsite-b2" xsi:type="Relationship" source="n-c4-context--baseline-app-backup" target="n-c4-context--baseline-app-offsite-b2" />
+      </view>
+      <view identifier="c4-context--target" xsi:type="Diagram">
+        <name xml:lang="en">Backup — system context (target state)</name>
+        <node identifier="g-c4-context--target-business" xsi:type="Container" x="20" y="20" w="460" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--target-enterprise.bus-admin" elementRef="enterprise.bus-admin" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-context--target-application" xsi:type="Container" x="20" y="150" w="460" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context--target-app-backup" elementRef="app-backup" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-c4-context--target-app-offsite-hetzner" elementRef="app-offsite-hetzner" xsi:type="Element" x="190" y="175" w="120" h="55" />
+          <node identifier="n-c4-context--target-nextcloud.app-nextcloud" elementRef="nextcloud.app-nextcloud" xsi:type="Element" x="340" y="175" w="120" h="55" />
+        </node>
+        <connection identifier="c-c4-context--target-rel-app-backup-flow-app-offsite-hetzner" relationshipRef="rel-app-backup-flow-app-offsite-hetzner" xsi:type="Relationship" source="n-c4-context--target-app-backup" target="n-c4-context--target-app-offsite-hetzner" />
+      </view>
+    </diagrams>
+  </views>
+</model>

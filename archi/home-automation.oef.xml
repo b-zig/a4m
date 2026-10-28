@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="model-home-automation" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd">
+  <name xml:lang="en">Home automation</name>
+  <documentation xml:lang="en">Home Assistant OS in its own VM on the IoT network.</documentation>
+  <elements>
+    <element identifier="app-home-assistant" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Home Assistant</name>
+      <documentation xml:lang="en">Smart-home automation, dashboards and device integrations.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Home Assistant OS</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="app-svc-automation" xsi:type="ApplicationService">
+      <name xml:lang="en">Automations and dashboards</name>
+    </element>
+    <element identifier="infra-vm-haos" xsi:type="Node">
+      <name xml:lang="en">VM haos</name>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Home Assistant OS VM</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.20.10</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-proxmox-ve" xsi:type="SystemSoftware">
+      <name xml:lang="en">Proxmox VE</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-pve-01" xsi:type="Node">
+      <name xml:lang="en">Proxmox host 01</name>
+      <documentation xml:lang="en">Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Proxmox VE 8</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.10.11</value>
+        </property>
+        <property propertyDefinitionRef="propid-3">
+          <value xml:lang="en">8 cores</value>
+        </property>
+        <property propertyDefinitionRef="propid-5">
+          <value xml:lang="en">64 GB</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="compute.infra-svc-vm-hosting" xsi:type="TechnologyService">
+      <name xml:lang="en">VM hosting</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.app-pihole" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Pi-hole</name>
+      <documentation xml:lang="en">Network-wide DNS resolver with ad and tracker blocking.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">system</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.app-svc-dns" xsi:type="ApplicationService">
+      <name xml:lang="en">DNS resolution and filtering</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="dns.infra-lxc-pihole" xsi:type="Node">
+      <name xml:lang="en">LXC pihole</name>
+      <properties>
+        <property propertyDefinitionRef="propid-7">
+          <value xml:lang="en">Debian 12 LXC</value>
+        </property>
+        <property propertyDefinitionRef="propid-4">
+          <value xml:lang="en">10.0.10.53</value>
+        </property>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-family" xsi:type="BusinessActor">
+      <name xml:lang="en">Family</name>
+      <documentation xml:lang="en">Household members using files, photos and smart-home dashboards.</documentation>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">person</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-role-user" xsi:type="BusinessRole">
+      <name xml:lang="en">Service user</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="enterprise.bus-svc-automation" xsi:type="BusinessService">
+      <name xml:lang="en">Home automation</name>
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="network.infra-loc-home" xsi:type="Location">
+      <name xml:lang="en">Home office rack</name>
+      <properties>
+        <property propertyDefinitionRef="propid-1">
+          <value xml:lang="en">deployment</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">network</value>
+        </property>
+      </properties>
+    </element>
+    <element identifier="network.infra-net-iot" xsi:type="CommunicationNetwork">
+      <name xml:lang="en">IoT (VLAN 20)</name>
+      <properties>
+        <property propertyDefinitionRef="propid-8">
+          <value xml:lang="en">20</value>
+        </property>
+        <property propertyDefinitionRef="propid-6">
+          <value xml:lang="en">10.0.20.0/24</value>
+        </property>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">network</value>
+        </property>
+      </properties>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="rel-app-home-assistant-realization-app-svc-automation" source="app-home-assistant" target="app-svc-automation" xsi:type="Realization" />
+    <relationship identifier="rel-app-svc-automation-realization-enterprise.bus-svc-automation" source="app-svc-automation" target="enterprise.bus-svc-automation" xsi:type="Realization" />
+    <relationship identifier="rel-app-svc-automation-serving-enterprise.bus-role-user" source="app-svc-automation" target="enterprise.bus-role-user" xsi:type="Serving" />
+    <relationship identifier="rel-dns.app-svc-dns-serving-app-home-assistant" source="dns.app-svc-dns" target="app-home-assistant" xsi:type="Serving">
+      <name xml:lang="en">DNS lookups</name>
+    </relationship>
+    <relationship identifier="rel-infra-vm-haos-realization-app-home-assistant" source="infra-vm-haos" target="app-home-assistant" xsi:type="Realization" />
+    <relationship identifier="rel-compute.infra-pve-01-composition-infra-vm-haos" source="compute.infra-pve-01" target="infra-vm-haos" xsi:type="Composition" />
+    <relationship identifier="rel-compute.infra-svc-vm-hosting-serving-infra-vm-haos" source="compute.infra-svc-vm-hosting" target="infra-vm-haos" xsi:type="Serving" />
+    <relationship identifier="rel-infra-vm-haos-association-network.infra-net-iot" source="infra-vm-haos" target="network.infra-net-iot" xsi:type="Association" />
+    <relationship identifier="compute.rel-infra-pve-01-composition-infra-proxmox-ve" source="compute.infra-pve-01" target="compute.infra-proxmox-ve" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-infra-proxmox-ve-realization-infra-svc-vm-hosting" source="compute.infra-proxmox-ve" target="compute.infra-svc-vm-hosting" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="compute.rel-network.infra-loc-home-aggregation-infra-pve-01" source="network.infra-loc-home" target="compute.infra-pve-01" xsi:type="Aggregation">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">compute</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-app-pihole-realization-app-svc-dns" source="dns.app-pihole" target="dns.app-svc-dns" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-infra-lxc-pihole-realization-app-pihole" source="dns.infra-lxc-pihole" target="dns.app-pihole" xsi:type="Realization">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-compute.infra-pve-01-composition-infra-lxc-pihole" source="compute.infra-pve-01" target="dns.infra-lxc-pihole" xsi:type="Composition">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="dns.rel-compute.infra-svc-vm-hosting-serving-infra-lxc-pihole" source="compute.infra-svc-vm-hosting" target="dns.infra-lxc-pihole" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">dns</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="enterprise.rel-bus-family-assignment-bus-role-user" source="enterprise.bus-family" target="enterprise.bus-role-user" xsi:type="Assignment">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </relationship>
+    <relationship identifier="enterprise.rel-bus-svc-automation-serving-bus-role-user" source="enterprise.bus-svc-automation" target="enterprise.bus-role-user" xsi:type="Serving">
+      <properties>
+        <property propertyDefinitionRef="propid-2">
+          <value xml:lang="en">enterprise</value>
+        </property>
+      </properties>
+    </relationship>
+  </relationships>
+  <propertyDefinitions>
+    <propertyDefinition identifier="propid-1" type="string">
+      <name xml:lang="en">a4m:c4</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-2" type="string">
+      <name xml:lang="en">a4m:sa</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-3" type="string">
+      <name xml:lang="en">cpu</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-4" type="string">
+      <name xml:lang="en">ip</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-5" type="string">
+      <name xml:lang="en">ram</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-6" type="string">
+      <name xml:lang="en">subnet</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-7" type="string">
+      <name xml:lang="en">technology</name>
+    </propertyDefinition>
+    <propertyDefinition identifier="propid-8" type="string">
+      <name xml:lang="en">vlan</name>
+    </propertyDefinition>
+  </propertyDefinitions>
+  <views>
+    <diagrams>
+      <view identifier="view-overview" xsi:type="Diagram" viewpoint="Layered">
+        <name xml:lang="en">Home automation — overview</name>
+        <node identifier="g-view-overview-business" xsi:type="Container" x="20" y="20" w="610" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-enterprise.bus-role-user" elementRef="enterprise.bus-role-user" xsi:type="Element" x="40" y="45" w="120" h="55" />
+          <node identifier="n-view-overview-enterprise.bus-svc-automation" elementRef="enterprise.bus-svc-automation" xsi:type="Element" x="190" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-application" xsi:type="Container" x="20" y="150" w="610" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-app-home-assistant" elementRef="app-home-assistant" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-view-overview-app-svc-automation" elementRef="app-svc-automation" xsi:type="Element" x="190" y="175" w="120" h="55" />
+          <node identifier="n-view-overview-dns.app-svc-dns" elementRef="dns.app-svc-dns" xsi:type="Element" x="340" y="175" w="120" h="55" />
+        </node>
+        <node identifier="g-view-overview-infrastructure" xsi:type="Container" x="20" y="280" w="610" h="100">
+          <label xml:lang="en">Infrastructure</label>
+          <style>
+            <fillColor r="201" g="231" b="183" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-view-overview-infra-vm-haos" elementRef="infra-vm-haos" xsi:type="Element" x="40" y="305" w="120" h="55" />
+          <node identifier="n-view-overview-compute.infra-pve-01" elementRef="compute.infra-pve-01" xsi:type="Element" x="190" y="305" w="120" h="55" />
+          <node identifier="n-view-overview-network.infra-net-iot" elementRef="network.infra-net-iot" xsi:type="Element" x="340" y="305" w="120" h="55" />
+          <node identifier="n-view-overview-compute.infra-svc-vm-hosting" elementRef="compute.infra-svc-vm-hosting" xsi:type="Element" x="490" y="305" w="120" h="55" />
+        </node>
+        <connection identifier="c-view-overview-rel-app-home-assistant-realization-app-svc-automation" relationshipRef="rel-app-home-assistant-realization-app-svc-automation" xsi:type="Relationship" source="n-view-overview-app-home-assistant" target="n-view-overview-app-svc-automation" />
+        <connection identifier="c-view-overview-rel-app-svc-automation-realization-enterprise.bus-svc-automation" relationshipRef="rel-app-svc-automation-realization-enterprise.bus-svc-automation" xsi:type="Relationship" source="n-view-overview-app-svc-automation" target="n-view-overview-enterprise.bus-svc-automation" />
+        <connection identifier="c-view-overview-rel-app-svc-automation-serving-enterprise.bus-role-user" relationshipRef="rel-app-svc-automation-serving-enterprise.bus-role-user" xsi:type="Relationship" source="n-view-overview-app-svc-automation" target="n-view-overview-enterprise.bus-role-user" />
+        <connection identifier="c-view-overview-rel-dns.app-svc-dns-serving-app-home-assistant" relationshipRef="rel-dns.app-svc-dns-serving-app-home-assistant" xsi:type="Relationship" source="n-view-overview-dns.app-svc-dns" target="n-view-overview-app-home-assistant" />
+        <connection identifier="c-view-overview-rel-infra-vm-haos-realization-app-home-assistant" relationshipRef="rel-infra-vm-haos-realization-app-home-assistant" xsi:type="Relationship" source="n-view-overview-infra-vm-haos" target="n-view-overview-app-home-assistant" />
+        <connection identifier="c-view-overview-rel-compute.infra-pve-01-composition-infra-vm-haos" relationshipRef="rel-compute.infra-pve-01-composition-infra-vm-haos" xsi:type="Relationship" source="n-view-overview-compute.infra-pve-01" target="n-view-overview-infra-vm-haos" />
+        <connection identifier="c-view-overview-rel-compute.infra-svc-vm-hosting-serving-infra-vm-haos" relationshipRef="rel-compute.infra-svc-vm-hosting-serving-infra-vm-haos" xsi:type="Relationship" source="n-view-overview-compute.infra-svc-vm-hosting" target="n-view-overview-infra-vm-haos" />
+        <connection identifier="c-view-overview-rel-infra-vm-haos-association-network.infra-net-iot" relationshipRef="rel-infra-vm-haos-association-network.infra-net-iot" xsi:type="Relationship" source="n-view-overview-infra-vm-haos" target="n-view-overview-network.infra-net-iot" />
+        <connection identifier="c-view-overview-enterprise.rel-bus-svc-automation-serving-bus-role-user" relationshipRef="enterprise.rel-bus-svc-automation-serving-bus-role-user" xsi:type="Relationship" source="n-view-overview-enterprise.bus-svc-automation" target="n-view-overview-enterprise.bus-role-user" />
+      </view>
+      <view identifier="c4-context" xsi:type="Diagram">
+        <name xml:lang="en">Home automation — system context</name>
+        <node identifier="g-c4-context-business" xsi:type="Container" x="20" y="20" w="310" h="100">
+          <label xml:lang="en">Business</label>
+          <style>
+            <fillColor r="255" g="255" b="181" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context-enterprise.bus-family" elementRef="enterprise.bus-family" xsi:type="Element" x="40" y="45" w="120" h="55" />
+        </node>
+        <node identifier="g-c4-context-application" xsi:type="Container" x="20" y="150" w="310" h="100">
+          <label xml:lang="en">Application</label>
+          <style>
+            <fillColor r="181" g="255" b="255" a="35" />
+            <lineColor r="160" g="160" b="160" />
+          </style>
+          <node identifier="n-c4-context-app-home-assistant" elementRef="app-home-assistant" xsi:type="Element" x="40" y="175" w="120" h="55" />
+          <node identifier="n-c4-context-dns.app-pihole" elementRef="dns.app-pihole" xsi:type="Element" x="190" y="175" w="120" h="55" />
+        </node>
+      </view>
+    </diagrams>
+  </views>
+</model>
