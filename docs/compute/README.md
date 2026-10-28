@@ -13,7 +13,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/compute.
 
 | View | Kind | Elements |
 |---|---|---|
-| [Compute and storage](view-infrastructure.md) | archimate | 16 |
+| [Compute and storage](view-infrastructure.md) | archimate | 17 |
 
 ## Elements per layer
 
@@ -24,7 +24,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/compute.
 ## Other solution architectures
 
 - **Uses:** [enterprise](../enterprise/README.md), [network](../network/README.md)
-- **Used by:** [backup](../backup/README.md), [dns](../dns/README.md), [home-automation](../home-automation/README.md), [media](../media/README.md), [nextcloud](../nextcloud/README.md)
+- **Used by:** [backup](../backup/README.md), [dns](../dns/README.md), [events](../events/README.md), [home-automation](../home-automation/README.md), [media](../media/README.md), [nextcloud](../nextcloud/README.md)
 - **Exports** (`compute/<id>`): `infra-pve-01`, `infra-svc-vm-hosting`, `infra-vm-docker`, `infra-docker`, `infra-nas`, `infra-svc-nfs`
 
 ## Decisions

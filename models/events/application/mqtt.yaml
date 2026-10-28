@@ -1,0 +1,18 @@
+elements:
+  - id: app-mqtt-broker
+    type: ApplicationComponent
+    name: MQTT broker
+    c4: system
+    state: new
+    documentation: Shared publish/subscribe broker for device, media and system events.
+    properties: { technology: Eclipse Mosquitto 2 }
+  - id: app-svc-event-streaming
+    type: ApplicationService
+    name: Event publish/subscribe
+    state: new
+    documentation: Topics under home/<source>/<event>, TLS on port 8883, one account per client.
+
+relationships:
+  - { type: Realization, source: app-mqtt-broker, target: app-svc-event-streaming, state: new }
+  - { type: Access, source: app-mqtt-broker, target: data-events, access: readwrite, state: new }
+  - { type: Realization, source: app-svc-event-streaming, target: enterprise/bus-cap-home-automation, state: new }

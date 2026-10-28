@@ -1,0 +1,11 @@
+name: Event fabric (MQTT)
+version: "0.1"
+kind: platform
+status: proposed
+owner: home lab admin
+documentation: >-
+  Proposal: one shared publish/subscribe broker that solutions publish events to and subscribe
+  from, instead of wiring point-to-point integrations. The home-lab counterpart of an enterprise
+  data fabric (Kafka on premises): the platform owns the broker, every consuming solution
+  declares its own use of it.
+exports: [app-mqtt-broker, app-svc-event-streaming]

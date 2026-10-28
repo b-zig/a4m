@@ -1,0 +1,9 @@
+elements:
+  - id: infra-art-mosquitto
+    type: Artifact
+    name: eclipse-mosquitto image
+    state: new
+
+relationships:
+  - { type: Assignment, source: compute/infra-docker, target: infra-art-mosquitto, state: new }
+  - { type: Realization, source: infra-art-mosquitto, target: app-mqtt-broker, state: new }

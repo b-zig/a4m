@@ -17,6 +17,7 @@ flowchart TB
     infra_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
     infra_svc_nfs("NFS storage<br/>«TechnologyService»")
     dns__infra_lxc_pihole["LXC pihole<br/>«Node» · dns"]
+    events__infra_art_mosquitto[/"eclipse-mosquitto image<br/>«Artifact» · events<br/>NEW"/]
     home_automation__infra_vm_haos["VM haos<br/>«Node» · home-automation"]
     media__infra_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media<br/>NEW"/]
     network__infra_loc_home[["Home office rack<br/>«Location» · network"]]
@@ -42,6 +43,7 @@ flowchart TB
   infra_pve_01 -->|"composed of"| dns__infra_lxc_pihole
   infra_svc_vm_hosting -->|"serves"| dns__infra_lxc_pihole
   dns__infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  infra_docker -->|"assigned to"| events__infra_art_mosquitto
   infra_pve_01 -->|"composed of"| home_automation__infra_vm_haos
   infra_svc_vm_hosting -->|"serves"| home_automation__infra_vm_haos
   infra_docker -->|"assigned to"| media__infra_art_jellyfin
@@ -50,13 +52,14 @@ flowchart TB
   infra_docker -->|"assigned to"| nextcloud__infra_art_mariadb
   infra_docker -->|"assigned to"| nextcloud__infra_art_redis
   classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
-  class infra_pve_01,infra_proxmox_ve,infra_vm_docker,infra_docker,infra_nas,infra_svc_vm_hosting,infra_svc_nfs,dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis infrastructure
+  class infra_pve_01,infra_proxmox_ve,infra_vm_docker,infra_docker,infra_nas,infra_svc_vm_hosting,infra_svc_nfs,dns__infra_lxc_pihole,events__infra_art_mosquitto,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis infrastructure
   style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis foreign
+  class dns__infra_lxc_pihole,events__infra_art_mosquitto,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
-  class media__infra_art_jellyfin st_new
-  linkStyle 18 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
+  class events__infra_art_mosquitto,media__infra_art_jellyfin st_new
+  linkStyle 16 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
+  linkStyle 19 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
@@ -128,6 +131,7 @@ flowchart TB
     infra_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
     infra_svc_nfs("NFS storage<br/>«TechnologyService»")
     dns__infra_lxc_pihole["LXC pihole<br/>«Node» · dns"]
+    events__infra_art_mosquitto[/"eclipse-mosquitto image<br/>«Artifact» · events"/]
     home_automation__infra_vm_haos["VM haos<br/>«Node» · home-automation"]
     media__infra_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media"/]
     network__infra_loc_home[["Home office rack<br/>«Location» · network"]]
@@ -153,6 +157,7 @@ flowchart TB
   infra_pve_01 -->|"composed of"| dns__infra_lxc_pihole
   infra_svc_vm_hosting -->|"serves"| dns__infra_lxc_pihole
   dns__infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  infra_docker -->|"assigned to"| events__infra_art_mosquitto
   infra_pve_01 -->|"composed of"| home_automation__infra_vm_haos
   infra_svc_vm_hosting -->|"serves"| home_automation__infra_vm_haos
   infra_docker -->|"assigned to"| media__infra_art_jellyfin
@@ -161,10 +166,10 @@ flowchart TB
   infra_docker -->|"assigned to"| nextcloud__infra_art_mariadb
   infra_docker -->|"assigned to"| nextcloud__infra_art_redis
   classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
-  class infra_pve_01,infra_proxmox_ve,infra_vm_docker,infra_docker,infra_nas,infra_svc_vm_hosting,infra_svc_nfs,dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis infrastructure
+  class infra_pve_01,infra_proxmox_ve,infra_vm_docker,infra_docker,infra_nas,infra_svc_vm_hosting,infra_svc_nfs,dns__infra_lxc_pihole,events__infra_art_mosquitto,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis infrastructure
   style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis foreign
+  class dns__infra_lxc_pihole,events__infra_art_mosquitto,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis foreign
 ```
 
 </details>
@@ -181,6 +186,7 @@ flowchart TB
 | VM hosting (`infra-svc-vm-hosting`) | TechnologyService | Infrastructure |  |  |  |
 | NFS storage (`infra-svc-nfs`) | TechnologyService | Infrastructure |  |  |  |
 | LXC pihole (`dns/infra-lxc-pihole`) | Node | Infrastructure | deployment |  |  |
+| eclipse-mosquitto image (`events/infra-art-mosquitto`) | Artifact | Infrastructure |  | new |  |
 | VM haos (`home-automation/infra-vm-haos`) | Node | Infrastructure | deployment |  |  |
 | jellyfin/jellyfin image (`media/infra-art-jellyfin`) | Artifact | Infrastructure |  | new |  |
 | Home office rack (`network/infra-loc-home`) | Location | Infrastructure | deployment |  |  |

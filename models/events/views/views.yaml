@@ -1,0 +1,11 @@
+views:
+  - id: view-overview
+    name: Event fabric — overview
+    viewpoint: Layered
+    include_layers: [business, information, application, infrastructure]
+  - id: c4-context
+    kind: c4-context
+    name: Event fabric — system context
+  - id: c4-deployment
+    kind: c4-deployment
+    name: Event fabric — deployment

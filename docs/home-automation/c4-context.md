@@ -8,6 +8,27 @@ C4Context
   title Home automation — system context
   Person(enterprise__bus_family, "Family", "[enterprise] Household members using files, photos and smart-home dashboards.")
   System_Ext(dns__app_pihole, "Pi-hole", "[dns] Network-wide DNS resolver with ad and tracker blocking.")
+  System_Ext(events__app_mqtt_broker, "MQTT broker [NEW]", "[events] Shared publish/subscribe broker for device, media and system events.")
+  Boundary(boundary_home_automation, "Home automation") {
+    System(app_home_assistant, "Home Assistant", "Smart-home automation, dashboards and device integrations.")
+  }
+  Rel(enterprise__bus_family, app_home_assistant, "Uses")
+  Rel(app_home_assistant, dns__app_pihole, "Uses — DNS lookups")
+  Rel(app_home_assistant, events__app_mqtt_broker, "Uses — Device and media events")
+  UpdateElementStyle(events__app_mqtt_broker, $borderColor="#2e7d32", $fontColor="#2e7d32")
+  UpdateRelStyle(app_home_assistant, events__app_mqtt_broker, $textColor="#2e7d32", $lineColor="#2e7d32")
+  UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
+```
+
+*Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
+
+<details><summary>Current state</summary>
+
+```mermaid
+C4Context
+  title Home automation — system context
+  Person(enterprise__bus_family, "Family", "[enterprise] Household members using files, photos and smart-home dashboards.")
+  System_Ext(dns__app_pihole, "Pi-hole", "[dns] Network-wide DNS resolver with ad and tracker blocking.")
   Boundary(boundary_home_automation, "Home automation") {
     System(app_home_assistant, "Home Assistant", "Smart-home automation, dashboards and device integrations.")
   }
@@ -16,6 +37,27 @@ C4Context
   UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
 ```
 
+</details>
+
+<details><summary>Target state</summary>
+
+```mermaid
+C4Context
+  title Home automation — system context
+  Person(enterprise__bus_family, "Family", "[enterprise] Household members using files, photos and smart-home dashboards.")
+  System_Ext(dns__app_pihole, "Pi-hole", "[dns] Network-wide DNS resolver with ad and tracker blocking.")
+  System_Ext(events__app_mqtt_broker, "MQTT broker", "[events] Shared publish/subscribe broker for device, media and system events.")
+  Boundary(boundary_home_automation, "Home automation") {
+    System(app_home_assistant, "Home Assistant", "Smart-home automation, dashboards and device integrations.")
+  }
+  Rel(enterprise__bus_family, app_home_assistant, "Uses")
+  Rel(app_home_assistant, dns__app_pihole, "Uses — DNS lookups")
+  Rel(app_home_assistant, events__app_mqtt_broker, "Uses — Device and media events")
+  UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
+```
+
+</details>
+
 ## Elements
 
 | Element | Type | Layer | C4 | State | Description |
@@ -23,3 +65,4 @@ C4Context
 | Family (`enterprise/bus-family`) | BusinessActor | Business | person |  | Household members using files, photos and smart-home dashboards. |
 | Home Assistant (`app-home-assistant`) | ApplicationComponent | Application | system |  | Smart-home automation, dashboards and device integrations. |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
+| MQTT broker (`events/app-mqtt-broker`) | ApplicationComponent | Application | system | new | Shared publish/subscribe broker for device, media and system events. |

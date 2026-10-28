@@ -3,7 +3,7 @@
 
 The home lab as an enterprise: why it exists (motivation), what it can do (capabilities), who uses it (business) and the roadmap. Every solution architecture under models/ builds on these elements; it is the test bed for the a4m workflow before the office network.
 
-8 solution architectures · 61 elements · 99 relationships.
+9 solution architectures · 65 elements · 106 relationships.
 Each SA lives in `models/<sa>/`; this page and `docs/_landscape/` are generated from all of them.
 
 - [System landscape](_landscape/system-landscape.md) — every system, grouped by SA (C4)
@@ -16,11 +16,12 @@ Each SA lives in `models/<sa>/`; this page and `docs/_landscape/` are generated 
 | SA | Kind | Status | Owner | Elements | Changes | Uses | Used by |
 |---|---|---|---|---|---|---|---|
 | [Backup](backup/README.md) (`backup`) | solution | approved | home lab admin | 4 | +2 new, −2 retiring | [compute](compute/README.md), [enterprise](enterprise/README.md), [nextcloud](nextcloud/README.md) | — |
-| [Compute and storage platform](compute/README.md) (`compute`) | platform | implemented | home lab admin | 7 | — | [enterprise](enterprise/README.md), [network](network/README.md) | [backup](backup/README.md), [dns](dns/README.md), [home-automation](home-automation/README.md), [media](media/README.md), [nextcloud](nextcloud/README.md) |
+| [Compute and storage platform](compute/README.md) (`compute`) | platform | implemented | home lab admin | 7 | — | [enterprise](enterprise/README.md), [network](network/README.md) | [backup](backup/README.md), [dns](dns/README.md), [events](events/README.md), [home-automation](home-automation/README.md), [media](media/README.md), [nextcloud](nextcloud/README.md) |
 | [DNS filtering (Pi-hole)](dns/README.md) (`dns`) | platform | implemented | home lab admin | 3 | — | [compute](compute/README.md), [enterprise](enterprise/README.md), [network](network/README.md) | [home-automation](home-automation/README.md), [media](media/README.md), [nextcloud](nextcloud/README.md) |
-| [Home Lab](enterprise/README.md) (`enterprise`) | enterprise | implemented | home lab admin | 25 | — | — | [backup](backup/README.md), [compute](compute/README.md), [dns](dns/README.md), [home-automation](home-automation/README.md), [media](media/README.md), [nextcloud](nextcloud/README.md) |
-| [Home automation](home-automation/README.md) (`home-automation`) | solution | implemented | home lab admin | 3 | — | [compute](compute/README.md), [dns](dns/README.md), [enterprise](enterprise/README.md), [network](network/README.md) | — |
-| [Media streaming](media/README.md) (`media`) | solution | proposed | home lab admin | 3 | +9 new | [compute](compute/README.md), [dns](dns/README.md), [enterprise](enterprise/README.md), [nextcloud](nextcloud/README.md) | — |
+| [Home Lab](enterprise/README.md) (`enterprise`) | enterprise | implemented | home lab admin | 25 | — | — | [backup](backup/README.md), [compute](compute/README.md), [dns](dns/README.md), [events](events/README.md), [home-automation](home-automation/README.md), [media](media/README.md), [nextcloud](nextcloud/README.md) |
+| [Event fabric (MQTT)](events/README.md) (`events`) | platform | proposed | home lab admin | 4 | +9 new | [compute](compute/README.md), [enterprise](enterprise/README.md) | [home-automation](home-automation/README.md), [media](media/README.md) |
+| [Home automation](home-automation/README.md) (`home-automation`) | solution | proposed | home lab admin | 3 | +1 new | [compute](compute/README.md), [dns](dns/README.md), [enterprise](enterprise/README.md), [events](events/README.md), [network](network/README.md) | — |
+| [Media streaming](media/README.md) (`media`) | solution | proposed | home lab admin | 3 | +10 new | [compute](compute/README.md), [dns](dns/README.md), [enterprise](enterprise/README.md), [events](events/README.md), [nextcloud](nextcloud/README.md) | — |
 | [Home network and rack](network/README.md) (`network`) | platform | implemented | home lab admin | 7 | — | — | [compute](compute/README.md), [dns](dns/README.md), [home-automation](home-automation/README.md) |
 | [Nextcloud](nextcloud/README.md) (`nextcloud`) | solution | implemented | home lab admin | 9 | — | [compute](compute/README.md), [dns](dns/README.md), [enterprise](enterprise/README.md) | [backup](backup/README.md), [media](media/README.md) |
 
@@ -36,7 +37,8 @@ flowchart LR
   sa_compute["Compute and storage platform<br/>«platform» · implemented"]
   sa_dns["DNS filtering (Pi-hole)<br/>«platform» · implemented"]
   sa_enterprise["Home Lab<br/>«enterprise» · implemented"]
-  sa_home_automation["Home automation<br/>«solution» · implemented"]
+  sa_events["Event fabric (MQTT)<br/>«platform» · proposed"]
+  sa_home_automation["Home automation<br/>«solution» · proposed"]
   sa_media["Media streaming<br/>«solution» · proposed"]
   sa_network["Home network and rack<br/>«platform» · implemented"]
   sa_nextcloud["Nextcloud<br/>«solution» · implemented"]
@@ -48,13 +50,17 @@ flowchart LR
   sa_dns -->|"2"| sa_compute
   sa_dns -->|"2"| sa_enterprise
   sa_dns -->|"1"| sa_network
+  sa_events -.->|"1"| sa_compute
+  sa_events -.->|"1"| sa_enterprise
   sa_home_automation -->|"2"| sa_compute
   sa_home_automation -->|"1"| sa_dns
   sa_home_automation -->|"2"| sa_enterprise
+  sa_home_automation -.->|"1"| sa_events
   sa_home_automation -->|"1"| sa_network
   sa_media -.->|"1"| sa_compute
   sa_media -.->|"1"| sa_dns
   sa_media -.->|"1"| sa_enterprise
+  sa_media -.->|"1"| sa_events
   sa_media -.->|"1"| sa_nextcloud
   sa_nextcloud -->|"4"| sa_compute
   sa_nextcloud -->|"1"| sa_dns
@@ -62,10 +68,10 @@ flowchart LR
   classDef enterprise fill:#fff3c4,stroke:#555,color:#000
   class sa_enterprise enterprise
   classDef platform fill:#d6eaff,stroke:#555,color:#000
-  class sa_compute,sa_dns,sa_network platform
+  class sa_compute,sa_dns,sa_events,sa_network platform
   classDef solution fill:#e3f5d8,stroke:#555,color:#000
   class sa_backup,sa_home_automation,sa_media,sa_nextcloud solution
   classDef pending stroke-dasharray:6 4
-  class sa_media pending
+  class sa_events,sa_home_automation,sa_media pending
 ```
 

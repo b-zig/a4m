@@ -19,6 +19,9 @@ C4Context
     Boundary(sa_dns, "DNS filtering (Pi-hole)") {
       System(dns__app_pihole, "Pi-hole", "Network-wide DNS resolver with ad and tracker blocking.")
     }
+    Boundary(sa_events, "Event fabric (MQTT)") {
+      System(events__app_mqtt_broker, "MQTT broker [PROPOSED]", "Shared publish/subscribe broker for device, media and system events.")
+    }
     Boundary(sa_home_automation, "Home automation") {
       System(home_automation__app_home_assistant, "Home Assistant", "Smart-home automation, dashboards and device integrations.")
     }
@@ -37,16 +40,21 @@ C4Context
   Rel(enterprise__bus_family, nextcloud__app_nextcloud, "Uses")
   Rel(enterprise__bus_family, home_automation__app_home_assistant, "Uses")
   Rel(home_automation__app_home_assistant, dns__app_pihole, "Uses — DNS lookups")
+  Rel(home_automation__app_home_assistant, events__app_mqtt_broker, "Uses — Device and media events")
   Rel(enterprise__bus_family, media__app_jellyfin, "Uses")
   Rel(media__app_jellyfin, dns__app_pihole, "Uses — DNS lookups")
+  Rel(media__app_jellyfin, events__app_mqtt_broker, "Playback events", "MQTT")
   Rel(nextcloud__app_nextcloud, dns__app_pihole, "Uses — DNS lookups")
   UpdateElementStyle(backup__app_offsite_b2, $borderColor="#c62828", $fontColor="#c62828")
   UpdateElementStyle(backup__app_offsite_hetzner, $borderColor="#2e7d32", $fontColor="#2e7d32")
+  UpdateElementStyle(events__app_mqtt_broker, $borderColor="#6a1b9a", $fontColor="#6a1b9a")
   UpdateElementStyle(media__app_jellyfin, $borderColor="#6a1b9a", $fontColor="#6a1b9a")
   UpdateRelStyle(backup__app_backup, backup__app_offsite_b2, $textColor="#c62828", $lineColor="#c62828")
   UpdateRelStyle(backup__app_backup, backup__app_offsite_hetzner, $textColor="#2e7d32", $lineColor="#2e7d32")
+  UpdateRelStyle(home_automation__app_home_assistant, events__app_mqtt_broker, $textColor="#6a1b9a", $lineColor="#6a1b9a")
   UpdateRelStyle(enterprise__bus_family, media__app_jellyfin, $textColor="#6a1b9a", $lineColor="#6a1b9a")
   UpdateRelStyle(media__app_jellyfin, dns__app_pihole, $textColor="#6a1b9a", $lineColor="#6a1b9a")
+  UpdateRelStyle(media__app_jellyfin, events__app_mqtt_broker, $textColor="#6a1b9a", $lineColor="#6a1b9a")
   UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="2")
 ```
 
@@ -132,6 +140,7 @@ C4Context
 | Backblaze B2 (`backup/app-offsite-b2`) | ApplicationComponent | Application | system | retiring | Off-site object storage for encrypted backup snapshots (being replaced). |
 | Hetzner Storage Box (`backup/app-offsite-hetzner`) | ApplicationComponent | Application | system | new | Off-site storage for encrypted restic snapshots, EU-hosted, flat price. |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
+| MQTT broker (`events/app-mqtt-broker`) | ApplicationComponent | Application | system | new | Shared publish/subscribe broker for device, media and system events. |
 | Home Assistant (`home-automation/app-home-assistant`) | ApplicationComponent | Application | system |  | Smart-home automation, dashboards and device integrations. |
 | Jellyfin (`media/app-jellyfin`) | ApplicationComponent | Application | system | new | Media server streaming the family's videos and music to TVs and phones. |
 | Nextcloud (`nextcloud/app-nextcloud`) | ApplicationComponent | Application | system |  | Self-hosted file sync, sharing and photo backup for the family. |
@@ -139,5 +148,6 @@ C4Context
 ## Related decisions
 
 - [ADR-0001: Move off-site backups from Backblaze B2 to a Hetzner Storage Box](../../models/backup/decisions/ADR-0001-move-offsite-backups-to-hetzner.md) — *accepted*
+- [ADR-0001: Introduce a shared MQTT event fabric](../../models/events/decisions/ADR-0001-introduce-a-shared-mqtt-event-fabric.md) — *proposed*
 - [ADR-0001: Add Jellyfin as the family media server](../../models/media/decisions/ADR-0001-add-jellyfin-media-server.md) — *proposed*
 - [ADR-0001: Run Nextcloud as Docker containers on a dedicated VM](../../models/nextcloud/decisions/ADR-0001-run-nextcloud-as-containers.md) — *accepted*

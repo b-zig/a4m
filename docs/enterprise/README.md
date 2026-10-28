@@ -14,7 +14,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/enterpri
 | View | Kind | Elements |
 |---|---|---|
 | [Motivation and strategy](view-motivation.md) | archimate | 16 |
-| [Business and supporting services](view-business.md) | archimate | 16 |
+| [Business and supporting services](view-business.md) | archimate | 17 |
 | [Office migration roadmap](view-migration.md) | archimate | 6 |
 
 ## Elements per layer
@@ -25,7 +25,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/enterpri
 
 ## Other solution architectures
 
-- **Used by:** [backup](../backup/README.md), [compute](../compute/README.md), [dns](../dns/README.md), [home-automation](../home-automation/README.md), [media](../media/README.md), [nextcloud](../nextcloud/README.md)
+- **Used by:** [backup](../backup/README.md), [compute](../compute/README.md), [dns](../dns/README.md), [events](../events/README.md), [home-automation](../home-automation/README.md), [media](../media/README.md), [nextcloud](../nextcloud/README.md)
 - **Exports** (`enterprise/<id>`): all elements
 
 ## Decisions
