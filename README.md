@@ -34,7 +34,8 @@ python3 -m unittest discover -s tests -t .
 ```
 
 Then open [docs/README.md](docs/README.md), or import `build/_landscape.oef.xml` (everything) or
-`build/<sa>.oef.xml` (one SA) into Archi.
+`build/<sa>.oef.xml` (one SA) into Archi. No Python at hand? CI keeps the current Archi files of
+`main` in [`archi/`](archi/README.md): download one and import it.
 
 The sample is a home lab modelled as eight SAs:
 
@@ -57,7 +58,8 @@ The sample is a home lab modelled as eight SAs:
 | `schema/a4m.schema.json` | JSON Schema for model files (editor validation, LLM structured output) |
 | `a4m/` | The tool (stdlib + PyYAML + jsonschema) |
 | `docs/` | **Generated** Markdown + Mermaid (committed so GitHub renders it): `README.md` + `_landscape/` for the enterprise, `<sa>/` per SA |
-| `build/` | **Generated** OEF for Archi (git-ignored; CI uploads it as an artifact) |
+| `build/` | **Generated** OEF for Archi by a local `a4m build` (git-ignored) |
+| `archi/` | **Generated** OEF of `main`, committed by CI after every change: download and import into Archi |
 | `AGENTS.md` | Modelling rules for any LLM, the canonical guide for contributors too |
 | `.github/` | Copilot instructions, prompt files, CI workflow |
 | `.mcp.json`, `.vscode/mcp.json` | MCP server registration for Claude Code / VS Code Copilot |

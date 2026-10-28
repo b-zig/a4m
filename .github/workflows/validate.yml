@@ -45,3 +45,44 @@ jobs:
         with:
           name: archi-oef
           path: build/*.oef.xml
+
+  # After every change on main, commit the current Archi files to archi/ so they can be downloaded
+  # straight from GitHub. Only this job writes archi/; branches never touch it, so it can't conflict.
+  archi-files:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: archi-files
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+
+      - name: Build Archi files
+        run: |
+          python -m a4m build
+          find archi -name '*.oef.xml' -delete 2>/dev/null || true
+          mkdir -p archi
+          cp build/*.oef.xml archi/
+
+      - name: Commit if changed
+        run: |
+          git add -A archi
+          if git diff --cached --quiet; then
+            echo "Archi files are up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update Archi files for ${GITHUB_SHA::7}"
+          git pull --rebase origin main
+          git push origin HEAD:main
