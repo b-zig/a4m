@@ -18,6 +18,10 @@ flowchart TB
     bus_svc_automation("Home automation<br/>«BusinessService»")
     bus_obj_photos[/"Family photos and documents<br/>«BusinessObject»"/]
   end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
@@ -26,7 +30,6 @@ flowchart TB
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
     home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
     media__app_svc_streaming("Media streaming<br/>«ApplicationService» · media<br/>NEW")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
     nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
   end
   bus_family -->|"assigned to"| bus_role_user
@@ -39,7 +42,7 @@ flowchart TB
   bus_proc_backup -.->|"reads"| bus_obj_photos
   backup__app_backup -.->|"realizes"| backup__app_svc_backup
   backup__app_svc_backup -->|"serves"| bus_proc_backup
-  backup__app_backup -.->|"reads"| nextcloud__app_data_files
+  backup__app_backup -.->|"reads"| nextcloud__data_files
   dns__app_pihole -.->|"realizes"| dns__app_svc_dns
   dns__app_svc_dns -->|"Admin console"| bus_admin
   home_automation__app_svc_automation -.->|"realizes"| bus_svc_automation
@@ -47,15 +50,18 @@ flowchart TB
   media__app_svc_streaming -->|"serves"| bus_role_user
   nextcloud__app_svc_file_sync -->|"serves"| bus_proc_share
   nextcloud__app_svc_file_sync -.->|"realizes"| bus_svc_file_sharing
-  nextcloud__app_data_files -.->|"realizes"| bus_obj_photos
+  nextcloud__data_files -.->|"realizes"| bus_obj_photos
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class bus_family,bus_admin,bus_role_user,bus_proc_share,bus_proc_backup,bus_svc_file_sharing,bus_svc_automation,bus_obj_photos business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_data_files,nextcloud__app_svc_file_sync application
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync application
   style layer_application fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_data_files,nextcloud__app_svc_file_sync foreign
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync,nextcloud__data_files foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
   class media__app_svc_streaming st_new
   linkStyle 15 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
@@ -78,6 +84,10 @@ flowchart TB
     bus_svc_automation("Home automation<br/>«BusinessService»")
     bus_obj_photos[/"Family photos and documents<br/>«BusinessObject»"/]
   end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
@@ -85,7 +95,6 @@ flowchart TB
     dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
     home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
     nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
   end
   bus_family -->|"assigned to"| bus_role_user
@@ -98,22 +107,25 @@ flowchart TB
   bus_proc_backup -.->|"reads"| bus_obj_photos
   backup__app_backup -.->|"realizes"| backup__app_svc_backup
   backup__app_svc_backup -->|"serves"| bus_proc_backup
-  backup__app_backup -.->|"reads"| nextcloud__app_data_files
+  backup__app_backup -.->|"reads"| nextcloud__data_files
   dns__app_pihole -.->|"realizes"| dns__app_svc_dns
   dns__app_svc_dns -->|"Admin console"| bus_admin
   home_automation__app_svc_automation -.->|"realizes"| bus_svc_automation
   home_automation__app_svc_automation -->|"serves"| bus_role_user
   nextcloud__app_svc_file_sync -->|"serves"| bus_proc_share
   nextcloud__app_svc_file_sync -.->|"realizes"| bus_svc_file_sharing
-  nextcloud__app_data_files -.->|"realizes"| bus_obj_photos
+  nextcloud__data_files -.->|"realizes"| bus_obj_photos
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class bus_family,bus_admin,bus_role_user,bus_proc_share,bus_proc_backup,bus_svc_file_sharing,bus_svc_automation,bus_obj_photos business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,nextcloud__app_data_files,nextcloud__app_svc_file_sync application
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,nextcloud__app_svc_file_sync application
   style layer_application fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,nextcloud__app_data_files,nextcloud__app_svc_file_sync foreign
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,nextcloud__app_svc_file_sync,nextcloud__data_files foreign
 ```
 
 </details>
@@ -133,6 +145,10 @@ flowchart TB
     bus_svc_automation("Home automation<br/>«BusinessService»")
     bus_obj_photos[/"Family photos and documents<br/>«BusinessObject»"/]
   end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
@@ -141,7 +157,6 @@ flowchart TB
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
     home_automation__app_svc_automation("Automations and dashboards<br/>«ApplicationService» · home-automation")
     media__app_svc_streaming("Media streaming<br/>«ApplicationService» · media")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
     nextcloud__app_svc_file_sync("File sync and share<br/>«ApplicationService» · nextcloud")
   end
   bus_family -->|"assigned to"| bus_role_user
@@ -154,7 +169,7 @@ flowchart TB
   bus_proc_backup -.->|"reads"| bus_obj_photos
   backup__app_backup -.->|"realizes"| backup__app_svc_backup
   backup__app_svc_backup -->|"serves"| bus_proc_backup
-  backup__app_backup -.->|"reads"| nextcloud__app_data_files
+  backup__app_backup -.->|"reads"| nextcloud__data_files
   dns__app_pihole -.->|"realizes"| dns__app_svc_dns
   dns__app_svc_dns -->|"Admin console"| bus_admin
   home_automation__app_svc_automation -.->|"realizes"| bus_svc_automation
@@ -162,15 +177,18 @@ flowchart TB
   media__app_svc_streaming -->|"serves"| bus_role_user
   nextcloud__app_svc_file_sync -->|"serves"| bus_proc_share
   nextcloud__app_svc_file_sync -.->|"realizes"| bus_svc_file_sharing
-  nextcloud__app_data_files -.->|"realizes"| bus_obj_photos
+  nextcloud__data_files -.->|"realizes"| bus_obj_photos
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class bus_family,bus_admin,bus_role_user,bus_proc_share,bus_proc_backup,bus_svc_file_sharing,bus_svc_automation,bus_obj_photos business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_data_files,nextcloud__app_svc_file_sync application
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync application
   style layer_application fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_data_files,nextcloud__app_svc_file_sync foreign
+  class backup__app_backup,backup__app_svc_backup,dns__app_pihole,dns__app_svc_dns,home_automation__app_svc_automation,media__app_svc_streaming,nextcloud__app_svc_file_sync,nextcloud__data_files foreign
 ```
 
 </details>
@@ -193,5 +211,5 @@ flowchart TB
 | DNS resolution and filtering (`dns/app-svc-dns`) | ApplicationService | Application |  |  |  |
 | Automations and dashboards (`home-automation/app-svc-automation`) | ApplicationService | Application |  |  |  |
 | Media streaming (`media/app-svc-streaming`) | ApplicationService | Application |  | new |  |
-| User files (`nextcloud/app-data-files`) | DataObject | Application |  |  | Family files and photos, stored on the NAS over NFS. |
 | File sync and share (`nextcloud/app-svc-file-sync`) | ApplicationService | Application |  |  |  |
+| User files (`nextcloud/data-files`) | DataObject | Information |  |  | Family files and photos, stored on the NAS over NFS. |

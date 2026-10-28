@@ -7,13 +7,14 @@ What is backed up, from where, and where the copies go (current → target).
 
 ```mermaid
 flowchart TB
-  subgraph layer_motivation["Motivation"]
-    direction LR
-    enterprise__mot_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
-  end
   subgraph layer_business["Business"]
     direction LR
     enterprise__bus_proc_backup("Back up family data<br/>«BusinessProcess» · enterprise")
+    enterprise__bus_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
+  end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
   end
   subgraph layer_application["Application"]
     direction LR
@@ -21,35 +22,34 @@ flowchart TB
     app_svc_backup("Scheduled backup<br/>«ApplicationService»")
     app_offsite_b2["Backblaze B2<br/>«ApplicationComponent»<br/>RETIRING"]
     app_offsite_hetzner["Hetzner Storage Box<br/>«ApplicationComponent»<br/>NEW"]
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
     nextcloud__app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent» · nextcloud"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__infra_nas["NAS<br/>«Device» · compute"]
   end
   app_backup -.->|"realizes"| app_svc_backup
   app_svc_backup -->|"serves"| enterprise__bus_proc_backup
-  app_backup -.->|"realizes"| enterprise__mot_req_backup
-  compute__tech_nas -.->|"realizes"| app_backup
-  app_backup -.->|"reads"| nextcloud__app_data_files
+  app_backup -.->|"realizes"| enterprise__bus_req_backup
+  compute__infra_nas -.->|"realizes"| app_backup
+  app_backup -.->|"reads"| nextcloud__data_files
   nextcloud__app_nextcloud_db -.->|"Nightly dump"| app_backup
   app_backup -.->|"Encrypted snapshots"| app_offsite_b2
   app_backup -.->|"Encrypted snapshots"| app_offsite_hetzner
-  classDef motivation fill:#CCCCFF,stroke:#555,color:#000
-  class enterprise__mot_req_backup motivation
-  style layer_motivation fill:#fafafa,stroke:#bbb
   classDef business fill:#FFFFB5,stroke:#555,color:#000
-  class enterprise__bus_proc_backup business
+  class enterprise__bus_proc_backup,enterprise__bus_req_backup business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_backup,app_svc_backup,app_offsite_b2,app_offsite_hetzner,nextcloud__app_data_files,nextcloud__app_nextcloud_db application
+  class app_backup,app_svc_backup,app_offsite_b2,app_offsite_hetzner,nextcloud__app_nextcloud_db application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class compute__tech_nas technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class compute__infra_nas infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_nas,enterprise__bus_proc_backup,enterprise__mot_req_backup,nextcloud__app_data_files,nextcloud__app_nextcloud_db foreign
+  class compute__infra_nas,enterprise__bus_proc_backup,enterprise__bus_req_backup,nextcloud__app_nextcloud_db,nextcloud__data_files foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
   class app_offsite_hetzner st_new
   classDef st_retiring stroke:#c62828,stroke-width:3px,stroke-dasharray:6 4
@@ -64,47 +64,47 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  subgraph layer_motivation["Motivation"]
-    direction LR
-    enterprise__mot_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
-  end
   subgraph layer_business["Business"]
     direction LR
     enterprise__bus_proc_backup("Back up family data<br/>«BusinessProcess» · enterprise")
+    enterprise__bus_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
+  end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
   end
   subgraph layer_application["Application"]
     direction LR
     app_backup["Backup jobs<br/>«ApplicationComponent»"]
     app_svc_backup("Scheduled backup<br/>«ApplicationService»")
     app_offsite_b2["Backblaze B2<br/>«ApplicationComponent»"]
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
     nextcloud__app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent» · nextcloud"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__infra_nas["NAS<br/>«Device» · compute"]
   end
   app_backup -.->|"realizes"| app_svc_backup
   app_svc_backup -->|"serves"| enterprise__bus_proc_backup
-  app_backup -.->|"realizes"| enterprise__mot_req_backup
-  compute__tech_nas -.->|"realizes"| app_backup
-  app_backup -.->|"reads"| nextcloud__app_data_files
+  app_backup -.->|"realizes"| enterprise__bus_req_backup
+  compute__infra_nas -.->|"realizes"| app_backup
+  app_backup -.->|"reads"| nextcloud__data_files
   nextcloud__app_nextcloud_db -.->|"Nightly dump"| app_backup
   app_backup -.->|"Encrypted snapshots"| app_offsite_b2
-  classDef motivation fill:#CCCCFF,stroke:#555,color:#000
-  class enterprise__mot_req_backup motivation
-  style layer_motivation fill:#fafafa,stroke:#bbb
   classDef business fill:#FFFFB5,stroke:#555,color:#000
-  class enterprise__bus_proc_backup business
+  class enterprise__bus_proc_backup,enterprise__bus_req_backup business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_backup,app_svc_backup,app_offsite_b2,nextcloud__app_data_files,nextcloud__app_nextcloud_db application
+  class app_backup,app_svc_backup,app_offsite_b2,nextcloud__app_nextcloud_db application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class compute__tech_nas technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class compute__infra_nas infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_nas,enterprise__bus_proc_backup,enterprise__mot_req_backup,nextcloud__app_data_files,nextcloud__app_nextcloud_db foreign
+  class compute__infra_nas,enterprise__bus_proc_backup,enterprise__bus_req_backup,nextcloud__app_nextcloud_db,nextcloud__data_files foreign
 ```
 
 </details>
@@ -113,47 +113,47 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  subgraph layer_motivation["Motivation"]
-    direction LR
-    enterprise__mot_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
-  end
   subgraph layer_business["Business"]
     direction LR
     enterprise__bus_proc_backup("Back up family data<br/>«BusinessProcess» · enterprise")
+    enterprise__bus_req_backup{{"Nightly off-site backups<br/>«Requirement» · enterprise"}}
+  end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
   end
   subgraph layer_application["Application"]
     direction LR
     app_backup["Backup jobs<br/>«ApplicationComponent»"]
     app_svc_backup("Scheduled backup<br/>«ApplicationService»")
     app_offsite_hetzner["Hetzner Storage Box<br/>«ApplicationComponent»"]
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
     nextcloud__app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent» · nextcloud"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__infra_nas["NAS<br/>«Device» · compute"]
   end
   app_backup -.->|"realizes"| app_svc_backup
   app_svc_backup -->|"serves"| enterprise__bus_proc_backup
-  app_backup -.->|"realizes"| enterprise__mot_req_backup
-  compute__tech_nas -.->|"realizes"| app_backup
-  app_backup -.->|"reads"| nextcloud__app_data_files
+  app_backup -.->|"realizes"| enterprise__bus_req_backup
+  compute__infra_nas -.->|"realizes"| app_backup
+  app_backup -.->|"reads"| nextcloud__data_files
   nextcloud__app_nextcloud_db -.->|"Nightly dump"| app_backup
   app_backup -.->|"Encrypted snapshots"| app_offsite_hetzner
-  classDef motivation fill:#CCCCFF,stroke:#555,color:#000
-  class enterprise__mot_req_backup motivation
-  style layer_motivation fill:#fafafa,stroke:#bbb
   classDef business fill:#FFFFB5,stroke:#555,color:#000
-  class enterprise__bus_proc_backup business
+  class enterprise__bus_proc_backup,enterprise__bus_req_backup business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_backup,app_svc_backup,app_offsite_hetzner,nextcloud__app_data_files,nextcloud__app_nextcloud_db application
+  class app_backup,app_svc_backup,app_offsite_hetzner,nextcloud__app_nextcloud_db application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class compute__tech_nas technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class compute__infra_nas infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_nas,enterprise__bus_proc_backup,enterprise__mot_req_backup,nextcloud__app_data_files,nextcloud__app_nextcloud_db foreign
+  class compute__infra_nas,enterprise__bus_proc_backup,enterprise__bus_req_backup,nextcloud__app_nextcloud_db,nextcloud__data_files foreign
 ```
 
 </details>
@@ -166,11 +166,11 @@ flowchart TB
 | Scheduled backup (`app-svc-backup`) | ApplicationService | Application |  |  |  |
 | Backblaze B2 (`app-offsite-b2`) | ApplicationComponent | Application | system | retiring | Off-site object storage for encrypted backup snapshots (being replaced). |
 | Hetzner Storage Box (`app-offsite-hetzner`) | ApplicationComponent | Application | system | new | Off-site storage for encrypted restic snapshots, EU-hosted, flat price. |
-| NAS (`compute/tech-nas`) | Device | Technology | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
+| NAS (`compute/infra-nas`) | Device | Infrastructure | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
 | Back up family data (`enterprise/bus-proc-backup`) | BusinessProcess | Business |  |  |  |
-| Nightly off-site backups (`enterprise/mot-req-backup`) | Requirement | Motivation |  |  |  |
-| User files (`nextcloud/app-data-files`) | DataObject | Application |  |  | Family files and photos, stored on the NAS over NFS. |
+| Nightly off-site backups (`enterprise/bus-req-backup`) | Requirement | Business |  |  |  |
 | Nextcloud database (`nextcloud/app-nextcloud-db`) | ApplicationComponent | Application | container |  | Metadata, shares and user accounts. |
+| User files (`nextcloud/data-files`) | DataObject | Information |  |  | Family files and photos, stored on the NAS over NFS. |
 
 ## Related decisions
 

@@ -48,7 +48,7 @@ TOOLS = [
     },
     {
         "name": "a4m_types",
-        "description": "List ArchiMate element types (optionally for one layer) with their aspect and the id prefix convention.",
+        "description": "List ArchiMate element types (optionally for one layer) with their aspect, the folder they go in (models/<sa>/<layer>/) and the id prefix convention.",
         "inputSchema": {"type": "object", "properties": {"layer": {"type": "string"}}},
     },
     {
@@ -107,7 +107,7 @@ def call_tool(name: str, arguments: dict) -> tuple[object, bool]:
     if name == "a4m_types":
         layers = [arguments["layer"]] if arguments.get("layer") else rules.layer_order()
         return {
-            layer: {"prefix": rules.layers[layer]["prefix"], "types": {t: rules.aspect_of(t) for t in rules.types_in_layer(layer)}}
+            layer: {"folder": layer if layer in rules.layer_folders() else None, "prefix": rules.layers[layer].get("prefix"), "types": {t: rules.aspect_of(t) for t in rules.types_in_layer(layer)}}
             for layer in layers
             if layer in rules.layers
         } | {"relationships": RELATIONSHIP_TYPES, "c4_tags": {t: s["types"] for t, s in rules.c4["tags"].items()}}, False

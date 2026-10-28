@@ -5,4 +5,4 @@
 
 | ADR | Title | Status | Date | Affects |
 |---|---|---|---|---|
-| [ADR-0001](../../models/nextcloud/decisions/ADR-0001-run-nextcloud-as-containers.md) | Run Nextcloud as Docker containers on a dedicated VM | accepted | 2026-10-23 | `app-nextcloud`, `app-nextcloud-web`, `app-nextcloud-db`, `app-nextcloud-cache`, `compute/tech-vm-docker`, `compute/tech-docker` |
+| [ADR-0001](../../models/nextcloud/decisions/ADR-0001-run-nextcloud-as-containers.md) | Run Nextcloud as Docker containers on a dedicated VM | accepted | 2026-10-23 | `app-nextcloud`, `app-nextcloud-web`, `app-nextcloud-db`, `app-nextcloud-cache`, `compute/infra-vm-docker`, `compute/infra-docker` |

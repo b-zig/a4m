@@ -50,9 +50,9 @@ The sample is a home lab modelled as eight SAs:
 
 | Path | What |
 |---|---|
-| `models/<sa>/` | The source of truth, one folder per solution architecture: `model.yaml` (kind, status, exports) + YAML per layer, `views/`, `decisions/` (ADRs) |
+| `models/<sa>/` | The source of truth, one folder per solution architecture: `model.yaml` (kind, status, exports) + the layer folders `business/ information/ application/ infrastructure/`, `views/`, `decisions/` (ADRs) |
 | `rules/archimate-3.2/` | Archi's relationship matrix, vendored unmodified (MIT), see NOTICE |
-| `rules/elements.yaml` | Element catalogue: layer, aspect, colour, id prefix; viewpoint names |
+| `rules/elements.yaml` | Element catalogue: the four layers (folder, id prefix, colour), which layer each ArchiMate type belongs to; viewpoint names |
 | `rules/c4.yaml` | C4 ↔ ArchiMate mapping used to derive C4 views |
 | `schema/a4m.schema.json` | JSON Schema for model files (editor validation, LLM structured output) |
 | `a4m/` | The tool (stdlib + PyYAML + jsonschema) |
@@ -79,18 +79,34 @@ The sample is a home lab modelled as eight SAs:
 
 ## Modelling in one minute
 
+Each SA is layered quasi-TOGAF, one folder per layer:
+
+```
+models/nextcloud/
+├── model.yaml        # name, kind, status, owner, exports
+├── business/         # bus-   actors, roles, processes, services, business objects; goals, capabilities, roadmap
+├── information/      # data-  data objects
+├── application/      # app-   components, interfaces, application services
+├── infrastructure/   # infra- nodes, system software, networks, artifacts, technology services, equipment
+├── views/            # ArchiMate and C4 views
+└── decisions/        # ADRs
+```
+
+Every ArchiMate type belongs to one layer (`python3 -m a4m types`), and the validator rejects an element
+in the wrong folder. Diagrams show the same four layers as horizontal bands.
+
 ```yaml
 # models/nextcloud/model.yaml
 name: Nextcloud
 kind: solution                        # solution | platform | enterprise
 status: implemented                   # draft | proposed | approved | implemented | rejected
-exports: [app-nextcloud, app-nextcloud-db, app-data-files]   # what other SAs may reference
+exports: [app-nextcloud, app-nextcloud-db, data-files]   # what other SAs may reference
 ```
 
 ```yaml
 # models/nextcloud/application/nextcloud.yaml
 elements:
-  - id: app-nextcloud                 # kebab-case, layer prefix (bus- app- tech- mot- str- phys- impl- oth-)
+  - id: app-nextcloud                 # kebab-case, layer prefix (bus- data- app- infra-)
     type: ApplicationComponent
     name: Nextcloud
     c4: system                        # opt into C4 views

@@ -10,16 +10,16 @@ Use `python3 -m a4m impact <sa>/<id>` before changing or retiring an exported el
 
 | Element | Used by | Relationship | State |
 |---|---|---|---|
-| Docker Engine (`compute/tech-docker`) | [media](../media/README.md) | Assignment `compute/tech-docker` → `media/tech-art-jellyfin` | new |
-| Docker Engine (`compute/tech-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/tech-docker` → `nextcloud/tech-art-mariadb` |  |
-| Docker Engine (`compute/tech-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/tech-docker` → `nextcloud/tech-art-nextcloud` |  |
-| Docker Engine (`compute/tech-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/tech-docker` → `nextcloud/tech-art-redis` |  |
-| NAS (`compute/tech-nas`) | [backup](../backup/README.md) | Realization `compute/tech-nas` → `backup/app-backup` |  |
-| NFS storage (`compute/tech-svc-nfs`) | [nextcloud](../nextcloud/README.md) | Serving `compute/tech-svc-nfs` → `nextcloud/app-nextcloud-web` — User files volume |  |
-| Proxmox host 01 (`compute/tech-pve-01`) | [dns](../dns/README.md) | Composition `compute/tech-pve-01` → `dns/tech-lxc-pihole` |  |
-| Proxmox host 01 (`compute/tech-pve-01`) | [home-automation](../home-automation/README.md) | Composition `compute/tech-pve-01` → `home-automation/tech-vm-haos` |  |
-| VM hosting (`compute/tech-svc-vm-hosting`) | [dns](../dns/README.md) | Serving `compute/tech-svc-vm-hosting` → `dns/tech-lxc-pihole` |  |
-| VM hosting (`compute/tech-svc-vm-hosting`) | [home-automation](../home-automation/README.md) | Serving `compute/tech-svc-vm-hosting` → `home-automation/tech-vm-haos` |  |
+| Docker Engine (`compute/infra-docker`) | [media](../media/README.md) | Assignment `compute/infra-docker` → `media/infra-art-jellyfin` | new |
+| Docker Engine (`compute/infra-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/infra-docker` → `nextcloud/infra-art-mariadb` |  |
+| Docker Engine (`compute/infra-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/infra-docker` → `nextcloud/infra-art-nextcloud` |  |
+| Docker Engine (`compute/infra-docker`) | [nextcloud](../nextcloud/README.md) | Assignment `compute/infra-docker` → `nextcloud/infra-art-redis` |  |
+| NAS (`compute/infra-nas`) | [backup](../backup/README.md) | Realization `compute/infra-nas` → `backup/app-backup` |  |
+| NFS storage (`compute/infra-svc-nfs`) | [nextcloud](../nextcloud/README.md) | Serving `compute/infra-svc-nfs` → `nextcloud/app-nextcloud-web` — User files volume |  |
+| Proxmox host 01 (`compute/infra-pve-01`) | [dns](../dns/README.md) | Composition `compute/infra-pve-01` → `dns/infra-lxc-pihole` |  |
+| Proxmox host 01 (`compute/infra-pve-01`) | [home-automation](../home-automation/README.md) | Composition `compute/infra-pve-01` → `home-automation/infra-vm-haos` |  |
+| VM hosting (`compute/infra-svc-vm-hosting`) | [dns](../dns/README.md) | Serving `compute/infra-svc-vm-hosting` → `dns/infra-lxc-pihole` |  |
+| VM hosting (`compute/infra-svc-vm-hosting`) | [home-automation](../home-automation/README.md) | Serving `compute/infra-svc-vm-hosting` → `home-automation/infra-vm-haos` |  |
 
 ## DNS filtering (Pi-hole) (`dns`, platform)
 
@@ -34,14 +34,14 @@ Use `python3 -m a4m impact <sa>/<id>` before changing or retiring an exported el
 | Element | Used by | Relationship | State |
 |---|---|---|---|
 | Back up family data (`enterprise/bus-proc-backup`) | [backup](../backup/README.md) | Serving `backup/app-svc-backup` → `enterprise/bus-proc-backup` |  |
-| Family photos and documents (`enterprise/bus-obj-photos`) | [nextcloud](../nextcloud/README.md) | Realization `nextcloud/app-data-files` → `enterprise/bus-obj-photos` |  |
+| Family photos and documents (`enterprise/bus-obj-photos`) | [nextcloud](../nextcloud/README.md) | Realization `nextcloud/data-files` → `enterprise/bus-obj-photos` |  |
 | File sharing (`enterprise/bus-svc-file-sharing`) | [nextcloud](../nextcloud/README.md) | Realization `nextcloud/app-svc-file-sync` → `enterprise/bus-svc-file-sharing` |  |
 | Home automation (`enterprise/bus-svc-automation`) | [home-automation](../home-automation/README.md) | Realization `home-automation/app-svc-automation` → `enterprise/bus-svc-automation` |  |
 | Home lab admin (`enterprise/bus-admin`) | [dns](../dns/README.md) | Serving `dns/app-svc-dns` → `enterprise/bus-admin` — Admin console |  |
-| Home lab hardware (`enterprise/str-res-hardware`) | [compute](../compute/README.md) | Realization `compute/tech-nas` → `enterprise/str-res-hardware` |  |
-| Home lab hardware (`enterprise/str-res-hardware`) | [compute](../compute/README.md) | Realization `compute/tech-pve-01` → `enterprise/str-res-hardware` |  |
-| Network-wide ad and tracker blocking (`enterprise/mot-req-dns-filter`) | [dns](../dns/README.md) | Realization `dns/app-pihole` → `enterprise/mot-req-dns-filter` |  |
-| Nightly off-site backups (`enterprise/mot-req-backup`) | [backup](../backup/README.md) | Realization `backup/app-backup` → `enterprise/mot-req-backup` |  |
+| Home lab hardware (`enterprise/bus-res-hardware`) | [compute](../compute/README.md) | Realization `compute/infra-nas` → `enterprise/bus-res-hardware` |  |
+| Home lab hardware (`enterprise/bus-res-hardware`) | [compute](../compute/README.md) | Realization `compute/infra-pve-01` → `enterprise/bus-res-hardware` |  |
+| Network-wide ad and tracker blocking (`enterprise/bus-req-dns-filter`) | [dns](../dns/README.md) | Realization `dns/app-pihole` → `enterprise/bus-req-dns-filter` |  |
+| Nightly off-site backups (`enterprise/bus-req-backup`) | [backup](../backup/README.md) | Realization `backup/app-backup` → `enterprise/bus-req-backup` |  |
 | Service user (`enterprise/bus-role-user`) | [home-automation](../home-automation/README.md) | Serving `home-automation/app-svc-automation` → `enterprise/bus-role-user` |  |
 | Service user (`enterprise/bus-role-user`) | [media](../media/README.md) | Serving `media/app-svc-streaming` → `enterprise/bus-role-user` | new |
 | Share files and photos (`enterprise/bus-proc-share`) | [nextcloud](../nextcloud/README.md) | Serving `nextcloud/app-svc-file-sync` → `enterprise/bus-proc-share` |  |
@@ -50,20 +50,20 @@ Use `python3 -m a4m impact <sa>/<id>` before changing or retiring an exported el
 
 | Element | Used by | Relationship | State |
 |---|---|---|---|
-| Home office rack (`network/oth-loc-home`) | [compute](../compute/README.md) | Aggregation `network/oth-loc-home` → `compute/tech-nas` |  |
-| Home office rack (`network/oth-loc-home`) | [compute](../compute/README.md) | Aggregation `network/oth-loc-home` → `compute/tech-pve-01` |  |
-| IoT (VLAN 20) (`network/tech-net-iot`) | [home-automation](../home-automation/README.md) | Association `home-automation/tech-vm-haos` → `network/tech-net-iot` |  |
-| LAN (VLAN 10) (`network/tech-net-lan`) | [compute](../compute/README.md) | Association `compute/tech-nas` → `network/tech-net-lan` |  |
-| LAN (VLAN 10) (`network/tech-net-lan`) | [compute](../compute/README.md) | Association `compute/tech-pve-01` → `network/tech-net-lan` |  |
-| LAN (VLAN 10) (`network/tech-net-lan`) | [dns](../dns/README.md) | Association `dns/tech-lxc-pihole` → `network/tech-net-lan` |  |
-| UPS (`network/phys-ups`) | [compute](../compute/README.md) | Serving `network/phys-ups` → `compute/tech-nas` |  |
-| UPS (`network/phys-ups`) | [compute](../compute/README.md) | Serving `network/phys-ups` → `compute/tech-pve-01` |  |
+| Home office rack (`network/infra-loc-home`) | [compute](../compute/README.md) | Aggregation `network/infra-loc-home` → `compute/infra-nas` |  |
+| Home office rack (`network/infra-loc-home`) | [compute](../compute/README.md) | Aggregation `network/infra-loc-home` → `compute/infra-pve-01` |  |
+| IoT (VLAN 20) (`network/infra-net-iot`) | [home-automation](../home-automation/README.md) | Association `home-automation/infra-vm-haos` → `network/infra-net-iot` |  |
+| LAN (VLAN 10) (`network/infra-net-lan`) | [compute](../compute/README.md) | Association `compute/infra-nas` → `network/infra-net-lan` |  |
+| LAN (VLAN 10) (`network/infra-net-lan`) | [compute](../compute/README.md) | Association `compute/infra-pve-01` → `network/infra-net-lan` |  |
+| LAN (VLAN 10) (`network/infra-net-lan`) | [dns](../dns/README.md) | Association `dns/infra-lxc-pihole` → `network/infra-net-lan` |  |
+| UPS (`network/infra-ups`) | [compute](../compute/README.md) | Serving `network/infra-ups` → `compute/infra-nas` |  |
+| UPS (`network/infra-ups`) | [compute](../compute/README.md) | Serving `network/infra-ups` → `compute/infra-pve-01` |  |
 
 ## Nextcloud (`nextcloud`, solution)
 
 | Element | Used by | Relationship | State |
 |---|---|---|---|
 | Nextcloud database (`nextcloud/app-nextcloud-db`) | [backup](../backup/README.md) | Flow `nextcloud/app-nextcloud-db` → `backup/app-backup` — Nightly dump |  |
-| User files (`nextcloud/app-data-files`) | [backup](../backup/README.md) | Access `backup/app-backup` → `nextcloud/app-data-files` |  |
-| User files (`nextcloud/app-data-files`) | [media](../media/README.md) | Access `media/app-jellyfin` → `nextcloud/app-data-files` — Family videos | new |
+| User files (`nextcloud/data-files`) | [backup](../backup/README.md) | Access `backup/app-backup` → `nextcloud/data-files` |  |
+| User files (`nextcloud/data-files`) | [media](../media/README.md) | Access `media/app-jellyfin` → `nextcloud/data-files` — Family videos | new |
 

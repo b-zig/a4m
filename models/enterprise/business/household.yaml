@@ -37,6 +37,6 @@ relationships:
   - { type: Serving, source: bus-svc-automation, target: bus-role-user }
   - { type: Access, source: bus-proc-share, target: bus-obj-photos, access: readwrite }
   - { type: Access, source: bus-proc-backup, target: bus-obj-photos, access: read }
-  - { type: Realization, source: bus-svc-file-sharing, target: str-cap-file-sharing }
-  - { type: Realization, source: bus-svc-automation, target: str-cap-home-automation }
-  - { type: Association, source: bus-family, target: mot-family, name: represented by }
+  - { type: Realization, source: bus-svc-file-sharing, target: bus-cap-file-sharing }
+  - { type: Realization, source: bus-svc-automation, target: bus-cap-home-automation }
+  - { type: Association, source: bus-family, target: bus-stk-family, name: represented by }

@@ -1,0 +1,20 @@
+elements:
+  - id: bus-cap-home-it
+    type: Capability
+    name: Home IT services
+  - id: bus-cap-file-sharing
+    type: Capability
+    name: File sharing and sync
+  - id: bus-cap-home-automation
+    type: Capability
+    name: Home automation
+  - id: bus-res-hardware
+    type: Resource
+    name: Home lab hardware
+    documentation: Hypervisor, NAS, network gear and UPS (see the compute and network SAs).
+
+relationships:
+  - { type: Composition, source: bus-cap-home-it, target: bus-cap-file-sharing }
+  - { type: Composition, source: bus-cap-home-it, target: bus-cap-home-automation }
+  - { type: Realization, source: bus-cap-home-it, target: bus-goal-reliable }
+  - { type: Assignment, source: bus-res-hardware, target: bus-cap-home-it }

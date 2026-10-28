@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from pathlib import Path
 
 from .adr import check_adrs
 from .c4 import C4Projector
@@ -41,14 +42,37 @@ def _check_elements(model: Model, rules: Rules) -> list[Issue]:
             hint = rules.suggest_type(el.type)
             issues.append(error("unknown-type", f"unknown element type '{el.type}'" + (f"; did you mean {', '.join(hint)}?" if hint else "; run `a4m types`"), el.file, el.id))
             continue
-        prefix = rules.layers[rules.layer_of(el.type)]["prefix"]
-        if not el.id.startswith(prefix + "-"):
-            issues.append(warning("id-prefix", f"{el.type} is in the {rules.layer_of(el.type)} layer; id should start with '{prefix}-'", el.file, el.id))
+        layer = rules.layer_of(el.type)
+        prefix = rules.layers[layer].get("prefix")
+        if prefix and not el.id.startswith(prefix + "-"):
+            issues.append(warning("id-prefix", f"{el.type} is in the {layer} layer; id should start with '{prefix}-'", el.file, el.id))
+        folder = _sa_folder(model, el.file)
+        if folder != rules.folder_of(el.type) and not (rules.folder_of(el.type) is None and folder in rules.layer_folders()):
+            where = rules.folder_of(el.type) or " or ".join(f"{f}/" for f in rules.layer_folders())
+            issues.append(error(
+                "layer-folder",
+                f"{el.type} belongs to the {layer} layer; move it to models/{model.sa}/{where}"
+                + ("/" if rules.folder_of(el.type) else "")
+                + f" (it is in {folder + '/' if folder else 'the SA root'})",
+                el.file, el.id,
+            ))
         if el.junction_type and el.type != "Junction":
             issues.append(error("bad-attribute", "junction_type is only valid on Junction", el.file, el.id))
         if el.c4_shape and el.c4 not in ("container", "system", "component"):
             issues.append(error("bad-attribute", "c4_shape needs c4: system, container or component", el.file, el.id))
     return issues
+
+
+def _sa_folder(model: Model, file: str) -> str:
+    """First folder of a file below models/<sa>/ ("" for files directly in the SA folder)."""
+    path = Path(file)
+    if not path.is_absolute():
+        path = model.path.parent.parent / path  # paths are shown relative to the workspace root
+    try:
+        parts = path.resolve().relative_to(model.path.resolve()).parts
+    except ValueError:
+        return ""
+    return parts[0] if len(parts) > 1 else ""
 
 
 def _concept_type(model: Model, concept_id: str) -> str | None:

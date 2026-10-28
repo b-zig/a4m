@@ -61,6 +61,14 @@ class Rules:
         t = self.types.get(type_name)
         return t.aspect if t else "other"
 
+    def folder_of(self, type_name: str) -> str | None:
+        """The folder under models/<sa>/ for elements of this type (None: any layer folder)."""
+        layer = self.layer_of(type_name)
+        return layer if self.layers[layer].get("folder", True) else None
+
+    def layer_folders(self) -> list[str]:
+        return [layer for layer in self.layer_order() if self.layers[layer].get("folder", True)]
+
     def layer_order(self) -> list[str]:
         return sorted(self.layers, key=lambda layer: self.layers[layer]["order"])
 

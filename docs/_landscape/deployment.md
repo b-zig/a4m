@@ -8,24 +8,24 @@ Where every container and system runs, across all SAs.
 ```mermaid
 C4Deployment
   title Home Lab — deployment
-  Deployment_Node(network__oth_loc_home, "Home office rack", "Location", "") {
-    Deployment_Node(compute__tech_pve_01, "Proxmox host 01", "Proxmox VE 8", "Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host).") {
-      Deployment_Node(compute__tech_vm_docker, "VM docker-01", "Debian 12 VM", "Shared Docker host for containerised solutions.") {
-        Deployment_Node(compute__tech_docker, "Docker Engine", "Docker Compose", "") {
+  Deployment_Node(network__infra_loc_home, "Home office rack", "Location", "") {
+    Deployment_Node(compute__infra_pve_01, "Proxmox host 01", "Proxmox VE 8", "Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).") {
+      Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "Shared Docker host for containerised solutions.") {
+        Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "") {
           Container(nextcloud__app_nextcloud_web, "Nextcloud web", "PHP 8 / Apache", "Web UI, WebDAV and mobile sync endpoints.")
           ContainerDb(nextcloud__app_nextcloud_db, "Nextcloud database", "MariaDB 11", "Metadata, shares and user accounts.")
           Container(nextcloud__app_nextcloud_cache, "Nextcloud cache", "Redis 7", "File locking and session cache.")
           System(media__app_jellyfin, "Jellyfin [PROPOSED]", "Media server streaming the family's videos and music to TVs and phones.")
         }
       }
-      Deployment_Node(dns__tech_lxc_pihole, "LXC pihole", "Debian 12 LXC", "") {
+      Deployment_Node(dns__infra_lxc_pihole, "LXC pihole", "Debian 12 LXC", "") {
         System(dns__app_pihole, "Pi-hole", "Network-wide DNS resolver with ad and tracker blocking.")
       }
-      Deployment_Node(home_automation__tech_vm_haos, "VM haos", "Home Assistant OS VM", "") {
+      Deployment_Node(home_automation__infra_vm_haos, "VM haos", "Home Assistant OS VM", "") {
         System(home_automation__app_home_assistant, "Home Assistant", "Smart-home automation, dashboards and device integrations.")
       }
     }
-    Deployment_Node(compute__tech_nas, "NAS", "Synology DSM 7", "Synology NAS holding solution data (NFS) and running backup jobs.") {
+    Deployment_Node(compute__infra_nas, "NAS", "Synology DSM 7", "Synology NAS holding solution data (NFS) and running backup jobs.") {
       System(backup__app_backup, "Backup jobs", "Nightly restic snapshots of Nextcloud data and its database.")
     }
   }
@@ -46,23 +46,23 @@ C4Deployment
 ```mermaid
 C4Deployment
   title Home Lab — deployment
-  Deployment_Node(network__oth_loc_home, "Home office rack", "Location", "") {
-    Deployment_Node(compute__tech_pve_01, "Proxmox host 01", "Proxmox VE 8", "Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host).") {
-      Deployment_Node(compute__tech_vm_docker, "VM docker-01", "Debian 12 VM", "Shared Docker host for containerised solutions.") {
-        Deployment_Node(compute__tech_docker, "Docker Engine", "Docker Compose", "") {
+  Deployment_Node(network__infra_loc_home, "Home office rack", "Location", "") {
+    Deployment_Node(compute__infra_pve_01, "Proxmox host 01", "Proxmox VE 8", "Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).") {
+      Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "Shared Docker host for containerised solutions.") {
+        Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "") {
           Container(nextcloud__app_nextcloud_web, "Nextcloud web", "PHP 8 / Apache", "Web UI, WebDAV and mobile sync endpoints.")
           ContainerDb(nextcloud__app_nextcloud_db, "Nextcloud database", "MariaDB 11", "Metadata, shares and user accounts.")
           Container(nextcloud__app_nextcloud_cache, "Nextcloud cache", "Redis 7", "File locking and session cache.")
         }
       }
-      Deployment_Node(dns__tech_lxc_pihole, "LXC pihole", "Debian 12 LXC", "") {
+      Deployment_Node(dns__infra_lxc_pihole, "LXC pihole", "Debian 12 LXC", "") {
         System(dns__app_pihole, "Pi-hole", "Network-wide DNS resolver with ad and tracker blocking.")
       }
-      Deployment_Node(home_automation__tech_vm_haos, "VM haos", "Home Assistant OS VM", "") {
+      Deployment_Node(home_automation__infra_vm_haos, "VM haos", "Home Assistant OS VM", "") {
         System(home_automation__app_home_assistant, "Home Assistant", "Smart-home automation, dashboards and device integrations.")
       }
     }
-    Deployment_Node(compute__tech_nas, "NAS", "Synology DSM 7", "Synology NAS holding solution data (NFS) and running backup jobs.") {
+    Deployment_Node(compute__infra_nas, "NAS", "Synology DSM 7", "Synology NAS holding solution data (NFS) and running backup jobs.") {
       System(backup__app_backup, "Backup jobs", "Nightly restic snapshots of Nextcloud data and its database.")
     }
   }
@@ -80,23 +80,23 @@ C4Deployment
 ```mermaid
 C4Deployment
   title Home Lab — deployment
-  Deployment_Node(network__oth_loc_home, "Home office rack", "Location", "") {
-    Deployment_Node(compute__tech_pve_01, "Proxmox host 01", "Proxmox VE 8", "Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host).") {
-      Deployment_Node(compute__tech_vm_docker, "VM docker-01", "Debian 12 VM", "Shared Docker host for containerised solutions.") {
-        Deployment_Node(compute__tech_docker, "Docker Engine", "Docker Compose", "") {
+  Deployment_Node(network__infra_loc_home, "Home office rack", "Location", "") {
+    Deployment_Node(compute__infra_pve_01, "Proxmox host 01", "Proxmox VE 8", "Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).") {
+      Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "Shared Docker host for containerised solutions.") {
+        Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "") {
           Container(nextcloud__app_nextcloud_web, "Nextcloud web", "PHP 8 / Apache", "Web UI, WebDAV and mobile sync endpoints.")
           ContainerDb(nextcloud__app_nextcloud_db, "Nextcloud database", "MariaDB 11", "Metadata, shares and user accounts.")
           Container(nextcloud__app_nextcloud_cache, "Nextcloud cache", "Redis 7", "File locking and session cache.")
         }
       }
-      Deployment_Node(dns__tech_lxc_pihole, "LXC pihole", "Debian 12 LXC", "") {
+      Deployment_Node(dns__infra_lxc_pihole, "LXC pihole", "Debian 12 LXC", "") {
         System(dns__app_pihole, "Pi-hole", "Network-wide DNS resolver with ad and tracker blocking.")
       }
-      Deployment_Node(home_automation__tech_vm_haos, "VM haos", "Home Assistant OS VM", "") {
+      Deployment_Node(home_automation__infra_vm_haos, "VM haos", "Home Assistant OS VM", "") {
         System(home_automation__app_home_assistant, "Home Assistant", "Smart-home automation, dashboards and device integrations.")
       }
     }
-    Deployment_Node(compute__tech_nas, "NAS", "Synology DSM 7", "Synology NAS holding solution data (NFS) and running backup jobs.") {
+    Deployment_Node(compute__infra_nas, "NAS", "Synology DSM 7", "Synology NAS holding solution data (NFS) and running backup jobs.") {
       System(backup__app_backup, "Backup jobs", "Nightly restic snapshots of Nextcloud data and its database.")
     }
   }
@@ -120,13 +120,13 @@ C4Deployment
 | Nextcloud web (`nextcloud/app-nextcloud-web`) | ApplicationComponent | Application | container |  | Web UI, WebDAV and mobile sync endpoints. |
 | Nextcloud database (`nextcloud/app-nextcloud-db`) | ApplicationComponent | Application | container |  | Metadata, shares and user accounts. |
 | Nextcloud cache (`nextcloud/app-nextcloud-cache`) | ApplicationComponent | Application | container |  | File locking and session cache. |
-| Home office rack (`network/oth-loc-home`) | Location | Other | deployment |  |  |
-| Proxmox host 01 (`compute/tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| VM docker-01 (`compute/tech-vm-docker`) | Node | Technology | deployment |  | Shared Docker host for containerised solutions. |
-| Docker Engine (`compute/tech-docker`) | SystemSoftware | Technology | deployment |  |  |
-| LXC pihole (`dns/tech-lxc-pihole`) | Node | Technology | deployment |  |  |
-| VM haos (`home-automation/tech-vm-haos`) | Node | Technology | deployment |  |  |
-| NAS (`compute/tech-nas`) | Device | Technology | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
+| Home office rack (`network/infra-loc-home`) | Location | Infrastructure | deployment |  |  |
+| Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| VM docker-01 (`compute/infra-vm-docker`) | Node | Infrastructure | deployment |  | Shared Docker host for containerised solutions. |
+| Docker Engine (`compute/infra-docker`) | SystemSoftware | Infrastructure | deployment |  |  |
+| LXC pihole (`dns/infra-lxc-pihole`) | Node | Infrastructure | deployment |  |  |
+| VM haos (`home-automation/infra-vm-haos`) | Node | Infrastructure | deployment |  |  |
+| NAS (`compute/infra-nas`) | Device | Infrastructure | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
 
 ## Related decisions
 

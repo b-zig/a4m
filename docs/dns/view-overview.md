@@ -10,6 +10,7 @@ flowchart TB
   subgraph layer_business["Business"]
     direction LR
     enterprise__bus_admin["Home lab admin<br/>«BusinessActor» · enterprise"]
+    enterprise__bus_req_dns_filter{{"Network-wide ad and tracker blocking<br/>«Requirement» · enterprise"}}
   end
   subgraph layer_application["Application"]
     direction LR
@@ -19,37 +20,38 @@ flowchart TB
     media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media<br/>NEW"]
     nextcloud__app_nextcloud["Nextcloud<br/>«ApplicationComponent» · nextcloud"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_lxc_pihole["LXC pihole<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    infra_lxc_pihole["LXC pihole<br/>«Node»"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    compute__infra_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
+    network__infra_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
   end
   app_pihole -.->|"realizes"| app_svc_dns
+  app_pihole -.->|"realizes"| enterprise__bus_req_dns_filter
   app_svc_dns -->|"Admin console"| enterprise__bus_admin
-  tech_lxc_pihole -.->|"realizes"| app_pihole
-  compute__tech_pve_01 -->|"composed of"| tech_lxc_pihole
-  compute__tech_svc_vm_hosting -->|"serves"| tech_lxc_pihole
-  tech_lxc_pihole ---|"associated with"| network__tech_net_lan
-  compute__tech_pve_01 ---|"associated with"| network__tech_net_lan
+  infra_lxc_pihole -.->|"realizes"| app_pihole
+  compute__infra_pve_01 -->|"composed of"| infra_lxc_pihole
+  compute__infra_svc_vm_hosting -->|"serves"| infra_lxc_pihole
+  infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  compute__infra_pve_01 ---|"associated with"| network__infra_net_lan
   app_svc_dns -->|"DNS lookups"| home_automation__app_home_assistant
   app_svc_dns -->|"DNS lookups"| media__app_jellyfin
   app_svc_dns -->|"DNS lookups"| nextcloud__app_nextcloud
   classDef business fill:#FFFFB5,stroke:#555,color:#000
-  class enterprise__bus_admin business
+  class enterprise__bus_admin,enterprise__bus_req_dns_filter business
   style layer_business fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
   class app_pihole,app_svc_dns,home_automation__app_home_assistant,media__app_jellyfin,nextcloud__app_nextcloud application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_lxc_pihole,compute__tech_pve_01,compute__tech_svc_vm_hosting,network__tech_net_lan technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_lxc_pihole,compute__infra_pve_01,compute__infra_svc_vm_hosting,network__infra_net_lan infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_pve_01,compute__tech_svc_vm_hosting,enterprise__bus_admin,home_automation__app_home_assistant,media__app_jellyfin,network__tech_net_lan,nextcloud__app_nextcloud foreign
+  class compute__infra_pve_01,compute__infra_svc_vm_hosting,enterprise__bus_admin,enterprise__bus_req_dns_filter,home_automation__app_home_assistant,media__app_jellyfin,network__infra_net_lan,nextcloud__app_nextcloud foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
   class media__app_jellyfin st_new
-  linkStyle 8 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
+  linkStyle 9 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
 *Change highlighting: green = new, orange = changed, red = retiring (purple = proposed by an SA that is not approved yet).*
@@ -61,6 +63,7 @@ flowchart TB
   subgraph layer_business["Business"]
     direction LR
     enterprise__bus_admin["Home lab admin<br/>«BusinessActor» · enterprise"]
+    enterprise__bus_req_dns_filter{{"Network-wide ad and tracker blocking<br/>«Requirement» · enterprise"}}
   end
   subgraph layer_application["Application"]
     direction LR
@@ -69,33 +72,34 @@ flowchart TB
     home_automation__app_home_assistant["Home Assistant<br/>«ApplicationComponent» · home-automation"]
     nextcloud__app_nextcloud["Nextcloud<br/>«ApplicationComponent» · nextcloud"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_lxc_pihole["LXC pihole<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    infra_lxc_pihole["LXC pihole<br/>«Node»"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    compute__infra_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
+    network__infra_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
   end
   app_pihole -.->|"realizes"| app_svc_dns
+  app_pihole -.->|"realizes"| enterprise__bus_req_dns_filter
   app_svc_dns -->|"Admin console"| enterprise__bus_admin
-  tech_lxc_pihole -.->|"realizes"| app_pihole
-  compute__tech_pve_01 -->|"composed of"| tech_lxc_pihole
-  compute__tech_svc_vm_hosting -->|"serves"| tech_lxc_pihole
-  tech_lxc_pihole ---|"associated with"| network__tech_net_lan
-  compute__tech_pve_01 ---|"associated with"| network__tech_net_lan
+  infra_lxc_pihole -.->|"realizes"| app_pihole
+  compute__infra_pve_01 -->|"composed of"| infra_lxc_pihole
+  compute__infra_svc_vm_hosting -->|"serves"| infra_lxc_pihole
+  infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  compute__infra_pve_01 ---|"associated with"| network__infra_net_lan
   app_svc_dns -->|"DNS lookups"| home_automation__app_home_assistant
   app_svc_dns -->|"DNS lookups"| nextcloud__app_nextcloud
   classDef business fill:#FFFFB5,stroke:#555,color:#000
-  class enterprise__bus_admin business
+  class enterprise__bus_admin,enterprise__bus_req_dns_filter business
   style layer_business fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
   class app_pihole,app_svc_dns,home_automation__app_home_assistant,nextcloud__app_nextcloud application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_lxc_pihole,compute__tech_pve_01,compute__tech_svc_vm_hosting,network__tech_net_lan technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_lxc_pihole,compute__infra_pve_01,compute__infra_svc_vm_hosting,network__infra_net_lan infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_pve_01,compute__tech_svc_vm_hosting,enterprise__bus_admin,home_automation__app_home_assistant,network__tech_net_lan,nextcloud__app_nextcloud foreign
+  class compute__infra_pve_01,compute__infra_svc_vm_hosting,enterprise__bus_admin,enterprise__bus_req_dns_filter,home_automation__app_home_assistant,network__infra_net_lan,nextcloud__app_nextcloud foreign
 ```
 
 </details>
@@ -107,6 +111,7 @@ flowchart TB
   subgraph layer_business["Business"]
     direction LR
     enterprise__bus_admin["Home lab admin<br/>«BusinessActor» · enterprise"]
+    enterprise__bus_req_dns_filter{{"Network-wide ad and tracker blocking<br/>«Requirement» · enterprise"}}
   end
   subgraph layer_application["Application"]
     direction LR
@@ -116,34 +121,35 @@ flowchart TB
     media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media"]
     nextcloud__app_nextcloud["Nextcloud<br/>«ApplicationComponent» · nextcloud"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_lxc_pihole["LXC pihole<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    infra_lxc_pihole["LXC pihole<br/>«Node»"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    compute__infra_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
+    network__infra_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
   end
   app_pihole -.->|"realizes"| app_svc_dns
+  app_pihole -.->|"realizes"| enterprise__bus_req_dns_filter
   app_svc_dns -->|"Admin console"| enterprise__bus_admin
-  tech_lxc_pihole -.->|"realizes"| app_pihole
-  compute__tech_pve_01 -->|"composed of"| tech_lxc_pihole
-  compute__tech_svc_vm_hosting -->|"serves"| tech_lxc_pihole
-  tech_lxc_pihole ---|"associated with"| network__tech_net_lan
-  compute__tech_pve_01 ---|"associated with"| network__tech_net_lan
+  infra_lxc_pihole -.->|"realizes"| app_pihole
+  compute__infra_pve_01 -->|"composed of"| infra_lxc_pihole
+  compute__infra_svc_vm_hosting -->|"serves"| infra_lxc_pihole
+  infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  compute__infra_pve_01 ---|"associated with"| network__infra_net_lan
   app_svc_dns -->|"DNS lookups"| home_automation__app_home_assistant
   app_svc_dns -->|"DNS lookups"| media__app_jellyfin
   app_svc_dns -->|"DNS lookups"| nextcloud__app_nextcloud
   classDef business fill:#FFFFB5,stroke:#555,color:#000
-  class enterprise__bus_admin business
+  class enterprise__bus_admin,enterprise__bus_req_dns_filter business
   style layer_business fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
   class app_pihole,app_svc_dns,home_automation__app_home_assistant,media__app_jellyfin,nextcloud__app_nextcloud application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_lxc_pihole,compute__tech_pve_01,compute__tech_svc_vm_hosting,network__tech_net_lan technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_lxc_pihole,compute__infra_pve_01,compute__infra_svc_vm_hosting,network__infra_net_lan infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_pve_01,compute__tech_svc_vm_hosting,enterprise__bus_admin,home_automation__app_home_assistant,media__app_jellyfin,network__tech_net_lan,nextcloud__app_nextcloud foreign
+  class compute__infra_pve_01,compute__infra_svc_vm_hosting,enterprise__bus_admin,enterprise__bus_req_dns_filter,home_automation__app_home_assistant,media__app_jellyfin,network__infra_net_lan,nextcloud__app_nextcloud foreign
 ```
 
 </details>
@@ -154,11 +160,12 @@ flowchart TB
 |---|---|---|---|---|---|
 | Pi-hole (`app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
 | DNS resolution and filtering (`app-svc-dns`) | ApplicationService | Application |  |  |  |
-| LXC pihole (`tech-lxc-pihole`) | Node | Technology | deployment |  |  |
-| Proxmox host 01 (`compute/tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| VM hosting (`compute/tech-svc-vm-hosting`) | TechnologyService | Technology |  |  |  |
+| LXC pihole (`infra-lxc-pihole`) | Node | Infrastructure | deployment |  |  |
+| Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| VM hosting (`compute/infra-svc-vm-hosting`) | TechnologyService | Infrastructure |  |  |  |
 | Home lab admin (`enterprise/bus-admin`) | BusinessActor | Business | person |  | Runs and maintains the home lab. |
+| Network-wide ad and tracker blocking (`enterprise/bus-req-dns-filter`) | Requirement | Business |  |  |  |
 | Home Assistant (`home-automation/app-home-assistant`) | ApplicationComponent | Application | system |  | Smart-home automation, dashboards and device integrations. |
 | Jellyfin (`media/app-jellyfin`) | ApplicationComponent | Application | system | new | Media server streaming the family's videos and music to TVs and phones. |
-| LAN (VLAN 10) (`network/tech-net-lan`) | CommunicationNetwork | Technology |  |  |  |
+| LAN (VLAN 10) (`network/infra-net-lan`) | CommunicationNetwork | Infrastructure |  |  |  |
 | Nextcloud (`nextcloud/app-nextcloud`) | ApplicationComponent | Application | system |  | Self-hosted file sync, sharing and photo backup for the family. |

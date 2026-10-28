@@ -5,4 +5,4 @@
 
 | ADR | Title | Status | Date | Affects |
 |---|---|---|---|---|
-| [ADR-0001](../../models/compute/decisions/ADR-0001-use-proxmox-for-virtualisation.md) | Use Proxmox VE for virtualisation | accepted | 2026-10-23 | `tech-pve-01`, `tech-proxmox-ve`, `tech-svc-vm-hosting`, `enterprise/mot-asm-single-host` |
+| [ADR-0001](../../models/compute/decisions/ADR-0001-use-proxmox-for-virtualisation.md) | Use Proxmox VE for virtualisation | accepted | 2026-10-23 | `infra-pve-01`, `infra-proxmox-ve`, `infra-svc-vm-hosting`, `enterprise/bus-asm-single-host` |

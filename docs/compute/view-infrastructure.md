@@ -7,67 +7,55 @@ The hypervisor, Docker VM and NAS, with the workloads other SAs run on them.
 
 ```mermaid
 flowchart TB
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_pve_01["Proxmox host 01<br/>«Node»"]
-    tech_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
-    tech_vm_docker["VM docker-01<br/>«Node»"]
-    tech_docker["Docker Engine<br/>«SystemSoftware»"]
-    tech_nas["NAS<br/>«Device»"]
-    tech_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
-    tech_svc_nfs("NFS storage<br/>«TechnologyService»")
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
-    media__tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media<br/>NEW"/]
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
-    nextcloud__tech_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
+    infra_pve_01["Proxmox host 01<br/>«Node»"]
+    infra_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
+    infra_vm_docker["VM docker-01<br/>«Node»"]
+    infra_docker["Docker Engine<br/>«SystemSoftware»"]
+    infra_nas["NAS<br/>«Device»"]
+    infra_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
+    infra_svc_nfs("NFS storage<br/>«TechnologyService»")
+    dns__infra_lxc_pihole["LXC pihole<br/>«Node» · dns"]
+    home_automation__infra_vm_haos["VM haos<br/>«Node» · home-automation"]
+    media__infra_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media<br/>NEW"/]
+    network__infra_loc_home[["Home office rack<br/>«Location» · network"]]
+    network__infra_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    network__infra_ups["UPS<br/>«Equipment» · network"]
+    nextcloud__infra_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
+    nextcloud__infra_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
+    nextcloud__infra_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
   end
-  subgraph layer_physical["Physical"]
-    direction LR
-    network__phys_ups["UPS<br/>«Equipment» · network"]
-  end
-  subgraph layer_other["Other"]
-    direction LR
-    network__oth_loc_home[["Home office rack<br/>«Location» · network"]]
-  end
-  tech_pve_01 -->|"composed of"| tech_proxmox_ve
-  tech_pve_01 -->|"composed of"| tech_vm_docker
-  tech_proxmox_ve -.->|"realizes"| tech_svc_vm_hosting
-  tech_svc_vm_hosting -->|"serves"| tech_vm_docker
-  tech_vm_docker -->|"assigned to"| tech_docker
-  tech_nas -.->|"realizes"| tech_svc_nfs
-  tech_svc_nfs -->|"Docker data volumes"| tech_vm_docker
-  network__oth_loc_home -->|"aggregates"| tech_pve_01
-  network__oth_loc_home -->|"aggregates"| tech_nas
-  network__phys_ups -->|"serves"| tech_pve_01
-  network__phys_ups -->|"serves"| tech_nas
-  tech_pve_01 ---|"associated with"| network__tech_net_lan
-  tech_nas ---|"associated with"| network__tech_net_lan
-  tech_pve_01 -->|"composed of"| dns__tech_lxc_pihole
-  tech_svc_vm_hosting -->|"serves"| dns__tech_lxc_pihole
-  dns__tech_lxc_pihole ---|"associated with"| network__tech_net_lan
-  tech_pve_01 -->|"composed of"| home_automation__tech_vm_haos
-  tech_svc_vm_hosting -->|"serves"| home_automation__tech_vm_haos
-  tech_docker -->|"assigned to"| media__tech_art_jellyfin
-  network__oth_loc_home -->|"aggregates"| network__phys_ups
-  tech_docker -->|"assigned to"| nextcloud__tech_art_nextcloud
-  tech_docker -->|"assigned to"| nextcloud__tech_art_mariadb
-  tech_docker -->|"assigned to"| nextcloud__tech_art_redis
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_pve_01,tech_proxmox_ve,tech_vm_docker,tech_docker,tech_nas,tech_svc_vm_hosting,tech_svc_nfs,dns__tech_lxc_pihole,home_automation__tech_vm_haos,media__tech_art_jellyfin,network__tech_net_lan,nextcloud__tech_art_mariadb,nextcloud__tech_art_nextcloud,nextcloud__tech_art_redis technology
-  style layer_technology fill:#fafafa,stroke:#bbb
-  classDef physical fill:#C9E7B7,stroke:#555,color:#000
-  class network__phys_ups physical
-  style layer_physical fill:#fafafa,stroke:#bbb
-  classDef other fill:#FFFFFF,stroke:#555,color:#000
-  class network__oth_loc_home other
-  style layer_other fill:#fafafa,stroke:#bbb
+  infra_pve_01 -->|"composed of"| infra_proxmox_ve
+  infra_pve_01 -->|"composed of"| infra_vm_docker
+  infra_proxmox_ve -.->|"realizes"| infra_svc_vm_hosting
+  infra_svc_vm_hosting -->|"serves"| infra_vm_docker
+  infra_vm_docker -->|"assigned to"| infra_docker
+  infra_nas -.->|"realizes"| infra_svc_nfs
+  infra_svc_nfs -->|"Docker data volumes"| infra_vm_docker
+  network__infra_loc_home -->|"aggregates"| infra_pve_01
+  network__infra_loc_home -->|"aggregates"| infra_nas
+  network__infra_ups -->|"serves"| infra_pve_01
+  network__infra_ups -->|"serves"| infra_nas
+  infra_pve_01 ---|"associated with"| network__infra_net_lan
+  infra_nas ---|"associated with"| network__infra_net_lan
+  infra_pve_01 -->|"composed of"| dns__infra_lxc_pihole
+  infra_svc_vm_hosting -->|"serves"| dns__infra_lxc_pihole
+  dns__infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  infra_pve_01 -->|"composed of"| home_automation__infra_vm_haos
+  infra_svc_vm_hosting -->|"serves"| home_automation__infra_vm_haos
+  infra_docker -->|"assigned to"| media__infra_art_jellyfin
+  network__infra_loc_home -->|"aggregates"| network__infra_ups
+  infra_docker -->|"assigned to"| nextcloud__infra_art_nextcloud
+  infra_docker -->|"assigned to"| nextcloud__infra_art_mariadb
+  infra_docker -->|"assigned to"| nextcloud__infra_art_redis
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_pve_01,infra_proxmox_ve,infra_vm_docker,infra_docker,infra_nas,infra_svc_vm_hosting,infra_svc_nfs,dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class dns__tech_lxc_pihole,home_automation__tech_vm_haos,media__tech_art_jellyfin,network__oth_loc_home,network__phys_ups,network__tech_net_lan,nextcloud__tech_art_mariadb,nextcloud__tech_art_nextcloud,nextcloud__tech_art_redis foreign
+  class dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
-  class media__tech_art_jellyfin st_new
+  class media__infra_art_jellyfin st_new
   linkStyle 18 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
 ```
 
@@ -77,63 +65,51 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_pve_01["Proxmox host 01<br/>«Node»"]
-    tech_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
-    tech_vm_docker["VM docker-01<br/>«Node»"]
-    tech_docker["Docker Engine<br/>«SystemSoftware»"]
-    tech_nas["NAS<br/>«Device»"]
-    tech_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
-    tech_svc_nfs("NFS storage<br/>«TechnologyService»")
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
-    nextcloud__tech_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
+    infra_pve_01["Proxmox host 01<br/>«Node»"]
+    infra_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
+    infra_vm_docker["VM docker-01<br/>«Node»"]
+    infra_docker["Docker Engine<br/>«SystemSoftware»"]
+    infra_nas["NAS<br/>«Device»"]
+    infra_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
+    infra_svc_nfs("NFS storage<br/>«TechnologyService»")
+    dns__infra_lxc_pihole["LXC pihole<br/>«Node» · dns"]
+    home_automation__infra_vm_haos["VM haos<br/>«Node» · home-automation"]
+    network__infra_loc_home[["Home office rack<br/>«Location» · network"]]
+    network__infra_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    network__infra_ups["UPS<br/>«Equipment» · network"]
+    nextcloud__infra_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
+    nextcloud__infra_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
+    nextcloud__infra_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
   end
-  subgraph layer_physical["Physical"]
-    direction LR
-    network__phys_ups["UPS<br/>«Equipment» · network"]
-  end
-  subgraph layer_other["Other"]
-    direction LR
-    network__oth_loc_home[["Home office rack<br/>«Location» · network"]]
-  end
-  tech_pve_01 -->|"composed of"| tech_proxmox_ve
-  tech_pve_01 -->|"composed of"| tech_vm_docker
-  tech_proxmox_ve -.->|"realizes"| tech_svc_vm_hosting
-  tech_svc_vm_hosting -->|"serves"| tech_vm_docker
-  tech_vm_docker -->|"assigned to"| tech_docker
-  tech_nas -.->|"realizes"| tech_svc_nfs
-  tech_svc_nfs -->|"Docker data volumes"| tech_vm_docker
-  network__oth_loc_home -->|"aggregates"| tech_pve_01
-  network__oth_loc_home -->|"aggregates"| tech_nas
-  network__phys_ups -->|"serves"| tech_pve_01
-  network__phys_ups -->|"serves"| tech_nas
-  tech_pve_01 ---|"associated with"| network__tech_net_lan
-  tech_nas ---|"associated with"| network__tech_net_lan
-  tech_pve_01 -->|"composed of"| dns__tech_lxc_pihole
-  tech_svc_vm_hosting -->|"serves"| dns__tech_lxc_pihole
-  dns__tech_lxc_pihole ---|"associated with"| network__tech_net_lan
-  tech_pve_01 -->|"composed of"| home_automation__tech_vm_haos
-  tech_svc_vm_hosting -->|"serves"| home_automation__tech_vm_haos
-  network__oth_loc_home -->|"aggregates"| network__phys_ups
-  tech_docker -->|"assigned to"| nextcloud__tech_art_nextcloud
-  tech_docker -->|"assigned to"| nextcloud__tech_art_mariadb
-  tech_docker -->|"assigned to"| nextcloud__tech_art_redis
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_pve_01,tech_proxmox_ve,tech_vm_docker,tech_docker,tech_nas,tech_svc_vm_hosting,tech_svc_nfs,dns__tech_lxc_pihole,home_automation__tech_vm_haos,network__tech_net_lan,nextcloud__tech_art_mariadb,nextcloud__tech_art_nextcloud,nextcloud__tech_art_redis technology
-  style layer_technology fill:#fafafa,stroke:#bbb
-  classDef physical fill:#C9E7B7,stroke:#555,color:#000
-  class network__phys_ups physical
-  style layer_physical fill:#fafafa,stroke:#bbb
-  classDef other fill:#FFFFFF,stroke:#555,color:#000
-  class network__oth_loc_home other
-  style layer_other fill:#fafafa,stroke:#bbb
+  infra_pve_01 -->|"composed of"| infra_proxmox_ve
+  infra_pve_01 -->|"composed of"| infra_vm_docker
+  infra_proxmox_ve -.->|"realizes"| infra_svc_vm_hosting
+  infra_svc_vm_hosting -->|"serves"| infra_vm_docker
+  infra_vm_docker -->|"assigned to"| infra_docker
+  infra_nas -.->|"realizes"| infra_svc_nfs
+  infra_svc_nfs -->|"Docker data volumes"| infra_vm_docker
+  network__infra_loc_home -->|"aggregates"| infra_pve_01
+  network__infra_loc_home -->|"aggregates"| infra_nas
+  network__infra_ups -->|"serves"| infra_pve_01
+  network__infra_ups -->|"serves"| infra_nas
+  infra_pve_01 ---|"associated with"| network__infra_net_lan
+  infra_nas ---|"associated with"| network__infra_net_lan
+  infra_pve_01 -->|"composed of"| dns__infra_lxc_pihole
+  infra_svc_vm_hosting -->|"serves"| dns__infra_lxc_pihole
+  dns__infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  infra_pve_01 -->|"composed of"| home_automation__infra_vm_haos
+  infra_svc_vm_hosting -->|"serves"| home_automation__infra_vm_haos
+  network__infra_loc_home -->|"aggregates"| network__infra_ups
+  infra_docker -->|"assigned to"| nextcloud__infra_art_nextcloud
+  infra_docker -->|"assigned to"| nextcloud__infra_art_mariadb
+  infra_docker -->|"assigned to"| nextcloud__infra_art_redis
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_pve_01,infra_proxmox_ve,infra_vm_docker,infra_docker,infra_nas,infra_svc_vm_hosting,infra_svc_nfs,dns__infra_lxc_pihole,home_automation__infra_vm_haos,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class dns__tech_lxc_pihole,home_automation__tech_vm_haos,network__oth_loc_home,network__phys_ups,network__tech_net_lan,nextcloud__tech_art_mariadb,nextcloud__tech_art_nextcloud,nextcloud__tech_art_redis foreign
+  class dns__infra_lxc_pihole,home_automation__infra_vm_haos,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis foreign
 ```
 
 </details>
@@ -142,65 +118,53 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_pve_01["Proxmox host 01<br/>«Node»"]
-    tech_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
-    tech_vm_docker["VM docker-01<br/>«Node»"]
-    tech_docker["Docker Engine<br/>«SystemSoftware»"]
-    tech_nas["NAS<br/>«Device»"]
-    tech_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
-    tech_svc_nfs("NFS storage<br/>«TechnologyService»")
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
-    media__tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media"/]
-    network__tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
-    nextcloud__tech_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
-    nextcloud__tech_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
+    infra_pve_01["Proxmox host 01<br/>«Node»"]
+    infra_proxmox_ve["Proxmox VE<br/>«SystemSoftware»"]
+    infra_vm_docker["VM docker-01<br/>«Node»"]
+    infra_docker["Docker Engine<br/>«SystemSoftware»"]
+    infra_nas["NAS<br/>«Device»"]
+    infra_svc_vm_hosting("VM hosting<br/>«TechnologyService»")
+    infra_svc_nfs("NFS storage<br/>«TechnologyService»")
+    dns__infra_lxc_pihole["LXC pihole<br/>«Node» · dns"]
+    home_automation__infra_vm_haos["VM haos<br/>«Node» · home-automation"]
+    media__infra_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact» · media"/]
+    network__infra_loc_home[["Home office rack<br/>«Location» · network"]]
+    network__infra_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork» · network"]
+    network__infra_ups["UPS<br/>«Equipment» · network"]
+    nextcloud__infra_art_mariadb[/"mariadb:11 image<br/>«Artifact» · nextcloud"/]
+    nextcloud__infra_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact» · nextcloud"/]
+    nextcloud__infra_art_redis[/"redis:7 image<br/>«Artifact» · nextcloud"/]
   end
-  subgraph layer_physical["Physical"]
-    direction LR
-    network__phys_ups["UPS<br/>«Equipment» · network"]
-  end
-  subgraph layer_other["Other"]
-    direction LR
-    network__oth_loc_home[["Home office rack<br/>«Location» · network"]]
-  end
-  tech_pve_01 -->|"composed of"| tech_proxmox_ve
-  tech_pve_01 -->|"composed of"| tech_vm_docker
-  tech_proxmox_ve -.->|"realizes"| tech_svc_vm_hosting
-  tech_svc_vm_hosting -->|"serves"| tech_vm_docker
-  tech_vm_docker -->|"assigned to"| tech_docker
-  tech_nas -.->|"realizes"| tech_svc_nfs
-  tech_svc_nfs -->|"Docker data volumes"| tech_vm_docker
-  network__oth_loc_home -->|"aggregates"| tech_pve_01
-  network__oth_loc_home -->|"aggregates"| tech_nas
-  network__phys_ups -->|"serves"| tech_pve_01
-  network__phys_ups -->|"serves"| tech_nas
-  tech_pve_01 ---|"associated with"| network__tech_net_lan
-  tech_nas ---|"associated with"| network__tech_net_lan
-  tech_pve_01 -->|"composed of"| dns__tech_lxc_pihole
-  tech_svc_vm_hosting -->|"serves"| dns__tech_lxc_pihole
-  dns__tech_lxc_pihole ---|"associated with"| network__tech_net_lan
-  tech_pve_01 -->|"composed of"| home_automation__tech_vm_haos
-  tech_svc_vm_hosting -->|"serves"| home_automation__tech_vm_haos
-  tech_docker -->|"assigned to"| media__tech_art_jellyfin
-  network__oth_loc_home -->|"aggregates"| network__phys_ups
-  tech_docker -->|"assigned to"| nextcloud__tech_art_nextcloud
-  tech_docker -->|"assigned to"| nextcloud__tech_art_mariadb
-  tech_docker -->|"assigned to"| nextcloud__tech_art_redis
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_pve_01,tech_proxmox_ve,tech_vm_docker,tech_docker,tech_nas,tech_svc_vm_hosting,tech_svc_nfs,dns__tech_lxc_pihole,home_automation__tech_vm_haos,media__tech_art_jellyfin,network__tech_net_lan,nextcloud__tech_art_mariadb,nextcloud__tech_art_nextcloud,nextcloud__tech_art_redis technology
-  style layer_technology fill:#fafafa,stroke:#bbb
-  classDef physical fill:#C9E7B7,stroke:#555,color:#000
-  class network__phys_ups physical
-  style layer_physical fill:#fafafa,stroke:#bbb
-  classDef other fill:#FFFFFF,stroke:#555,color:#000
-  class network__oth_loc_home other
-  style layer_other fill:#fafafa,stroke:#bbb
+  infra_pve_01 -->|"composed of"| infra_proxmox_ve
+  infra_pve_01 -->|"composed of"| infra_vm_docker
+  infra_proxmox_ve -.->|"realizes"| infra_svc_vm_hosting
+  infra_svc_vm_hosting -->|"serves"| infra_vm_docker
+  infra_vm_docker -->|"assigned to"| infra_docker
+  infra_nas -.->|"realizes"| infra_svc_nfs
+  infra_svc_nfs -->|"Docker data volumes"| infra_vm_docker
+  network__infra_loc_home -->|"aggregates"| infra_pve_01
+  network__infra_loc_home -->|"aggregates"| infra_nas
+  network__infra_ups -->|"serves"| infra_pve_01
+  network__infra_ups -->|"serves"| infra_nas
+  infra_pve_01 ---|"associated with"| network__infra_net_lan
+  infra_nas ---|"associated with"| network__infra_net_lan
+  infra_pve_01 -->|"composed of"| dns__infra_lxc_pihole
+  infra_svc_vm_hosting -->|"serves"| dns__infra_lxc_pihole
+  dns__infra_lxc_pihole ---|"associated with"| network__infra_net_lan
+  infra_pve_01 -->|"composed of"| home_automation__infra_vm_haos
+  infra_svc_vm_hosting -->|"serves"| home_automation__infra_vm_haos
+  infra_docker -->|"assigned to"| media__infra_art_jellyfin
+  network__infra_loc_home -->|"aggregates"| network__infra_ups
+  infra_docker -->|"assigned to"| nextcloud__infra_art_nextcloud
+  infra_docker -->|"assigned to"| nextcloud__infra_art_mariadb
+  infra_docker -->|"assigned to"| nextcloud__infra_art_redis
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_pve_01,infra_proxmox_ve,infra_vm_docker,infra_docker,infra_nas,infra_svc_vm_hosting,infra_svc_nfs,dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class dns__tech_lxc_pihole,home_automation__tech_vm_haos,media__tech_art_jellyfin,network__oth_loc_home,network__phys_ups,network__tech_net_lan,nextcloud__tech_art_mariadb,nextcloud__tech_art_nextcloud,nextcloud__tech_art_redis foreign
+  class dns__infra_lxc_pihole,home_automation__infra_vm_haos,media__infra_art_jellyfin,network__infra_loc_home,network__infra_net_lan,network__infra_ups,nextcloud__infra_art_mariadb,nextcloud__infra_art_nextcloud,nextcloud__infra_art_redis foreign
 ```
 
 </details>
@@ -209,22 +173,22 @@ flowchart TB
 
 | Element | Type | Layer | C4 | State | Description |
 |---|---|---|---|---|---|
-| Proxmox host 01 (`tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| Proxmox VE (`tech-proxmox-ve`) | SystemSoftware | Technology |  |  |  |
-| VM docker-01 (`tech-vm-docker`) | Node | Technology | deployment |  | Shared Docker host for containerised solutions. |
-| Docker Engine (`tech-docker`) | SystemSoftware | Technology | deployment |  |  |
-| NAS (`tech-nas`) | Device | Technology | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
-| VM hosting (`tech-svc-vm-hosting`) | TechnologyService | Technology |  |  |  |
-| NFS storage (`tech-svc-nfs`) | TechnologyService | Technology |  |  |  |
-| LXC pihole (`dns/tech-lxc-pihole`) | Node | Technology | deployment |  |  |
-| VM haos (`home-automation/tech-vm-haos`) | Node | Technology | deployment |  |  |
-| jellyfin/jellyfin image (`media/tech-art-jellyfin`) | Artifact | Technology |  | new |  |
-| Home office rack (`network/oth-loc-home`) | Location | Other | deployment |  |  |
-| UPS (`network/phys-ups`) | Equipment | Physical |  |  | 900 VA line-interactive UPS; ~20 minutes runtime for host, NAS and network. |
-| LAN (VLAN 10) (`network/tech-net-lan`) | CommunicationNetwork | Technology |  |  |  |
-| mariadb:11 image (`nextcloud/tech-art-mariadb`) | Artifact | Technology |  |  |  |
-| nextcloud:29-apache image (`nextcloud/tech-art-nextcloud`) | Artifact | Technology |  |  |  |
-| redis:7 image (`nextcloud/tech-art-redis`) | Artifact | Technology |  |  |  |
+| Proxmox host 01 (`infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| Proxmox VE (`infra-proxmox-ve`) | SystemSoftware | Infrastructure |  |  |  |
+| VM docker-01 (`infra-vm-docker`) | Node | Infrastructure | deployment |  | Shared Docker host for containerised solutions. |
+| Docker Engine (`infra-docker`) | SystemSoftware | Infrastructure | deployment |  |  |
+| NAS (`infra-nas`) | Device | Infrastructure | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
+| VM hosting (`infra-svc-vm-hosting`) | TechnologyService | Infrastructure |  |  |  |
+| NFS storage (`infra-svc-nfs`) | TechnologyService | Infrastructure |  |  |  |
+| LXC pihole (`dns/infra-lxc-pihole`) | Node | Infrastructure | deployment |  |  |
+| VM haos (`home-automation/infra-vm-haos`) | Node | Infrastructure | deployment |  |  |
+| jellyfin/jellyfin image (`media/infra-art-jellyfin`) | Artifact | Infrastructure |  | new |  |
+| Home office rack (`network/infra-loc-home`) | Location | Infrastructure | deployment |  |  |
+| LAN (VLAN 10) (`network/infra-net-lan`) | CommunicationNetwork | Infrastructure |  |  |  |
+| UPS (`network/infra-ups`) | Equipment | Infrastructure |  |  | 900 VA line-interactive UPS; ~20 minutes runtime for host, NAS and network. |
+| mariadb:11 image (`nextcloud/infra-art-mariadb`) | Artifact | Infrastructure |  |  |  |
+| nextcloud:29-apache image (`nextcloud/infra-art-nextcloud`) | Artifact | Infrastructure |  |  |  |
+| redis:7 image (`nextcloud/infra-art-redis`) | Artifact | Infrastructure |  |  |  |
 
 ## Related decisions
 

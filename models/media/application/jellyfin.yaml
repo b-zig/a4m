@@ -14,5 +14,5 @@ elements:
 relationships:
   - { type: Realization, source: app-jellyfin, target: app-svc-streaming, state: new }
   - { type: Serving, source: app-svc-streaming, target: enterprise/bus-role-user, state: new }
-  - { type: Access, source: app-jellyfin, target: nextcloud/app-data-files, access: read, name: Family videos, state: new }
+  - { type: Access, source: app-jellyfin, target: nextcloud/data-files, access: read, name: Family videos, state: new }
   - { type: Serving, source: dns/app-svc-dns, target: app-jellyfin, name: DNS lookups, state: new }

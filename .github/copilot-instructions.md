@@ -14,5 +14,6 @@ every modelling task. The short version:
   (or the `a4m_*` MCP tools from `.vscode/mcp.json`).
 - After every edit run `python3 -m a4m validate` and fix all errors using the hints, then
   `python3 -m a4m build`.
-- Ids are kebab-case with a layer prefix (`bus-`, `app-`, `tech-`, `mot-`, `str-`, `phys-`, `impl-`, `oth-`).
+- Elements live in the layer folders `business/ information/ application/ infrastructure/`; ids are
+  kebab-case with the layer prefix (`bus-`, `data-`, `app-`, `infra-`).
 - C4 diagrams are derived from `c4:` tags. Never write Mermaid or XML by hand.

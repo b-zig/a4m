@@ -5,42 +5,36 @@
 
 ```mermaid
 flowchart TB
-  subgraph layer_motivation["Motivation"]
+  subgraph layer_business["Business"]
     direction LR
-    mot_goal_portable{{"Portable to the office network<br/>«Goal»"}}
+    bus_goal_portable{{"Portable to the office network<br/>«Goal»"}}
+    bus_plateau_homelab[["Baseline: home lab<br/>«Plateau»"]]
+    bus_plateau_office[["Target: office network<br/>«Plateau»"]]
+    bus_gap_identity[/"No central identity (SSO)<br/>«Gap»"/]
+    bus_wp_office("Port the home lab model to the office<br/>«WorkPackage»")
+    bus_del_office_model[/"Office solution architectures<br/>«Deliverable»"/]
   end
-  subgraph layer_implementation["Implementation & Migration"]
-    direction LR
-    impl_plateau_homelab[["Baseline: home lab<br/>«Plateau»"]]
-    impl_plateau_office[["Target: office network<br/>«Plateau»"]]
-    impl_gap_identity[/"No central identity (SSO)<br/>«Gap»"/]
-    impl_wp_office("Port the home lab model to the office<br/>«WorkPackage»")
-    impl_del_office_model[/"Office solution architectures<br/>«Deliverable»"/]
-  end
-  impl_plateau_homelab ==>|"triggers"| impl_plateau_office
-  impl_gap_identity ---|"associated with"| impl_plateau_homelab
-  impl_gap_identity ---|"associated with"| impl_plateau_office
-  impl_wp_office -.->|"realizes"| impl_del_office_model
-  impl_del_office_model -.->|"realizes"| impl_plateau_office
-  impl_wp_office -.->|"realizes"| mot_goal_portable
-  classDef motivation fill:#CCCCFF,stroke:#555,color:#000
-  class mot_goal_portable motivation
-  style layer_motivation fill:#fafafa,stroke:#bbb
-  classDef implementation fill:#FFE0E0,stroke:#555,color:#000
-  class impl_plateau_homelab,impl_plateau_office,impl_gap_identity,impl_wp_office,impl_del_office_model implementation
-  style layer_implementation fill:#fafafa,stroke:#bbb
+  bus_plateau_homelab ==>|"triggers"| bus_plateau_office
+  bus_gap_identity ---|"associated with"| bus_plateau_homelab
+  bus_gap_identity ---|"associated with"| bus_plateau_office
+  bus_wp_office -.->|"realizes"| bus_del_office_model
+  bus_del_office_model -.->|"realizes"| bus_plateau_office
+  bus_wp_office -.->|"realizes"| bus_goal_portable
+  classDef business fill:#FFFFB5,stroke:#555,color:#000
+  class bus_goal_portable,bus_plateau_homelab,bus_plateau_office,bus_gap_identity,bus_wp_office,bus_del_office_model business
+  style layer_business fill:#fafafa,stroke:#bbb
 ```
 
 ## Elements
 
 | Element | Type | Layer | C4 | State | Description |
 |---|---|---|---|---|---|
-| Portable to the office network (`mot-goal-portable`) | Goal | Motivation |  |  | The same tooling and patterns must be reusable for the office environment. |
-| Baseline: home lab (`impl-plateau-homelab`) | Plateau | Implementation & Migration |  |  |  |
-| Target: office network (`impl-plateau-office`) | Plateau | Implementation & Migration |  |  |  |
-| No central identity (SSO) (`impl-gap-identity`) | Gap | Implementation & Migration |  |  |  |
-| Port the home lab model to the office (`impl-wp-office`) | WorkPackage | Implementation & Migration |  |  | Copy the repo, model the office SAs under models/, switch the LLM assistant to GitHub Copilot. |
-| Office solution architectures (`impl-del-office-model`) | Deliverable | Implementation & Migration |  |  |  |
+| Portable to the office network (`bus-goal-portable`) | Goal | Business |  |  | The same tooling and patterns must be reusable for the office environment. |
+| Baseline: home lab (`bus-plateau-homelab`) | Plateau | Business |  |  |  |
+| Target: office network (`bus-plateau-office`) | Plateau | Business |  |  |  |
+| No central identity (SSO) (`bus-gap-identity`) | Gap | Business |  |  |  |
+| Port the home lab model to the office (`bus-wp-office`) | WorkPackage | Business |  |  | Copy the repo, model the office SAs under models/, switch the LLM assistant to GitHub Copilot. |
+| Office solution architectures (`bus-del-office-model`) | Deliverable | Business |  |  |  |
 
 ## Related decisions
 

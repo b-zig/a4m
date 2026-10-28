@@ -1,0 +1,10 @@
+elements:
+  - id: infra-loc-home
+    type: Location
+    name: Home office rack
+    c4: deployment
+
+relationships:
+  - { type: Aggregation, source: infra-loc-home, target: infra-router }
+  - { type: Aggregation, source: infra-loc-home, target: infra-switch }
+  - { type: Aggregation, source: infra-loc-home, target: infra-ups }

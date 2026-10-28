@@ -21,7 +21,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/home-aut
 | Layer | Count |
 |---|---|
 | Application | 2 |
-| Technology | 1 |
+| Infrastructure | 1 |
 
 ## Other solution architectures
 

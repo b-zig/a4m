@@ -13,7 +13,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/dns.oef.
 
 | View | Kind | Elements |
 |---|---|---|
-| [DNS filtering — overview](view-overview.md) | archimate | 10 |
+| [DNS filtering — overview](view-overview.md) | archimate | 11 |
 | [DNS filtering — system context](c4-context.md) | c4-context | 5 |
 
 ## Elements per layer
@@ -21,7 +21,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/dns.oef.
 | Layer | Count |
 |---|---|
 | Application | 2 |
-| Technology | 1 |
+| Infrastructure | 1 |
 
 ## Other solution architectures
 

@@ -9,37 +9,43 @@ flowchart TB
     direction LR
     enterprise__bus_role_user["Service user<br/>«BusinessRole» · enterprise"]
   end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     app_jellyfin["Jellyfin<br/>«ApplicationComponent»<br/>NEW"]
     app_svc_streaming("Media streaming<br/>«ApplicationService»<br/>NEW")
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact»<br/>NEW"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
+    infra_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact»<br/>NEW"/]
+    compute__infra_docker["Docker Engine<br/>«SystemSoftware» · compute"]
   end
   app_jellyfin -.->|"realizes"| app_svc_streaming
   app_svc_streaming -->|"serves"| enterprise__bus_role_user
-  app_jellyfin -.->|"Family videos"| nextcloud__app_data_files
+  app_jellyfin -.->|"Family videos"| nextcloud__data_files
   dns__app_svc_dns -->|"DNS lookups"| app_jellyfin
-  compute__tech_docker -->|"assigned to"| tech_art_jellyfin
-  tech_art_jellyfin -.->|"realizes"| app_jellyfin
+  compute__infra_docker -->|"assigned to"| infra_art_jellyfin
+  infra_art_jellyfin -.->|"realizes"| app_jellyfin
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class enterprise__bus_role_user business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_jellyfin,app_svc_streaming,dns__app_svc_dns,nextcloud__app_data_files application
+  class app_jellyfin,app_svc_streaming,dns__app_svc_dns application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_art_jellyfin,compute__tech_docker technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_art_jellyfin,compute__infra_docker infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_docker,dns__app_svc_dns,enterprise__bus_role_user,nextcloud__app_data_files foreign
+  class compute__infra_docker,dns__app_svc_dns,enterprise__bus_role_user,nextcloud__data_files foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
-  class app_jellyfin,app_svc_streaming,tech_art_jellyfin st_new
+  class app_jellyfin,app_svc_streaming,infra_art_jellyfin st_new
   linkStyle 0 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
   linkStyle 1 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
   linkStyle 2 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
@@ -66,35 +72,41 @@ flowchart TB
     direction LR
     enterprise__bus_role_user["Service user<br/>«BusinessRole» · enterprise"]
   end
+  subgraph layer_information["Information"]
+    direction LR
+    nextcloud__data_files[/"User files<br/>«DataObject» · nextcloud"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     app_jellyfin["Jellyfin<br/>«ApplicationComponent»"]
     app_svc_streaming("Media streaming<br/>«ApplicationService»")
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
-    nextcloud__app_data_files[/"User files<br/>«DataObject» · nextcloud"/]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
+    infra_art_jellyfin[/"jellyfin/jellyfin image<br/>«Artifact»"/]
+    compute__infra_docker["Docker Engine<br/>«SystemSoftware» · compute"]
   end
   app_jellyfin -.->|"realizes"| app_svc_streaming
   app_svc_streaming -->|"serves"| enterprise__bus_role_user
-  app_jellyfin -.->|"Family videos"| nextcloud__app_data_files
+  app_jellyfin -.->|"Family videos"| nextcloud__data_files
   dns__app_svc_dns -->|"DNS lookups"| app_jellyfin
-  compute__tech_docker -->|"assigned to"| tech_art_jellyfin
-  tech_art_jellyfin -.->|"realizes"| app_jellyfin
+  compute__infra_docker -->|"assigned to"| infra_art_jellyfin
+  infra_art_jellyfin -.->|"realizes"| app_jellyfin
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class enterprise__bus_role_user business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class nextcloud__data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_jellyfin,app_svc_streaming,dns__app_svc_dns,nextcloud__app_data_files application
+  class app_jellyfin,app_svc_streaming,dns__app_svc_dns application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_art_jellyfin,compute__tech_docker technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_art_jellyfin,compute__infra_docker infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_docker,dns__app_svc_dns,enterprise__bus_role_user,nextcloud__app_data_files foreign
+  class compute__infra_docker,dns__app_svc_dns,enterprise__bus_role_user,nextcloud__data_files foreign
 ```
 
 </details>
@@ -105,11 +117,11 @@ flowchart TB
 |---|---|---|---|---|---|
 | Jellyfin (`app-jellyfin`) | ApplicationComponent | Application | system | new | Media server streaming the family's videos and music to TVs and phones. |
 | Media streaming (`app-svc-streaming`) | ApplicationService | Application |  | new |  |
-| jellyfin/jellyfin image (`tech-art-jellyfin`) | Artifact | Technology |  | new |  |
-| Docker Engine (`compute/tech-docker`) | SystemSoftware | Technology | deployment |  |  |
+| jellyfin/jellyfin image (`infra-art-jellyfin`) | Artifact | Infrastructure |  | new |  |
+| Docker Engine (`compute/infra-docker`) | SystemSoftware | Infrastructure | deployment |  |  |
 | DNS resolution and filtering (`dns/app-svc-dns`) | ApplicationService | Application |  |  |  |
 | Service user (`enterprise/bus-role-user`) | BusinessRole | Business |  |  |  |
-| User files (`nextcloud/app-data-files`) | DataObject | Application |  |  | Family files and photos, stored on the NAS over NFS. |
+| User files (`nextcloud/data-files`) | DataObject | Information |  |  | Family files and photos, stored on the NAS over NFS. |
 
 ## Related decisions
 

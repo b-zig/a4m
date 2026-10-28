@@ -2,7 +2,7 @@ views:
   - id: view-overview
     name: Backup — overview
     documentation: What is backed up, from where, and where the copies go (current → target).
-    include_layers: [business, motivation, application, technology]
+    include_layers: [business, information, application, infrastructure]
   - id: c4-context
     kind: c4-context
     name: Backup — system context

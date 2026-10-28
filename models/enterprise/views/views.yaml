@@ -2,16 +2,31 @@ views:
   - id: view-motivation
     name: Motivation and strategy
     documentation: Why the home lab exists, which capabilities it provides, and which solutions realize the requirements.
-    include: [dns/app-pihole, backup/app-backup, compute/tech-pve-01, compute/tech-nas]
-    include_layers: [motivation, strategy]
+    include:
+      - bus-stk-family
+      - bus-drv-privacy
+      - bus-asm-single-host
+      - bus-goal-reliable
+      - bus-goal-portable
+      - bus-pri-as-code
+      - bus-req-backup
+      - bus-req-dns-filter
+      - bus-cap-home-it
+      - bus-cap-file-sharing
+      - bus-cap-home-automation
+      - bus-res-hardware
+      - dns/app-pihole
+      - backup/app-backup
+      - compute/infra-pve-01
+      - compute/infra-nas
 
   - id: view-business
     name: Business and supporting services
     documentation: Who uses the home lab and which application services of the solution architectures support them.
-    include_layers: [business, application]
+    include: [bus-family, bus-admin, bus-role-user, bus-proc-share, bus-proc-backup, bus-svc-file-sharing, bus-svc-automation, bus-obj-photos]
+    include_layers: [information, application]
 
   - id: view-migration
     name: Office migration roadmap
     viewpoint: Implementation and Migration
-    include: [mot-goal-portable]
-    include_layers: [implementation]
+    include: [bus-goal-portable, bus-plateau-homelab, bus-plateau-office, bus-gap-identity, bus-wp-office, bus-del-office-model]

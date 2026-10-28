@@ -5,4 +5,4 @@
 
 | ADR | Title | Status | Date | Affects |
 |---|---|---|---|---|
-| [ADR-0001](../../models/enterprise/decisions/ADR-0001-architecture-as-code-with-archimate.md) | Keep the architecture as ArchiMate YAML in git, with C4 as derived views | accepted | 2026-10-23 | `mot-pri-as-code`, `mot-goal-portable`, `impl-wp-office` |
+| [ADR-0001](../../models/enterprise/decisions/ADR-0001-architecture-as-code-with-archimate.md) | Keep the architecture as ArchiMate YAML in git, with C4 as derived views | accepted | 2026-10-23 | `bus-pri-as-code`, `bus-goal-portable`, `bus-wp-office` |

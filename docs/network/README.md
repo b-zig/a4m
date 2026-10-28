@@ -19,14 +19,12 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/network.
 
 | Layer | Count |
 |---|---|
-| Technology | 5 |
-| Physical | 1 |
-| Other | 1 |
+| Infrastructure | 7 |
 
 ## Other solution architectures
 
 - **Used by:** [compute](../compute/README.md), [dns](../dns/README.md), [home-automation](../home-automation/README.md)
-- **Exports** (`network/<id>`): `tech-net-wan`, `tech-net-lan`, `tech-net-iot`, `oth-loc-home`, `phys-ups`
+- **Exports** (`network/<id>`): `infra-net-wan`, `infra-net-lan`, `infra-net-iot`, `infra-loc-home`, `infra-ups`
 
 ## Decisions
 

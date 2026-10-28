@@ -21,10 +21,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/enterpri
 
 | Layer | Count |
 |---|---|
-| Motivation | 8 |
-| Strategy | 4 |
-| Business | 8 |
-| Implementation & Migration | 5 |
+| Business | 25 |
 
 ## Other solution architectures
 

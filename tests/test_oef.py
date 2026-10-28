@@ -50,7 +50,7 @@ class ExportTest(unittest.TestCase):
         root = ET.fromstring(export_oef(load_sample("enterprise")))
         rels = {r.get("identifier"): r for r in root.iter(f"{X}relationship")}
         self.assertEqual(rels["rel-bus-proc-share-access-bus-obj-photos"].get("accessType"), "ReadWrite")
-        self.assertEqual(rels["rel-mot-drv-privacy-influence-mot-goal-reliable"].get("modifier"), "+")
+        self.assertEqual(rels["rel-bus-drv-privacy-influence-bus-goal-reliable"].get("modifier"), "+")
 
     def test_c4_tags_travel_as_properties(self):
         names = {d.findtext(f"{X}name") for d in self.root.iter(f"{X}propertyDefinition")}
@@ -59,7 +59,7 @@ class ExportTest(unittest.TestCase):
     def test_layer_groups_contain_elements_with_absolute_bounds(self):
         view = next(v for v in self.root.iter(f"{X}view") if v.get("identifier") == "view-layered")
         groups = [n for n in view.findall(f"{X}node") if n.get(T) == "Container"]
-        self.assertEqual([g.findtext(f"{X}label") for g in groups], ["Business", "Application", "Technology"])
+        self.assertEqual([g.findtext(f"{X}label") for g in groups], ["Business", "Information", "Application", "Infrastructure"])
         for group in groups:
             gx, gy, gw, gh = (int(group.get(k)) for k in "xywh")
             for child in group.findall(f"{X}node"):
@@ -105,7 +105,7 @@ class RoundTripTest(WorkspaceTestCase):
         self.assertEqual(nextcloud.elements["app-nextcloud"].file, "models/nextcloud/application/nextcloud.yaml")
         self.assertFalse(list((self.root / "models/nextcloud").rglob("imported.yaml")))
         self.assertEqual(nextcloud.views["c4-deployment"].kind, "c4-deployment")
-        self.assertEqual(nextcloud.views["view-layered"].include_layers, ["business", "application", "technology"])
+        self.assertEqual(nextcloud.views["view-layered"].include_layers, ["business", "information", "application", "infrastructure"])
         self.assertEqual(nextcloud.views["view-layered"].layout, {})
         self.assertEqual(self.load("backup").elements["app-offsite-b2"].state, "retiring")
 

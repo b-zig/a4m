@@ -22,14 +22,15 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/nextclou
 
 | Layer | Count |
 |---|---|
-| Application | 6 |
-| Technology | 3 |
+| Information | 1 |
+| Application | 5 |
+| Infrastructure | 3 |
 
 ## Other solution architectures
 
 - **Uses:** [compute](../compute/README.md), [dns](../dns/README.md), [enterprise](../enterprise/README.md)
 - **Used by:** [backup](../backup/README.md), [media](../media/README.md)
-- **Exports** (`nextcloud/<id>`): `app-nextcloud`, `app-nextcloud-db`, `app-data-files`
+- **Exports** (`nextcloud/<id>`): `app-nextcloud`, `app-nextcloud-db`, `data-files`
 
 ## Decisions
 

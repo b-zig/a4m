@@ -134,7 +134,8 @@ def cmd_types(args) -> int:
         if layer not in rules.layers:
             sys.exit(f"a4m: unknown layer '{layer}' (choose from {', '.join(rules.layer_order())})")
         spec = rules.layers[layer]
-        print(f"{spec['label']} (id prefix '{spec['prefix']}-')")
+        where = f"folder {layer}/, id prefix '{spec['prefix']}-'" if spec.get("prefix") else "any layer folder"
+        print(f"{spec['label']} ({where})")
         for name in rules.types_in_layer(layer):
             print(f"  {name:26} {rules.aspect_of(name)}")
     if not args.layer:

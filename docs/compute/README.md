@@ -19,13 +19,13 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/compute.
 
 | Layer | Count |
 |---|---|
-| Technology | 7 |
+| Infrastructure | 7 |
 
 ## Other solution architectures
 
 - **Uses:** [enterprise](../enterprise/README.md), [network](../network/README.md)
 - **Used by:** [backup](../backup/README.md), [dns](../dns/README.md), [home-automation](../home-automation/README.md), [media](../media/README.md), [nextcloud](../nextcloud/README.md)
-- **Exports** (`compute/<id>`): `tech-pve-01`, `tech-svc-vm-hosting`, `tech-vm-docker`, `tech-docker`, `tech-nas`, `tech-svc-nfs`
+- **Exports** (`compute/<id>`): `infra-pve-01`, `infra-svc-vm-hosting`, `infra-vm-docker`, `infra-docker`, `infra-nas`, `infra-svc-nfs`
 
 ## Decisions
 

@@ -53,11 +53,11 @@ class SampleC4Test(unittest.TestCase):
 
     def test_deployment_on_another_sas_platform(self):
         diagram = self.project("c4-deployment")
-        self.assertEqual(diagram.roots, ["network/oth-loc-home"])
-        self.assertIn("compute/tech-vm-docker", diagram.children["compute/tech-pve-01"])
-        self.assertEqual(diagram.children["compute/tech-vm-docker"], ["compute/tech-docker"])
-        # compute/tech-docker -Assignment-> Artifact (nextcloud) -Realization-> container
-        self.assertEqual(set(diagram.hosted["compute/tech-docker"]), {"app-nextcloud-web", "app-nextcloud-db", "app-nextcloud-cache"})
+        self.assertEqual(diagram.roots, ["network/infra-loc-home"])
+        self.assertIn("compute/infra-vm-docker", diagram.children["compute/infra-pve-01"])
+        self.assertEqual(diagram.children["compute/infra-vm-docker"], ["compute/infra-docker"])
+        # compute/infra-docker -Assignment-> Artifact (nextcloud) -Realization-> container
+        self.assertEqual(set(diagram.hosted["compute/infra-docker"]), {"app-nextcloud-web", "app-nextcloud-db", "app-nextcloud-cache"})
 
     def test_render_uses_db_shape_and_draws_other_sas_as_external(self):
         self.assertIn("ContainerDb(app_nextcloud_db", render_c4(self.model, self.model.views["c4-containers"]))
@@ -81,8 +81,8 @@ class LandscapeC4Test(unittest.TestCase):
 
     def test_deployment_across_sas(self):
         diagram = self.projector.project(self.model.views["landscape-deployment"])
-        self.assertEqual(diagram.hosted["home-automation/tech-vm-haos"], ["home-automation/app-home-assistant"])
-        self.assertIn("media/app-jellyfin", diagram.hosted["compute/tech-docker"])
+        self.assertEqual(diagram.hosted["home-automation/infra-vm-haos"], ["home-automation/app-home-assistant"])
+        self.assertIn("media/app-jellyfin", diagram.hosted["compute/infra-docker"])
 
     def test_target_needs_approval(self):
         target = set(at_state(self.model, "target").elements)

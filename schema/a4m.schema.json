@@ -385,13 +385,10 @@
           "type": "array",
           "items": {
             "enum": [
-              "motivation",
-              "strategy",
               "business",
+              "information",
               "application",
-              "technology",
-              "physical",
-              "implementation",
+              "infrastructure",
               "other"
             ]
           },

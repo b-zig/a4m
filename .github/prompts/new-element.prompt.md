@@ -9,7 +9,7 @@ Follow AGENTS.md:
    SA, reference it as `<sa>/<id>` (ask for it to be exported if it is not) instead of re-creating it.
 2. Check types with `python3 -m a4m types` and every relationship with `python3 -m a4m allowed`.
 3. Put elements in the folder for their layer with the right id prefix; add `documentation`.
-4. Connect the new elements up (motivation/business, usually in `enterprise/`) and down (technology,
+4. Connect the new elements up (business: goals, capabilities, processes, usually in `enterprise/`) and down (infrastructure,
    usually a platform SA) the layers.
 5. If this is a proposal rather than today's reality, mark the new items `state: new` (and anything
    being replaced `state: retiring`).

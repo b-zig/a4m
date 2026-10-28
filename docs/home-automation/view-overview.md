@@ -16,21 +16,21 @@ flowchart TB
     app_svc_automation("Automations and dashboards<br/>«ApplicationService»")
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_vm_haos["VM haos<br/>«Node»"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
-    network__tech_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork» · network"]
+    infra_vm_haos["VM haos<br/>«Node»"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    compute__infra_svc_vm_hosting("VM hosting<br/>«TechnologyService» · compute")
+    network__infra_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork» · network"]
   end
   app_home_assistant -.->|"realizes"| app_svc_automation
   app_svc_automation -.->|"realizes"| enterprise__bus_svc_automation
   app_svc_automation -->|"serves"| enterprise__bus_role_user
   dns__app_svc_dns -->|"DNS lookups"| app_home_assistant
-  tech_vm_haos -.->|"realizes"| app_home_assistant
-  compute__tech_pve_01 -->|"composed of"| tech_vm_haos
-  compute__tech_svc_vm_hosting -->|"serves"| tech_vm_haos
-  tech_vm_haos ---|"associated with"| network__tech_net_iot
+  infra_vm_haos -.->|"realizes"| app_home_assistant
+  compute__infra_pve_01 -->|"composed of"| infra_vm_haos
+  compute__infra_svc_vm_hosting -->|"serves"| infra_vm_haos
+  infra_vm_haos ---|"associated with"| network__infra_net_iot
   enterprise__bus_svc_automation -->|"serves"| enterprise__bus_role_user
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class enterprise__bus_role_user,enterprise__bus_svc_automation business
@@ -38,11 +38,11 @@ flowchart TB
   classDef application fill:#B5FFFF,stroke:#555,color:#000
   class app_home_assistant,app_svc_automation,dns__app_svc_dns application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_vm_haos,compute__tech_pve_01,compute__tech_svc_vm_hosting,network__tech_net_iot technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_vm_haos,compute__infra_pve_01,compute__infra_svc_vm_hosting,network__infra_net_iot infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_pve_01,compute__tech_svc_vm_hosting,dns__app_svc_dns,enterprise__bus_role_user,enterprise__bus_svc_automation,network__tech_net_iot foreign
+  class compute__infra_pve_01,compute__infra_svc_vm_hosting,dns__app_svc_dns,enterprise__bus_role_user,enterprise__bus_svc_automation,network__infra_net_iot foreign
 ```
 
 ## Elements
@@ -51,10 +51,10 @@ flowchart TB
 |---|---|---|---|---|---|
 | Home Assistant (`app-home-assistant`) | ApplicationComponent | Application | system |  | Smart-home automation, dashboards and device integrations. |
 | Automations and dashboards (`app-svc-automation`) | ApplicationService | Application |  |  |  |
-| VM haos (`tech-vm-haos`) | Node | Technology | deployment |  |  |
-| Proxmox host 01 (`compute/tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| VM hosting (`compute/tech-svc-vm-hosting`) | TechnologyService | Technology |  |  |  |
+| VM haos (`infra-vm-haos`) | Node | Infrastructure | deployment |  |  |
+| Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| VM hosting (`compute/infra-svc-vm-hosting`) | TechnologyService | Infrastructure |  |  |  |
 | DNS resolution and filtering (`dns/app-svc-dns`) | ApplicationService | Application |  |  |  |
 | Service user (`enterprise/bus-role-user`) | BusinessRole | Business |  |  |  |
 | Home automation (`enterprise/bus-svc-automation`) | BusinessService | Business |  |  |  |
-| IoT (VLAN 20) (`network/tech-net-iot`) | CommunicationNetwork | Technology |  |  |  |
+| IoT (VLAN 20) (`network/infra-net-iot`) | CommunicationNetwork | Infrastructure |  |  |  |

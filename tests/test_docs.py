@@ -24,13 +24,13 @@ class MermaidTest(unittest.TestCase):
         view = model.views["view-layered"]
         text = render_archimate(model, view)
         self.assertTrue(text.startswith("flowchart TB\n"))
-        for layer in ("business", "application", "technology"):
+        for layer in ("business", "information", "application", "infrastructure"):
             self.assertIn(f"subgraph layer_{layer}", text)
             self.assertIn(f"classDef {layer} fill:", text)
         edges = [line for line in text.splitlines() if "|\"" in line]
         members = view_members(model, view, load_rules())
         self.assertEqual(len(edges), len(view_relationships(model, members)))
-        self.assertIn('app_nextcloud_web -.->|"reads/writes"| app_data_files', text)
+        self.assertIn('app_nextcloud_web -.->|"reads/writes"| data_files', text)
         # other SAs' elements are captioned with their SA and drawn dashed
         self.assertIn('dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")', text)
         self.assertRegex(text, r"class .*dns__app_svc_dns.* foreign")
@@ -199,7 +199,7 @@ class McpTest(unittest.TestCase):
 
     def test_cross_sa_tools(self):
         result, text = self.tool("a4m_search", query="docker")
-        hit = next(h for h in json.loads(text)["matches"] if h["id"] == "compute/tech-docker")
+        hit = next(h for h in json.loads(text)["matches"] if h["id"] == "compute/infra-docker")
         self.assertEqual((hit["sa"], hit["exported"]), ("compute", True))
         result, text = self.tool("a4m_impact", ref="nextcloud")
         self.assertEqual({u["consumer"] for u in json.loads(text)}, {"backup", "media"})

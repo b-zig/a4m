@@ -1,0 +1,12 @@
+elements:
+  - id: infra-lxc-pihole
+    type: Node
+    name: LXC pihole
+    c4: deployment
+    properties: { technology: Debian 12 LXC, ip: 10.0.10.53 }
+
+relationships:
+  - { type: Realization, source: infra-lxc-pihole, target: app-pihole }
+  - { type: Composition, source: compute/infra-pve-01, target: infra-lxc-pihole }
+  - { type: Serving, source: compute/infra-svc-vm-hosting, target: infra-lxc-pihole }
+  - { type: Association, source: infra-lxc-pihole, target: network/infra-net-lan }
