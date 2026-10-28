@@ -1,18 +1,19 @@
 # a4m — ArchiMate architecture as code
 
-Architecture as **YAML in git**: one folder per **solution architecture (SA)**. SAs reference each
-other's elements, and together they make the **enterprise landscape**. Everything is checked against the
+Architecture as **YAML in git**: one folder per **solution architecture (SA)**, each organised in
+four layers (**business, information, application, infrastructure**). SAs reference each other's
+elements, and together they make the **enterprise landscape**. Everything is checked against the
 **ArchiMate 3.2 rules Archi itself uses** and rendered to **Archi** (Open Exchange XML) and to
 **Mermaid** docs (ArchiMate-style flowcharts and **C4** diagrams) that GitHub and VS Code display
 natively. Each SA shows its **current and target state**. Built to be driven by an LLM (Claude Code,
 GitHub Copilot, or a local model) through a validate-and-fix loop.
 
 ```
- models/<sa>/**/*.yaml ──► a4m validate ──► a4m build ──┬─► build/<sa>.oef.xml, build/_landscape.oef.xml ──► Archi
-   ▲  (LLM or human edits)  schema · ArchiMate rules    │
-   │                        cross-SA refs · exports     ├─► docs/<sa>/*.md   (Mermaid flowchart + C4, changes, ADRs)
-   │                        change states · C4 · ADRs   └─► docs/README.md, docs/_landscape/  (all SAs, dependencies,
-   │                                                         system landscape, deployment, platform consumers)
+ models/<sa>/<layer>/*.yaml ──► a4m validate ──► a4m build ──┬─► build/<sa>.oef.xml, build/_landscape.oef.xml ──► Archi
+   ▲  (LLM or human edits)       schema · layer folders      │
+   │                             ArchiMate rules · C4 · ADRs ├─► docs/<sa>/*.md   (Mermaid flowchart + C4, changes, ADRs)
+   │                             cross-SA refs · exports     └─► docs/README.md, docs/_landscape/  (all SAs, dependencies,
+   │                             change states                   system landscape, deployment, platform consumers)
    └──── a4m import-oef ◄── Archi (File ▸ Export ▸ Model to Open Exchange File)
 ```
 
@@ -47,11 +48,51 @@ The sample is a home lab modelled as eight SAs:
 | `backup` | solution, *approved* | a change in flight: Backblaze B2 retiring, Hetzner Storage Box new |
 | `media` | solution, *proposed* | a new system (Jellyfin) that is not approved yet |
 
+## Structure: solution architectures in four layers
+
+Every solution architecture is a folder under `models/`, and every SA has the same four layer folders,
+quasi-TOGAF, top to bottom:
+
+```
+models/
+├── enterprise/                 # one SA per folder
+├── compute/
+└── nextcloud/
+    ├── model.yaml              # name, kind, status, owner, exports
+    ├── business/               # bus-
+    ├── information/            # data-
+    ├── application/            # app-
+    ├── infrastructure/         # infra-
+    ├── views/                  # ArchiMate and C4 views
+    └── decisions/              # ADRs (ADR-0001-….md)
+```
+
+| Layer folder | Id prefix | What goes in it |
+|---|---|---|
+| `business/` | `bus-` | Actors, roles, processes, functions, events, business services, business objects, contracts. Also *why* and *when*: stakeholders, drivers, goals, principles, requirements, capabilities, resources, work packages, plateaus |
+| `information/` | `data-` | Data objects: the data an application stores or exchanges |
+| `application/` | `app-` | Application components, interfaces, functions, processes, events, application services |
+| `infrastructure/` | `infra-` | Nodes, devices, system software, networks, technology services, artifacts, physical equipment and facilities, locations |
+
+- **Every ArchiMate type belongs to exactly one layer.** The mapping is one table in
+  `rules/elements.yaml`; `python3 -m a4m types --layer <layer>` lists it. ArchiMate's own motivation,
+  strategy and implementation & migration layers are folded into Business, and physical elements into
+  Infrastructure. Junction and Grouping may go in any layer folder.
+- **The validator enforces it.** An element in the wrong folder (or at the SA root) is an error that
+  names the right place, e.g. `DataObject belongs to the information layer; move it to
+  models/nextcloud/information/ (it is in application/)`.
+- **Inside a layer folder, files are free-form**: group by system or topic (`application/nextcloud.yaml`).
+  Relationships sit next to the elements they mainly concern.
+- **Diagrams use the same layers**: ArchiMate views in Mermaid and Archi show Business → Information →
+  Application → Infrastructure as horizontal bands.
+- Not every SA needs every layer: a platform SA may only have `infrastructure/`, the enterprise SA
+  mostly `business/`.
+
 ## Repository layout
 
 | Path | What |
 |---|---|
-| `models/<sa>/` | The source of truth, one folder per solution architecture: `model.yaml` (kind, status, exports) + the layer folders `business/ information/ application/ infrastructure/`, `views/`, `decisions/` (ADRs) |
+| `models/<sa>/` | The source of truth, one folder per solution architecture (see [Structure](#structure-solution-architectures-in-four-layers)) |
 | `rules/archimate-3.2/` | Archi's relationship matrix, vendored unmodified (MIT), see NOTICE |
 | `rules/elements.yaml` | Element catalogue: the four layers (folder, id prefix, colour), which layer each ArchiMate type belongs to; viewpoint names |
 | `rules/c4.yaml` | C4 ↔ ArchiMate mapping used to derive C4 views |
@@ -68,11 +109,11 @@ The sample is a home lab modelled as eight SAs:
 
 | Command | Purpose |
 |---|---|
-| `validate [sa] [-w] [--format json]` | One SA or all: schema, unique ids, dangling refs, ArchiMate relationship rules (with allowed alternatives), cross-SA references and exports, change-state consistency, C4 tag/parent rules, view refs, ADR links; warnings for orphans, unviewed elements, id prefixes, duplicates across SAs, consumers hit by a change |
+| `validate [sa] [-w] [--format json]` | One SA or all: schema, layer folders, unique ids, dangling refs, ArchiMate relationship rules (with allowed alternatives), cross-SA references and exports, change-state consistency, C4 tag/parent rules, view refs, ADR links; warnings for orphans, unviewed elements, id prefixes, duplicates across SAs, consumers hit by a change |
 | `build [sa]` | Validate, then write the OEF and the docs of one SA (or all) and the landscape; prunes stale generated pages |
 | `sas` | List SAs: kind, status, number of changes, exports, uses / used by |
 | `impact <sa>[/<id>]` | Relationships (and ADRs) in other SAs that depend on an SA or one of its elements |
-| `types [--layer L]` / `allowed Src Tgt` | Ground the LLM in the real element types and relationship rules |
+| `types [--layer L]` / `allowed Src Tgt` | Ground the LLM in the real element types (per layer, with folder and id prefix) and relationship rules |
 | `mermaid sa view [--state …]` | Print one view (change, baseline or target) |
 | `import-oef file.xml sa` | Bring Archi edits back into YAML (see round-trip below) |
 | `new-adr sa "Title"` | Next numbered ADR of that SA from the template |
@@ -81,21 +122,7 @@ The sample is a home lab modelled as eight SAs:
 
 ## Modelling in one minute
 
-Each SA is layered quasi-TOGAF, one folder per layer:
-
-```
-models/nextcloud/
-├── model.yaml        # name, kind, status, owner, exports
-├── business/         # bus-   actors, roles, processes, services, business objects; goals, capabilities, roadmap
-├── information/      # data-  data objects
-├── application/      # app-   components, interfaces, application services
-├── infrastructure/   # infra- nodes, system software, networks, artifacts, technology services, equipment
-├── views/            # ArchiMate and C4 views
-└── decisions/        # ADRs
-```
-
-Every ArchiMate type belongs to one layer (`python3 -m a4m types`), and the validator rejects an element
-in the wrong folder. Diagrams show the same four layers as horizontal bands.
+An SA's metadata, then elements and relationships in the layer folders (see [Structure](#structure-solution-architectures-in-four-layers)):
 
 ```yaml
 # models/nextcloud/model.yaml
@@ -124,8 +151,8 @@ relationships:
   - { type: Serving, source: dns/app-svc-dns, target: app-nextcloud, name: DNS lookups }   # another SA's service
 ```
 
-Views are either ArchiMate views (`include:` ids and/or `include_layers:`), laid out in layer bands
-for Archi, or C4 views (`kind: c4-context | c4-container | c4-component | c4-deployment`, `scope:`),
+Views are either ArchiMate views (`include:` ids and/or `include_layers: [business, information,
+application, infrastructure]`), laid out in the four layer bands, or C4 views (`kind: c4-context | c4-container | c4-component | c4-deployment`, `scope:`),
 **derived** from `c4:` tags and the ArchiMate relationships. Untagged services, interfaces, roles and
 processes are collapsed, and nested elements roll up to the level shown. See [AGENTS.md](AGENTS.md) for
 the full rules and a cheat-sheet.
@@ -176,14 +203,14 @@ The loop is always: search all SAs → ground (`types`/`allowed`) → edit YAML 
 
 1. `python3 -m a4m build` → *File ▸ Import ▸ Open Exchange XML Model* → `build/<sa>.oef.xml` (one SA) or
    `build/_landscape.oef.xml` (all SAs; read-only overview).
-   - Views arrive laid out in layer bands.
+   - Views arrive laid out in the four layer bands (Business, Information, Application, Infrastructure).
    - `c4` tags, `state` and the owning SA appear as `a4m:*` properties.
    - Other SAs' ids are written as `<sa>.<id>`.
 2. Edit one SA's model in Archi if you like, then *File ▸ Export ▸ Model to Open Exchange File*.
 3. `python3 -m a4m import-oef exported.xml <sa>` → review `git diff` → `validate`.
 
 Import keeps ids that are valid a4m ids, renames Archi-generated `id-<uuid>` ids to `<prefix>-<name>`,
-keeps each concept in the file it came from (new ones go to `<layer>/imported.yaml`), keeps C4 view
+keeps each concept in the file it came from (new ones go to `<layer folder>/imported.yaml`, e.g. `application/imported.yaml`), keeps C4 view
 definitions, and stores node positions as `layout:` only when you moved something.
 
 Some things don't come back:
@@ -200,7 +227,7 @@ One repository is one organisation's landscape, and `models/` holds its SAs.
 2. Replace the home lab SAs with the office's own:
    - start with an `enterprise` SA (goals, capabilities, departments);
    - add the shared platforms (for example, the Enterprise Data Fabric on Kafka, networks, identity) with their `exports`;
-   - add one folder per solution architecture.
+   - add one folder per solution architecture, with the four layer folders inside.
 
    Keep a home lab SA or two as worked examples if useful.
 3. Use the same CI (`.github/workflows/validate.yml`). It validates and builds every SA under `models/`.
