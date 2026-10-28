@@ -26,9 +26,9 @@ elements:
 relationships:
   - { type: Realization, source: app-backup, target: app-svc-backup }
   - { type: Serving, source: app-svc-backup, target: enterprise/bus-proc-backup }
-  - { type: Realization, source: app-backup, target: enterprise/mot-req-backup }
-  - { type: Realization, source: compute/tech-nas, target: app-backup }
-  - { type: Access, source: app-backup, target: nextcloud/app-data-files, access: read }
+  - { type: Realization, source: app-backup, target: enterprise/bus-req-backup }
+  - { type: Realization, source: compute/infra-nas, target: app-backup }
+  - { type: Access, source: app-backup, target: nextcloud/data-files, access: read }
   - { type: Flow, source: nextcloud/app-nextcloud-db, target: app-backup, name: Nightly dump }
   - { type: Flow, source: app-backup, target: app-offsite-b2, name: Encrypted snapshots, state: retiring, properties: { technology: S3 over HTTPS } }
   - { type: Flow, source: app-backup, target: app-offsite-hetzner, name: Encrypted snapshots, state: new, properties: { technology: restic over SFTP } }

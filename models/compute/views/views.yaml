@@ -2,4 +2,4 @@ views:
   - id: view-infrastructure
     name: Compute and storage
     documentation: The hypervisor, Docker VM and NAS, with the workloads other SAs run on them.
-    include_layers: [technology, physical, other]
+    include_layers: [infrastructure]

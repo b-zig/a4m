@@ -5,4 +5,4 @@
 
 | ADR | Title | Status | Date | Affects |
 |---|---|---|---|---|
-| [ADR-0001](../../models/media/decisions/ADR-0001-add-jellyfin-media-server.md) | Add Jellyfin as the family media server | proposed | 2026-10-23 | `app-jellyfin`, `tech-art-jellyfin`, `compute/tech-docker`, `nextcloud/app-data-files` |
+| [ADR-0001](../../models/media/decisions/ADR-0001-add-jellyfin-media-server.md) | Add Jellyfin as the family media server | proposed | 2026-10-23 | `app-jellyfin`, `infra-art-jellyfin`, `compute/infra-docker`, `nextcloud/data-files` |

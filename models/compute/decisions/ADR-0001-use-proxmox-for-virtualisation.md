@@ -3,7 +3,7 @@ id: ADR-0001
 title: Use Proxmox VE for virtualisation
 status: accepted
 date: 2026-10-23
-affects: [tech-pve-01, tech-proxmox-ve, tech-svc-vm-hosting, enterprise/mot-asm-single-host]
+affects: [infra-pve-01, infra-proxmox-ve, infra-svc-vm-hosting, enterprise/bus-asm-single-host]
 ---
 
 ## Context
@@ -19,5 +19,5 @@ containers (pihole).
 ## Consequences
 
 - Snapshots and backups of whole guests become trivial.
-- The single host is a single point of failure (enterprise/mot-asm-single-host); a second node
+- The single host is a single point of failure (enterprise/bus-asm-single-host); a second node
   would be needed for HA. That is out of scope for the home lab but relevant for the office.

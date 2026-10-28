@@ -7,86 +7,80 @@ Why the home lab exists, which capabilities it provides, and which solutions rea
 
 ```mermaid
 flowchart TB
-  subgraph layer_motivation["Motivation"]
+  subgraph layer_business["Business"]
     direction LR
-    mot_family{{"Family<br/>«Stakeholder»"}}
-    mot_drv_privacy{{"Data privacy<br/>«Driver»"}}
-    mot_asm_single_host{{"Single hypervisor is a SPOF<br/>«Assessment»"}}
-    mot_goal_reliable{{"Reliable self-hosted services<br/>«Goal»"}}
-    mot_goal_portable{{"Portable to the office network<br/>«Goal»"}}
-    mot_pri_as_code{{"Architecture as code<br/>«Principle»"}}
-    mot_req_backup{{"Nightly off-site backups<br/>«Requirement»"}}
-    mot_req_dns_filter{{"Network-wide ad and tracker blocking<br/>«Requirement»"}}
-  end
-  subgraph layer_strategy["Strategy"]
-    direction LR
-    str_cap_home_it("Home IT services<br/>«Capability»")
-    str_cap_file_sharing("File sharing and sync<br/>«Capability»")
-    str_cap_home_automation("Home automation<br/>«Capability»")
-    str_res_hardware["Home lab hardware<br/>«Resource»"]
+    bus_stk_family{{"Family<br/>«Stakeholder»"}}
+    bus_drv_privacy{{"Data privacy<br/>«Driver»"}}
+    bus_asm_single_host{{"Single hypervisor is a SPOF<br/>«Assessment»"}}
+    bus_goal_reliable{{"Reliable self-hosted services<br/>«Goal»"}}
+    bus_goal_portable{{"Portable to the office network<br/>«Goal»"}}
+    bus_pri_as_code{{"Architecture as code<br/>«Principle»"}}
+    bus_req_backup{{"Nightly off-site backups<br/>«Requirement»"}}
+    bus_req_dns_filter{{"Network-wide ad and tracker blocking<br/>«Requirement»"}}
+    bus_cap_home_it("Home IT services<br/>«Capability»")
+    bus_cap_file_sharing("File sharing and sync<br/>«Capability»")
+    bus_cap_home_automation("Home automation<br/>«Capability»")
+    bus_res_hardware["Home lab hardware<br/>«Resource»"]
   end
   subgraph layer_application["Application"]
     direction LR
     dns__app_pihole["Pi-hole<br/>«ApplicationComponent» · dns"]
     backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    compute__tech_nas["NAS<br/>«Device» · compute"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    compute__infra_nas["NAS<br/>«Device» · compute"]
   end
-  mot_family ---|"associated with"| mot_drv_privacy
-  mot_drv_privacy -.->|"influences +"| mot_goal_reliable
-  mot_asm_single_host ---|"associated with"| mot_drv_privacy
-  mot_asm_single_host -.->|"influences -"| mot_goal_reliable
-  mot_pri_as_code -.->|"realizes"| mot_goal_portable
-  mot_req_backup -.->|"realizes"| mot_goal_reliable
-  mot_req_dns_filter -.->|"realizes"| mot_goal_reliable
-  str_cap_home_it -->|"composed of"| str_cap_file_sharing
-  str_cap_home_it -->|"composed of"| str_cap_home_automation
-  str_cap_home_it -.->|"realizes"| mot_goal_reliable
-  str_res_hardware -->|"assigned to"| str_cap_home_it
-  backup__app_backup -.->|"realizes"| mot_req_backup
-  compute__tech_nas -.->|"realizes"| backup__app_backup
-  compute__tech_pve_01 -.->|"realizes"| str_res_hardware
-  compute__tech_nas -.->|"realizes"| str_res_hardware
-  dns__app_pihole -.->|"realizes"| mot_req_dns_filter
-  classDef motivation fill:#CCCCFF,stroke:#555,color:#000
-  class mot_family,mot_drv_privacy,mot_asm_single_host,mot_goal_reliable,mot_goal_portable,mot_pri_as_code,mot_req_backup,mot_req_dns_filter motivation
-  style layer_motivation fill:#fafafa,stroke:#bbb
-  classDef strategy fill:#F5DEAA,stroke:#555,color:#000
-  class str_cap_home_it,str_cap_file_sharing,str_cap_home_automation,str_res_hardware strategy
-  style layer_strategy fill:#fafafa,stroke:#bbb
+  bus_cap_home_it -->|"composed of"| bus_cap_file_sharing
+  bus_cap_home_it -->|"composed of"| bus_cap_home_automation
+  bus_cap_home_it -.->|"realizes"| bus_goal_reliable
+  bus_res_hardware -->|"assigned to"| bus_cap_home_it
+  bus_stk_family ---|"associated with"| bus_drv_privacy
+  bus_drv_privacy -.->|"influences +"| bus_goal_reliable
+  bus_asm_single_host ---|"associated with"| bus_drv_privacy
+  bus_asm_single_host -.->|"influences -"| bus_goal_reliable
+  bus_pri_as_code -.->|"realizes"| bus_goal_portable
+  bus_req_backup -.->|"realizes"| bus_goal_reliable
+  bus_req_dns_filter -.->|"realizes"| bus_goal_reliable
+  backup__app_backup -.->|"realizes"| bus_req_backup
+  compute__infra_nas -.->|"realizes"| backup__app_backup
+  compute__infra_pve_01 -.->|"realizes"| bus_res_hardware
+  compute__infra_nas -.->|"realizes"| bus_res_hardware
+  dns__app_pihole -.->|"realizes"| bus_req_dns_filter
+  classDef business fill:#FFFFB5,stroke:#555,color:#000
+  class bus_stk_family,bus_drv_privacy,bus_asm_single_host,bus_goal_reliable,bus_goal_portable,bus_pri_as_code,bus_req_backup,bus_req_dns_filter,bus_cap_home_it,bus_cap_file_sharing,bus_cap_home_automation,bus_res_hardware business
+  style layer_business fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
   class dns__app_pihole,backup__app_backup application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class compute__tech_pve_01,compute__tech_nas technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class compute__infra_pve_01,compute__infra_nas infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class dns__app_pihole,backup__app_backup,compute__tech_pve_01,compute__tech_nas foreign
+  class dns__app_pihole,backup__app_backup,compute__infra_pve_01,compute__infra_nas foreign
 ```
 
 ## Elements
 
 | Element | Type | Layer | C4 | State | Description |
 |---|---|---|---|---|---|
+| Family (`bus-stk-family`) | Stakeholder | Business |  |  | Everyone in the household who relies on the self-hosted services. |
+| Data privacy (`bus-drv-privacy`) | Driver | Business |  |  | Keep family photos, documents and smart-home data off third-party clouds. |
+| Single hypervisor is a SPOF (`bus-asm-single-host`) | Assessment | Business |  |  | All VMs run on one Proxmox host; a hardware failure takes every service down. |
+| Reliable self-hosted services (`bus-goal-reliable`) | Goal | Business |  |  |  |
+| Portable to the office network (`bus-goal-portable`) | Goal | Business |  |  | The same tooling and patterns must be reusable for the office environment. |
+| Architecture as code (`bus-pri-as-code`) | Principle | Business |  |  | The architecture lives in git as validated ArchiMate YAML; diagrams are generated. |
+| Nightly off-site backups (`bus-req-backup`) | Requirement | Business |  |  |  |
+| Network-wide ad and tracker blocking (`bus-req-dns-filter`) | Requirement | Business |  |  |  |
+| Home IT services (`bus-cap-home-it`) | Capability | Business |  |  |  |
+| File sharing and sync (`bus-cap-file-sharing`) | Capability | Business |  |  |  |
+| Home automation (`bus-cap-home-automation`) | Capability | Business |  |  |  |
+| Home lab hardware (`bus-res-hardware`) | Resource | Business |  |  | Hypervisor, NAS, network gear and UPS (see the compute and network SAs). |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
 | Backup jobs (`backup/app-backup`) | ApplicationComponent | Application | system |  | Nightly restic snapshots of Nextcloud data and its database. |
-| Proxmox host 01 (`compute/tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| NAS (`compute/tech-nas`) | Device | Technology | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
-| Family (`mot-family`) | Stakeholder | Motivation |  |  | Everyone in the household who relies on the self-hosted services. |
-| Data privacy (`mot-drv-privacy`) | Driver | Motivation |  |  | Keep family photos, documents and smart-home data off third-party clouds. |
-| Single hypervisor is a SPOF (`mot-asm-single-host`) | Assessment | Motivation |  |  | All VMs run on one Proxmox host; a hardware failure takes every service down. |
-| Reliable self-hosted services (`mot-goal-reliable`) | Goal | Motivation |  |  |  |
-| Portable to the office network (`mot-goal-portable`) | Goal | Motivation |  |  | The same tooling and patterns must be reusable for the office environment. |
-| Architecture as code (`mot-pri-as-code`) | Principle | Motivation |  |  | The architecture lives in git as validated ArchiMate YAML; diagrams are generated. |
-| Nightly off-site backups (`mot-req-backup`) | Requirement | Motivation |  |  |  |
-| Network-wide ad and tracker blocking (`mot-req-dns-filter`) | Requirement | Motivation |  |  |  |
-| Home IT services (`str-cap-home-it`) | Capability | Strategy |  |  |  |
-| File sharing and sync (`str-cap-file-sharing`) | Capability | Strategy |  |  |  |
-| Home automation (`str-cap-home-automation`) | Capability | Strategy |  |  |  |
-| Home lab hardware (`str-res-hardware`) | Resource | Strategy |  |  | Hypervisor, NAS, network gear and UPS (see the compute and network SAs). |
+| Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| NAS (`compute/infra-nas`) | Device | Infrastructure | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
 
 ## Related decisions
 

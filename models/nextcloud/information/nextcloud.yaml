@@ -1,0 +1,8 @@
+elements:
+  - id: data-files
+    type: DataObject
+    name: User files
+    documentation: Family files and photos, stored on the NAS over NFS.
+
+relationships:
+  - { type: Realization, source: data-files, target: enterprise/bus-obj-photos }

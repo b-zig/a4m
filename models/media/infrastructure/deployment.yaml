@@ -1,0 +1,9 @@
+elements:
+  - id: infra-art-jellyfin
+    type: Artifact
+    name: jellyfin/jellyfin image
+    state: new
+
+relationships:
+  - { type: Assignment, source: compute/infra-docker, target: infra-art-jellyfin, state: new }
+  - { type: Realization, source: infra-art-jellyfin, target: app-jellyfin, state: new }

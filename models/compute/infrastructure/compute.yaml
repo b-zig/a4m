@@ -1,0 +1,53 @@
+# One Proxmox host and a NAS. Workload VMs/LXCs belong to the SAs that run on them.
+elements:
+  - id: infra-pve-01
+    type: Node
+    name: Proxmox host 01
+    c4: deployment
+    documentation: Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).
+    properties: { technology: Proxmox VE 8, ip: 10.0.10.11, cpu: 8 cores, ram: 64 GB }
+  - id: infra-proxmox-ve
+    type: SystemSoftware
+    name: Proxmox VE
+  - id: infra-vm-docker
+    type: Node
+    name: VM docker-01
+    c4: deployment
+    documentation: Shared Docker host for containerised solutions.
+    properties: { technology: Debian 12 VM, ip: 10.0.10.21 }
+  - id: infra-docker
+    type: SystemSoftware
+    name: Docker Engine
+    c4: deployment
+    properties: { technology: Docker Compose }
+  - id: infra-nas
+    type: Device
+    name: NAS
+    c4: deployment
+    documentation: Synology NAS holding solution data (NFS) and running backup jobs.
+    properties: { technology: Synology DSM 7, ip: 10.0.10.5 }
+  - id: infra-svc-vm-hosting
+    type: TechnologyService
+    name: VM hosting
+  - id: infra-svc-nfs
+    type: TechnologyService
+    name: NFS storage
+
+relationships:
+  - { type: Composition, source: infra-pve-01, target: infra-proxmox-ve }
+  - { type: Composition, source: infra-pve-01, target: infra-vm-docker }
+  - { type: Realization, source: infra-proxmox-ve, target: infra-svc-vm-hosting }
+  - { type: Serving, source: infra-svc-vm-hosting, target: infra-vm-docker }
+  - { type: Assignment, source: infra-vm-docker, target: infra-docker }
+  - { type: Realization, source: infra-nas, target: infra-svc-nfs }
+  - { type: Serving, source: infra-svc-nfs, target: infra-vm-docker, name: Docker data volumes }
+  # placement and power come from the network SA
+  - { type: Aggregation, source: network/infra-loc-home, target: infra-pve-01 }
+  - { type: Aggregation, source: network/infra-loc-home, target: infra-nas }
+  - { type: Serving, source: network/infra-ups, target: infra-pve-01 }
+  - { type: Serving, source: network/infra-ups, target: infra-nas }
+  - { type: Association, source: infra-pve-01, target: network/infra-net-lan }
+  - { type: Association, source: infra-nas, target: network/infra-net-lan }
+  # the enterprise's hardware resource
+  - { type: Realization, source: infra-pve-01, target: enterprise/bus-res-hardware }
+  - { type: Realization, source: infra-nas, target: enterprise/bus-res-hardware }

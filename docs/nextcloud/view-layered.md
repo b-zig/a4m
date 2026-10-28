@@ -13,6 +13,10 @@ flowchart TB
     enterprise__bus_proc_share("Share files and photos<br/>«BusinessProcess» · enterprise")
     enterprise__bus_svc_file_sharing("File sharing<br/>«BusinessService» · enterprise")
   end
+  subgraph layer_information["Information"]
+    direction LR
+    data_files[/"User files<br/>«DataObject»"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     app_nextcloud["Nextcloud<br/>«ApplicationComponent»"]
@@ -20,18 +24,17 @@ flowchart TB
     app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent»"]
     app_nextcloud_cache["Nextcloud cache<br/>«ApplicationComponent»"]
     app_svc_file_sync("File sync and share<br/>«ApplicationService»")
-    app_data_files[/"User files<br/>«DataObject»"/]
     backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
     media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media<br/>NEW"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
-    tech_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
-    tech_art_redis[/"redis:7 image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
-    compute__tech_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
+    infra_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
+    infra_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
+    infra_art_redis[/"redis:7 image<br/>«Artifact»"/]
+    compute__infra_docker["Docker Engine<br/>«SystemSoftware» · compute"]
+    compute__infra_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
   end
   app_nextcloud -->|"composed of"| app_nextcloud_web
   app_nextcloud -->|"composed of"| app_nextcloud_db
@@ -39,35 +42,38 @@ flowchart TB
   app_nextcloud_web -.->|"realizes"| app_svc_file_sync
   app_nextcloud_web -.->|"Reads/writes metadata"| app_nextcloud_db
   app_nextcloud_web -.->|"Locks and sessions"| app_nextcloud_cache
-  app_nextcloud_web -.->|"reads/writes"| app_data_files
+  app_nextcloud_web -.->|"reads/writes"| data_files
   app_svc_file_sync -->|"serves"| enterprise__bus_proc_share
   app_svc_file_sync -.->|"realizes"| enterprise__bus_svc_file_sharing
-  app_data_files -.->|"realizes"| enterprise__bus_obj_photos
   dns__app_svc_dns -->|"DNS lookups"| app_nextcloud
-  compute__tech_docker -->|"assigned to"| tech_art_nextcloud
-  compute__tech_docker -->|"assigned to"| tech_art_mariadb
-  compute__tech_docker -->|"assigned to"| tech_art_redis
-  tech_art_nextcloud -.->|"realizes"| app_nextcloud_web
-  tech_art_mariadb -.->|"realizes"| app_nextcloud_db
-  tech_art_redis -.->|"realizes"| app_nextcloud_cache
-  compute__tech_svc_nfs -->|"User files volume"| app_nextcloud_web
-  backup__app_backup -.->|"reads"| app_data_files
+  data_files -.->|"realizes"| enterprise__bus_obj_photos
+  compute__infra_docker -->|"assigned to"| infra_art_nextcloud
+  compute__infra_docker -->|"assigned to"| infra_art_mariadb
+  compute__infra_docker -->|"assigned to"| infra_art_redis
+  infra_art_nextcloud -.->|"realizes"| app_nextcloud_web
+  infra_art_mariadb -.->|"realizes"| app_nextcloud_db
+  infra_art_redis -.->|"realizes"| app_nextcloud_cache
+  compute__infra_svc_nfs -->|"User files volume"| app_nextcloud_web
+  backup__app_backup -.->|"reads"| data_files
   app_nextcloud_db -.->|"Nightly dump"| backup__app_backup
   enterprise__bus_proc_share -.->|"realizes"| enterprise__bus_svc_file_sharing
   enterprise__bus_proc_share -.->|"reads/writes"| enterprise__bus_obj_photos
-  media__app_jellyfin -.->|"Family videos"| app_data_files
+  media__app_jellyfin -.->|"Family videos"| data_files
   dns__app_svc_dns -->|"DNS lookups"| media__app_jellyfin
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_nextcloud,app_nextcloud_web,app_nextcloud_db,app_nextcloud_cache,app_svc_file_sync,app_data_files,backup__app_backup,dns__app_svc_dns,media__app_jellyfin application
+  class app_nextcloud,app_nextcloud_web,app_nextcloud_db,app_nextcloud_cache,app_svc_file_sync,backup__app_backup,dns__app_svc_dns,media__app_jellyfin application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_art_nextcloud,tech_art_mariadb,tech_art_redis,compute__tech_docker,compute__tech_svc_nfs technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_art_nextcloud,infra_art_mariadb,infra_art_redis,compute__infra_docker,compute__infra_svc_nfs infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,compute__tech_docker,compute__tech_svc_nfs,dns__app_svc_dns,enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing,media__app_jellyfin foreign
+  class backup__app_backup,compute__infra_docker,compute__infra_svc_nfs,dns__app_svc_dns,enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing,media__app_jellyfin foreign
   classDef st_new stroke:#2e7d32,stroke-width:3px,stroke-dasharray:6 4
   class media__app_jellyfin st_new
   linkStyle 22 stroke:#2e7d32,stroke-width:2px,stroke-dasharray:6 4
@@ -86,6 +92,10 @@ flowchart TB
     enterprise__bus_proc_share("Share files and photos<br/>«BusinessProcess» · enterprise")
     enterprise__bus_svc_file_sharing("File sharing<br/>«BusinessService» · enterprise")
   end
+  subgraph layer_information["Information"]
+    direction LR
+    data_files[/"User files<br/>«DataObject»"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     app_nextcloud["Nextcloud<br/>«ApplicationComponent»"]
@@ -93,17 +103,16 @@ flowchart TB
     app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent»"]
     app_nextcloud_cache["Nextcloud cache<br/>«ApplicationComponent»"]
     app_svc_file_sync("File sync and share<br/>«ApplicationService»")
-    app_data_files[/"User files<br/>«DataObject»"/]
     backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
-    tech_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
-    tech_art_redis[/"redis:7 image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
-    compute__tech_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
+    infra_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
+    infra_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
+    infra_art_redis[/"redis:7 image<br/>«Artifact»"/]
+    compute__infra_docker["Docker Engine<br/>«SystemSoftware» · compute"]
+    compute__infra_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
   end
   app_nextcloud -->|"composed of"| app_nextcloud_web
   app_nextcloud -->|"composed of"| app_nextcloud_db
@@ -111,33 +120,36 @@ flowchart TB
   app_nextcloud_web -.->|"realizes"| app_svc_file_sync
   app_nextcloud_web -.->|"Reads/writes metadata"| app_nextcloud_db
   app_nextcloud_web -.->|"Locks and sessions"| app_nextcloud_cache
-  app_nextcloud_web -.->|"reads/writes"| app_data_files
+  app_nextcloud_web -.->|"reads/writes"| data_files
   app_svc_file_sync -->|"serves"| enterprise__bus_proc_share
   app_svc_file_sync -.->|"realizes"| enterprise__bus_svc_file_sharing
-  app_data_files -.->|"realizes"| enterprise__bus_obj_photos
   dns__app_svc_dns -->|"DNS lookups"| app_nextcloud
-  compute__tech_docker -->|"assigned to"| tech_art_nextcloud
-  compute__tech_docker -->|"assigned to"| tech_art_mariadb
-  compute__tech_docker -->|"assigned to"| tech_art_redis
-  tech_art_nextcloud -.->|"realizes"| app_nextcloud_web
-  tech_art_mariadb -.->|"realizes"| app_nextcloud_db
-  tech_art_redis -.->|"realizes"| app_nextcloud_cache
-  compute__tech_svc_nfs -->|"User files volume"| app_nextcloud_web
-  backup__app_backup -.->|"reads"| app_data_files
+  data_files -.->|"realizes"| enterprise__bus_obj_photos
+  compute__infra_docker -->|"assigned to"| infra_art_nextcloud
+  compute__infra_docker -->|"assigned to"| infra_art_mariadb
+  compute__infra_docker -->|"assigned to"| infra_art_redis
+  infra_art_nextcloud -.->|"realizes"| app_nextcloud_web
+  infra_art_mariadb -.->|"realizes"| app_nextcloud_db
+  infra_art_redis -.->|"realizes"| app_nextcloud_cache
+  compute__infra_svc_nfs -->|"User files volume"| app_nextcloud_web
+  backup__app_backup -.->|"reads"| data_files
   app_nextcloud_db -.->|"Nightly dump"| backup__app_backup
   enterprise__bus_proc_share -.->|"realizes"| enterprise__bus_svc_file_sharing
   enterprise__bus_proc_share -.->|"reads/writes"| enterprise__bus_obj_photos
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_nextcloud,app_nextcloud_web,app_nextcloud_db,app_nextcloud_cache,app_svc_file_sync,app_data_files,backup__app_backup,dns__app_svc_dns application
+  class app_nextcloud,app_nextcloud_web,app_nextcloud_db,app_nextcloud_cache,app_svc_file_sync,backup__app_backup,dns__app_svc_dns application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_art_nextcloud,tech_art_mariadb,tech_art_redis,compute__tech_docker,compute__tech_svc_nfs technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_art_nextcloud,infra_art_mariadb,infra_art_redis,compute__infra_docker,compute__infra_svc_nfs infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,compute__tech_docker,compute__tech_svc_nfs,dns__app_svc_dns,enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing foreign
+  class backup__app_backup,compute__infra_docker,compute__infra_svc_nfs,dns__app_svc_dns,enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing foreign
 ```
 
 </details>
@@ -152,6 +164,10 @@ flowchart TB
     enterprise__bus_proc_share("Share files and photos<br/>«BusinessProcess» · enterprise")
     enterprise__bus_svc_file_sharing("File sharing<br/>«BusinessService» · enterprise")
   end
+  subgraph layer_information["Information"]
+    direction LR
+    data_files[/"User files<br/>«DataObject»"/]
+  end
   subgraph layer_application["Application"]
     direction LR
     app_nextcloud["Nextcloud<br/>«ApplicationComponent»"]
@@ -159,18 +175,17 @@ flowchart TB
     app_nextcloud_db["Nextcloud database<br/>«ApplicationComponent»"]
     app_nextcloud_cache["Nextcloud cache<br/>«ApplicationComponent»"]
     app_svc_file_sync("File sync and share<br/>«ApplicationService»")
-    app_data_files[/"User files<br/>«DataObject»"/]
     backup__app_backup["Backup jobs<br/>«ApplicationComponent» · backup"]
     dns__app_svc_dns("DNS resolution and filtering<br/>«ApplicationService» · dns")
     media__app_jellyfin["Jellyfin<br/>«ApplicationComponent» · media"]
   end
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
-    tech_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
-    tech_art_redis[/"redis:7 image<br/>«Artifact»"/]
-    compute__tech_docker["Docker Engine<br/>«SystemSoftware» · compute"]
-    compute__tech_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
+    infra_art_nextcloud[/"nextcloud:29-apache image<br/>«Artifact»"/]
+    infra_art_mariadb[/"mariadb:11 image<br/>«Artifact»"/]
+    infra_art_redis[/"redis:7 image<br/>«Artifact»"/]
+    compute__infra_docker["Docker Engine<br/>«SystemSoftware» · compute"]
+    compute__infra_svc_nfs("NFS storage<br/>«TechnologyService» · compute")
   end
   app_nextcloud -->|"composed of"| app_nextcloud_web
   app_nextcloud -->|"composed of"| app_nextcloud_db
@@ -178,35 +193,38 @@ flowchart TB
   app_nextcloud_web -.->|"realizes"| app_svc_file_sync
   app_nextcloud_web -.->|"Reads/writes metadata"| app_nextcloud_db
   app_nextcloud_web -.->|"Locks and sessions"| app_nextcloud_cache
-  app_nextcloud_web -.->|"reads/writes"| app_data_files
+  app_nextcloud_web -.->|"reads/writes"| data_files
   app_svc_file_sync -->|"serves"| enterprise__bus_proc_share
   app_svc_file_sync -.->|"realizes"| enterprise__bus_svc_file_sharing
-  app_data_files -.->|"realizes"| enterprise__bus_obj_photos
   dns__app_svc_dns -->|"DNS lookups"| app_nextcloud
-  compute__tech_docker -->|"assigned to"| tech_art_nextcloud
-  compute__tech_docker -->|"assigned to"| tech_art_mariadb
-  compute__tech_docker -->|"assigned to"| tech_art_redis
-  tech_art_nextcloud -.->|"realizes"| app_nextcloud_web
-  tech_art_mariadb -.->|"realizes"| app_nextcloud_db
-  tech_art_redis -.->|"realizes"| app_nextcloud_cache
-  compute__tech_svc_nfs -->|"User files volume"| app_nextcloud_web
-  backup__app_backup -.->|"reads"| app_data_files
+  data_files -.->|"realizes"| enterprise__bus_obj_photos
+  compute__infra_docker -->|"assigned to"| infra_art_nextcloud
+  compute__infra_docker -->|"assigned to"| infra_art_mariadb
+  compute__infra_docker -->|"assigned to"| infra_art_redis
+  infra_art_nextcloud -.->|"realizes"| app_nextcloud_web
+  infra_art_mariadb -.->|"realizes"| app_nextcloud_db
+  infra_art_redis -.->|"realizes"| app_nextcloud_cache
+  compute__infra_svc_nfs -->|"User files volume"| app_nextcloud_web
+  backup__app_backup -.->|"reads"| data_files
   app_nextcloud_db -.->|"Nightly dump"| backup__app_backup
   enterprise__bus_proc_share -.->|"realizes"| enterprise__bus_svc_file_sharing
   enterprise__bus_proc_share -.->|"reads/writes"| enterprise__bus_obj_photos
-  media__app_jellyfin -.->|"Family videos"| app_data_files
+  media__app_jellyfin -.->|"Family videos"| data_files
   dns__app_svc_dns -->|"DNS lookups"| media__app_jellyfin
   classDef business fill:#FFFFB5,stroke:#555,color:#000
   class enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing business
   style layer_business fill:#fafafa,stroke:#bbb
+  classDef information fill:#E3D7F4,stroke:#555,color:#000
+  class data_files information
+  style layer_information fill:#fafafa,stroke:#bbb
   classDef application fill:#B5FFFF,stroke:#555,color:#000
-  class app_nextcloud,app_nextcloud_web,app_nextcloud_db,app_nextcloud_cache,app_svc_file_sync,app_data_files,backup__app_backup,dns__app_svc_dns,media__app_jellyfin application
+  class app_nextcloud,app_nextcloud_web,app_nextcloud_db,app_nextcloud_cache,app_svc_file_sync,backup__app_backup,dns__app_svc_dns,media__app_jellyfin application
   style layer_application fill:#fafafa,stroke:#bbb
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_art_nextcloud,tech_art_mariadb,tech_art_redis,compute__tech_docker,compute__tech_svc_nfs technology
-  style layer_technology fill:#fafafa,stroke:#bbb
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_art_nextcloud,infra_art_mariadb,infra_art_redis,compute__infra_docker,compute__infra_svc_nfs infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class backup__app_backup,compute__tech_docker,compute__tech_svc_nfs,dns__app_svc_dns,enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing,media__app_jellyfin foreign
+  class backup__app_backup,compute__infra_docker,compute__infra_svc_nfs,dns__app_svc_dns,enterprise__bus_obj_photos,enterprise__bus_proc_share,enterprise__bus_svc_file_sharing,media__app_jellyfin foreign
 ```
 
 </details>
@@ -220,13 +238,13 @@ flowchart TB
 | Nextcloud database (`app-nextcloud-db`) | ApplicationComponent | Application | container |  | Metadata, shares and user accounts. |
 | Nextcloud cache (`app-nextcloud-cache`) | ApplicationComponent | Application | container |  | File locking and session cache. |
 | File sync and share (`app-svc-file-sync`) | ApplicationService | Application |  |  |  |
-| User files (`app-data-files`) | DataObject | Application |  |  | Family files and photos, stored on the NAS over NFS. |
-| nextcloud:29-apache image (`tech-art-nextcloud`) | Artifact | Technology |  |  |  |
-| mariadb:11 image (`tech-art-mariadb`) | Artifact | Technology |  |  |  |
-| redis:7 image (`tech-art-redis`) | Artifact | Technology |  |  |  |
+| User files (`data-files`) | DataObject | Information |  |  | Family files and photos, stored on the NAS over NFS. |
+| nextcloud:29-apache image (`infra-art-nextcloud`) | Artifact | Infrastructure |  |  |  |
+| mariadb:11 image (`infra-art-mariadb`) | Artifact | Infrastructure |  |  |  |
+| redis:7 image (`infra-art-redis`) | Artifact | Infrastructure |  |  |  |
 | Backup jobs (`backup/app-backup`) | ApplicationComponent | Application | system |  | Nightly restic snapshots of Nextcloud data and its database. |
-| Docker Engine (`compute/tech-docker`) | SystemSoftware | Technology | deployment |  |  |
-| NFS storage (`compute/tech-svc-nfs`) | TechnologyService | Technology |  |  |  |
+| Docker Engine (`compute/infra-docker`) | SystemSoftware | Infrastructure | deployment |  |  |
+| NFS storage (`compute/infra-svc-nfs`) | TechnologyService | Infrastructure |  |  |  |
 | DNS resolution and filtering (`dns/app-svc-dns`) | ApplicationService | Application |  |  |  |
 | Family photos and documents (`enterprise/bus-obj-photos`) | BusinessObject | Business |  |  |  |
 | Share files and photos (`enterprise/bus-proc-share`) | BusinessProcess | Business |  |  |  |

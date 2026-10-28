@@ -14,7 +14,7 @@ to any assistant (GitHub Copilot, Claude, local models). Humans: see README.md.
    service) probably exists in another SA: `a4m_search` / `grep -r "name:" models/`. Reference it as
    `<sa>/<id>` instead of re-creating it (the validator warns about duplicates across SAs).
 3. **Ground** — never guess types or relationships:
-   - `python3 -m a4m types [--layer business|application|technology|...]`
+   - `python3 -m a4m types [--layer business|information|application|infrastructure]`
    - `python3 -m a4m allowed <SourceType> <TargetType>`
 4. **Edit YAML** — add/change elements, relationships, views (formats below). Never edit
    `docs/` or `build/`; they are generated.
@@ -39,10 +39,10 @@ the shell commands.
   status: implemented       # draft | proposed | approved | implemented | rejected
   owner: home lab admin
   documentation: One paragraph: what this SA is and why.
-  exports: [app-nextcloud, app-nextcloud-db, app-data-files]   # ids other SAs may reference ("*" = all)
+  exports: [app-nextcloud, app-nextcloud-db, data-files]   # ids other SAs may reference ("*" = all)
   ```
 - **Every element has exactly one owner SA.** Other SAs reference it as `<sa>/<id>`, e.g.
-  `source: compute/tech-docker`, in relationships, view `include:`/`scope:`, and ADR `affects:`.
+  `source: compute/infra-docker`, in relationships, view `include:`/`scope:`, and ADR `affects:`.
   Only ids listed under the owner's `exports:` may be referenced. Export the *public surface*
   (systems, services, interfaces, shared nodes and networks), not internals.
 - **The relationship lives in the SA that uses the other one** — the consumer declares
@@ -80,13 +80,24 @@ has a `state`:
 
 ## Files and ids
 
-- Put elements in the folder of their layer: `motivation/ strategy/ business/ application/
-  technology/ physical/ implementation/ other/`. Group by system or topic (`application/nextcloud.yaml`).
+- Every SA has four **layer folders** (quasi-TOGAF, top to bottom). An element goes in the folder of
+  its layer; the validator rejects it anywhere else (`layer-folder`) and names the right folder.
+
+  | Folder | Id prefix | What goes in it (ArchiMate types) |
+  |---|---|---|
+  | `business/` | `bus-` | actors, roles, processes, functions, events, services, business objects, contracts; also the *why* and the roadmap: stakeholders, drivers, goals, principles, requirements, capabilities, resources, work packages, plateaus |
+  | `information/` | `data-` | DataObject (the data an application stores or exchanges) |
+  | `application/` | `app-` | application components, interfaces, functions, processes, events, services |
+  | `infrastructure/` | `infra-` | nodes, devices, system software, networks, technology services, artifacts, physical equipment and facilities, locations |
+
+  Junction and Grouping may go in any layer folder (no prefix). `python3 -m a4m types --layer <layer>`
+  lists the types of a layer. Group files by system or topic (`application/nextcloud.yaml`).
   Relationships go next to the elements they mainly concern (or `relationships/*.yaml`).
   Views go in `views/`. ADRs in `decisions/` (numbered per SA).
-- Ids are kebab-case, unique within the SA, **prefixed by layer**: `mot-` `str-` `bus-` `app-` `tech-`
-  `phys-` `impl-` `oth-`. Views: `view-…` (ArchiMate) / `c4-…` (C4). Ids are permanent — rename only
-  with a search-and-replace across all SAs (`grep -r "<sa>/<id>" models/`) and ADRs.
+- Ids are kebab-case, unique within the SA, **prefixed by layer**: `bus-` `data-` `app-` `infra-`.
+  Within the prefix, use a short type hint where it helps: `bus-goal-…`, `bus-cap-…`, `app-svc-…`,
+  `infra-art-…`, `infra-net-…`. Views: `view-…` (ArchiMate) / `c4-…` (C4). Ids are permanent — rename
+  only with a search-and-replace across all SAs (`grep -r "<sa>/<id>" models/`) and ADRs.
 - Relationship ids are optional (default `rel-<source>-<type>-<target>`). Only set one when the same
   type/source/target appears twice.
 
@@ -101,14 +112,14 @@ elements:
   - { id: app-jellyfin, type: ApplicationComponent, name: Jellyfin, c4: system, state: new }
 relationships:
   - { type: Serving, source: dns/app-svc-dns, target: app-nextcloud, name: DNS lookups }   # another SA's service
-  - { type: Access, source: app-backup, target: nextcloud/app-data-files, access: read }   # access: read|write|readwrite|access
-  - { type: Influence, source: mot-drv-privacy, target: mot-goal-reliable, modifier: "+" }
+  - { type: Access, source: app-backup, target: nextcloud/data-files, access: read }   # access: read|write|readwrite|access
+  - { type: Influence, source: bus-drv-privacy, target: bus-goal-reliable, modifier: "+" }
   - { type: Flow, source: app-backup, target: app-offsite-b2, state: retiring }
 views:
   - id: view-layered
     name: Layered overview
-    include: [compute/tech-nas]         # explicit ids (any SA) …
-    include_layers: [application]       # … and/or whole layers: this SA's elements + other SAs' direct neighbours
+    include: [compute/infra-nas]         # explicit ids (any SA) …
+    include_layers: [information, application]   # … and/or whole layers: this SA's elements + other SAs' direct neighbours
     viewpoint: Layered                  # optional; only Archi viewpoint names
 ```
 
@@ -158,10 +169,10 @@ C4 diagrams are **not drawn**; they are computed from `c4:` tags and the ArchiMa
   `{ kind: c4-component, scope: <container> }`, `{ kind: c4-deployment[, scope: <node>] }`.
 - In an SA's C4 views its own systems sit in a boundary named after the SA; systems of other SAs
   are drawn as external systems, and a container appears inside another SA's node (e.g.
-  `compute/tech-docker`) when its artifact is assigned there. The landscape C4 views group every
+  `compute/infra-docker`) when its artifact is assigned there. The landscape C4 views group every
   system by SA inside the enterprise boundary.
 
-Use **ArchiMate views** for cross-layer and enterprise questions (motivation → technology), **C4
+Use **ArchiMate views** for cross-layer and enterprise questions (goals → infrastructure), **C4
 views** for one software system.
 
 ## Review mode
@@ -169,7 +180,7 @@ views** for one software system.
 When asked to review a model (or before finishing a large change) check and report findings graded
 **Critical / Major / Minor / Suggestion**, each with the element ids and a concrete fix:
 
-- Layering gaps: application components with no technology realizing them; business services nobody
+- Layering gaps: application components with no infrastructure realizing them; business services nobody
   realizes; application services that serve nothing.
 - Motivation: goals with no requirement/principle/capability behind them; components realizing no
   requirement where one obviously applies.

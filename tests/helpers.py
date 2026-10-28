@@ -41,8 +41,13 @@ class WorkspaceTestCase(unittest.TestCase):
     def load(self, sa: str):
         return load_model(sa, self.root)
 
-    def codes(self, sa: str, severity: str | None = None) -> list[str]:
-        return [i.code for i in validate(self.load(sa)) if severity is None or i.severity == severity]
+    def codes(self, sa: str, severity: str | None = None, folders: bool = False) -> list[str]:
+        """Issue codes. Fixtures keep several layers in one file for brevity, so `layer-folder`
+        is left out unless `folders=True` (LayerFolderTest covers it)."""
+        return [
+            i.code for i in validate(self.load(sa))
+            if (severity is None or i.severity == severity) and (folders or i.code != "layer-folder")
+        ]
 
 
 def load_sample(sa: str = "nextcloud"):

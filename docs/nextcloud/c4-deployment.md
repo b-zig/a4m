@@ -6,13 +6,13 @@
 ```mermaid
 C4Deployment
   title Nextcloud — deployment
-  Deployment_Node(network__oth_loc_home, "Home office rack", "Location", "[network]") {
-    Deployment_Node(compute__tech_nas, "NAS", "Synology DSM 7", "[compute] Synology NAS holding solution data (NFS) and running backup jobs.") {
+  Deployment_Node(network__infra_loc_home, "Home office rack", "Location", "[network]") {
+    Deployment_Node(compute__infra_nas, "NAS", "Synology DSM 7", "[compute] Synology NAS holding solution data (NFS) and running backup jobs.") {
       System_Ext(backup__app_backup, "Backup jobs", "[backup] Nightly restic snapshots of Nextcloud data and its database.")
     }
-    Deployment_Node(compute__tech_pve_01, "Proxmox host 01", "Proxmox VE 8", "[compute] Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host).") {
-      Deployment_Node(compute__tech_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
-        Deployment_Node(compute__tech_docker, "Docker Engine", "Docker Compose", "[compute]") {
+    Deployment_Node(compute__infra_pve_01, "Proxmox host 01", "Proxmox VE 8", "[compute] Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).") {
+      Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
+        Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "[compute]") {
           Container(app_nextcloud_web, "Nextcloud web", "PHP 8 / Apache", "Web UI, WebDAV and mobile sync endpoints.")
           ContainerDb(app_nextcloud_db, "Nextcloud database", "MariaDB 11", "Metadata, shares and user accounts.")
           Container(app_nextcloud_cache, "Nextcloud cache", "Redis 7", "File locking and session cache.")
@@ -34,11 +34,11 @@ C4Deployment
 | Nextcloud web (`app-nextcloud-web`) | ApplicationComponent | Application | container |  | Web UI, WebDAV and mobile sync endpoints. |
 | Nextcloud database (`app-nextcloud-db`) | ApplicationComponent | Application | container |  | Metadata, shares and user accounts. |
 | Nextcloud cache (`app-nextcloud-cache`) | ApplicationComponent | Application | container |  | File locking and session cache. |
-| Home office rack (`network/oth-loc-home`) | Location | Other | deployment |  |  |
-| NAS (`compute/tech-nas`) | Device | Technology | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
-| Proxmox host 01 (`compute/tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| VM docker-01 (`compute/tech-vm-docker`) | Node | Technology | deployment |  | Shared Docker host for containerised solutions. |
-| Docker Engine (`compute/tech-docker`) | SystemSoftware | Technology | deployment |  |  |
+| Home office rack (`network/infra-loc-home`) | Location | Infrastructure | deployment |  |  |
+| NAS (`compute/infra-nas`) | Device | Infrastructure | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
+| Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| VM docker-01 (`compute/infra-vm-docker`) | Node | Infrastructure | deployment |  | Shared Docker host for containerised solutions. |
+| Docker Engine (`compute/infra-docker`) | SystemSoftware | Infrastructure | deployment |  |  |
 
 ## Related decisions
 

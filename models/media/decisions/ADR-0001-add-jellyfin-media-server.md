@@ -3,13 +3,13 @@ id: ADR-0001
 title: Add Jellyfin as the family media server
 status: proposed
 date: 2026-10-23
-affects: [app-jellyfin, tech-art-jellyfin, compute/tech-docker, nextcloud/app-data-files]
+affects: [app-jellyfin, infra-art-jellyfin, compute/infra-docker, nextcloud/data-files]
 ---
 
 ## Context
 
 Family videos sit in Nextcloud but are awkward to watch on the TV. Streaming services do not
-cover home videos, and the data should stay at home (enterprise/mot-drv-privacy).
+cover home videos, and the data should stay at home (enterprise/bus-drv-privacy).
 
 ## Decision
 

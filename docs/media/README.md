@@ -22,7 +22,7 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/media.oe
 | Layer | Count |
 |---|---|
 | Application | 2 |
-| Technology | 1 |
+| Infrastructure | 1 |
 
 ## Changes (current → target)
 
@@ -30,13 +30,13 @@ Open in Archi: *File → Import → Open Exchange XML Model* → `build/media.oe
 |---|---|---|
 | new | ApplicationComponent | Jellyfin (`app-jellyfin`) |
 | new | ApplicationService | Media streaming (`app-svc-streaming`) |
-| new | Access | `app-jellyfin` → `nextcloud/app-data-files` — Family videos |
+| new | Artifact | jellyfin/jellyfin image (`infra-art-jellyfin`) |
+| new | Access | `app-jellyfin` → `nextcloud/data-files` — Family videos |
 | new | Realization | `app-jellyfin` → `app-svc-streaming` |
 | new | Serving | `app-svc-streaming` → `enterprise/bus-role-user` |
-| new | Assignment | `compute/tech-docker` → `tech-art-jellyfin` |
+| new | Assignment | `compute/infra-docker` → `infra-art-jellyfin` |
 | new | Serving | `dns/app-svc-dns` → `app-jellyfin` — DNS lookups |
-| new | Realization | `tech-art-jellyfin` → `app-jellyfin` |
-| new | Artifact | jellyfin/jellyfin image (`tech-art-jellyfin`) |
+| new | Realization | `infra-art-jellyfin` → `app-jellyfin` |
 
 ## Other solution architectures
 

@@ -1,35 +1,38 @@
 # ArchiMate 3.2 element catalogue used by a4m.
-# layer  -> drives folder placement, view layout rows, colours and the ID prefix convention
+# Four layers, quasi-TOGAF, top to bottom: Business, Information (data), Application, Infrastructure.
+# Every ArchiMate type maps to one of them:
+#   business       <- business, motivation, strategy, implementation & migration
+#   information    <- DataObject
+#   application    <- application (except DataObject)
+#   infrastructure <- technology, physical, Location
+#   other          <- Grouping, Junction: connectors, allowed in any layer folder, no id prefix
+# layer  -> the folder an element lives in (models/<sa>/<layer>/), its id prefix, view rows and colours
 # aspect -> active | behavior | passive | motivation | composite | other (drives Mermaid shapes and in-row ordering)
-# Colours follow Archi's defaults so Mermaid output looks familiar next to Archi.
 
 layers:
-  motivation:     { label: Motivation,               order: 1, prefix: mot,  color: "#CCCCFF" }
-  strategy:       { label: Strategy,                 order: 2, prefix: str,  color: "#F5DEAA" }
-  business:       { label: Business,                 order: 3, prefix: bus,  color: "#FFFFB5" }
-  application:    { label: Application,              order: 4, prefix: app,  color: "#B5FFFF" }
-  technology:     { label: Technology,               order: 5, prefix: tech, color: "#C9E7B7" }
-  physical:       { label: Physical,                 order: 6, prefix: phys, color: "#C9E7B7" }
-  implementation: { label: Implementation & Migration, order: 7, prefix: impl, color: "#FFE0E0" }
-  other:          { label: Other,                    order: 8, prefix: oth,  color: "#FFFFFF" }
+  business:       { label: Business,       order: 1, prefix: bus,   color: "#FFFFB5" }
+  information:    { label: Information,    order: 2, prefix: data,  color: "#E3D7F4" }
+  application:    { label: Application,    order: 3, prefix: app,   color: "#B5FFFF" }
+  infrastructure: { label: Infrastructure, order: 4, prefix: infra, color: "#C9E7B7" }
+  other:          { label: Other,          order: 5, folder: false, color: "#FFFFFF" }
 
 types:
-  # Motivation
-  Stakeholder:              { layer: motivation, aspect: motivation }
-  Driver:                   { layer: motivation, aspect: motivation }
-  Assessment:               { layer: motivation, aspect: motivation }
-  Goal:                     { layer: motivation, aspect: motivation }
-  Outcome:                  { layer: motivation, aspect: motivation }
-  Principle:                { layer: motivation, aspect: motivation }
-  Requirement:              { layer: motivation, aspect: motivation }
-  Constraint:               { layer: motivation, aspect: motivation }
-  Meaning:                  { layer: motivation, aspect: motivation }
-  Value:                    { layer: motivation, aspect: motivation }
-  # Strategy
-  Resource:                 { layer: strategy, aspect: active }
-  Capability:               { layer: strategy, aspect: behavior }
-  ValueStream:              { layer: strategy, aspect: behavior }
-  CourseOfAction:           { layer: strategy, aspect: behavior }
+  # Business: motivation (why)
+  Stakeholder:              { layer: business, aspect: motivation }
+  Driver:                   { layer: business, aspect: motivation }
+  Assessment:               { layer: business, aspect: motivation }
+  Goal:                     { layer: business, aspect: motivation }
+  Outcome:                  { layer: business, aspect: motivation }
+  Principle:                { layer: business, aspect: motivation }
+  Requirement:              { layer: business, aspect: motivation }
+  Constraint:               { layer: business, aspect: motivation }
+  Meaning:                  { layer: business, aspect: motivation }
+  Value:                    { layer: business, aspect: motivation }
+  # Business: strategy
+  Resource:                 { layer: business, aspect: active }
+  Capability:               { layer: business, aspect: behavior }
+  ValueStream:              { layer: business, aspect: behavior }
+  CourseOfAction:           { layer: business, aspect: behavior }
   # Business
   BusinessActor:            { layer: business, aspect: active }
   BusinessRole:             { layer: business, aspect: active }
@@ -53,35 +56,35 @@ types:
   ApplicationProcess:       { layer: application, aspect: behavior }
   ApplicationEvent:         { layer: application, aspect: behavior }
   ApplicationService:       { layer: application, aspect: behavior }
-  DataObject:               { layer: application, aspect: passive }
-  # Technology
-  Node:                     { layer: technology, aspect: active }
-  Device:                   { layer: technology, aspect: active }
-  SystemSoftware:           { layer: technology, aspect: active }
-  TechnologyCollaboration:  { layer: technology, aspect: active }
-  TechnologyInterface:      { layer: technology, aspect: active }
-  Path:                     { layer: technology, aspect: active }
-  CommunicationNetwork:     { layer: technology, aspect: active }
-  TechnologyFunction:       { layer: technology, aspect: behavior }
-  TechnologyProcess:        { layer: technology, aspect: behavior }
-  TechnologyInteraction:    { layer: technology, aspect: behavior }
-  TechnologyEvent:          { layer: technology, aspect: behavior }
-  TechnologyService:        { layer: technology, aspect: behavior }
-  Artifact:                 { layer: technology, aspect: passive }
-  # Physical
-  Equipment:                { layer: physical, aspect: active }
-  Facility:                 { layer: physical, aspect: active }
-  DistributionNetwork:      { layer: physical, aspect: active }
-  Material:                 { layer: physical, aspect: passive }
-  # Implementation & Migration
-  WorkPackage:              { layer: implementation, aspect: behavior }
-  ImplementationEvent:      { layer: implementation, aspect: behavior }
-  Deliverable:              { layer: implementation, aspect: passive }
-  Plateau:                  { layer: implementation, aspect: composite }
-  Gap:                      { layer: implementation, aspect: passive }
+  DataObject:               { layer: information, aspect: passive }
+  # Infrastructure: technology
+  Node:                     { layer: infrastructure, aspect: active }
+  Device:                   { layer: infrastructure, aspect: active }
+  SystemSoftware:           { layer: infrastructure, aspect: active }
+  TechnologyCollaboration:  { layer: infrastructure, aspect: active }
+  TechnologyInterface:      { layer: infrastructure, aspect: active }
+  Path:                     { layer: infrastructure, aspect: active }
+  CommunicationNetwork:     { layer: infrastructure, aspect: active }
+  TechnologyFunction:       { layer: infrastructure, aspect: behavior }
+  TechnologyProcess:        { layer: infrastructure, aspect: behavior }
+  TechnologyInteraction:    { layer: infrastructure, aspect: behavior }
+  TechnologyEvent:          { layer: infrastructure, aspect: behavior }
+  TechnologyService:        { layer: infrastructure, aspect: behavior }
+  Artifact:                 { layer: infrastructure, aspect: passive }
+  # Infrastructure: physical
+  Equipment:                { layer: infrastructure, aspect: active }
+  Facility:                 { layer: infrastructure, aspect: active }
+  DistributionNetwork:      { layer: infrastructure, aspect: active }
+  Material:                 { layer: infrastructure, aspect: passive }
+  # Business: implementation & migration
+  WorkPackage:              { layer: business, aspect: behavior }
+  ImplementationEvent:      { layer: business, aspect: behavior }
+  Deliverable:              { layer: business, aspect: passive }
+  Plateau:                  { layer: business, aspect: composite }
+  Gap:                      { layer: business, aspect: passive }
   # Other
   Grouping:                 { layer: other, aspect: composite }
-  Location:                 { layer: other, aspect: composite }
+  Location:                 { layer: infrastructure, aspect: composite }
   Junction:                 { layer: other, aspect: other }
 
 # OEF viewpoint names Archi understands (org.opengroup.archimate.xmlexchange.XMLTypeMapper).

@@ -2,7 +2,7 @@ views:
   - id: view-overview
     name: Media streaming — overview
     viewpoint: Layered
-    include_layers: [business, application, technology]
+    include_layers: [business, information, application, infrastructure]
   - id: c4-context
     kind: c4-context
     name: Media streaming — system context

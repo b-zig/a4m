@@ -5,4 +5,4 @@
 
 | ADR | Title | Status | Date | Affects |
 |---|---|---|---|---|
-| [ADR-0001](../../models/backup/decisions/ADR-0001-move-offsite-backups-to-hetzner.md) | Move off-site backups from Backblaze B2 to a Hetzner Storage Box | accepted | 2026-10-23 | `app-offsite-b2`, `app-offsite-hetzner`, `app-backup`, `enterprise/mot-req-backup` |
+| [ADR-0001](../../models/backup/decisions/ADR-0001-move-offsite-backups-to-hetzner.md) | Move off-site backups from Backblaze B2 to a Hetzner Storage Box | accepted | 2026-10-23 | `app-offsite-b2`, `app-offsite-hetzner`, `app-backup`, `enterprise/bus-req-backup` |

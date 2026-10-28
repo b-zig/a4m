@@ -6,4 +6,4 @@ owner: home lab admin
 documentation: >-
   The Proxmox hypervisor, the shared Docker VM and the NAS. Solutions run as VMs or LXC
   containers on the host, or as images on the Docker VM, and store data on the NAS.
-exports: [tech-pve-01, tech-svc-vm-hosting, tech-vm-docker, tech-docker, tech-nas, tech-svc-nfs]
+exports: [infra-pve-01, infra-svc-vm-hosting, infra-vm-docker, infra-docker, infra-nas, infra-svc-nfs]

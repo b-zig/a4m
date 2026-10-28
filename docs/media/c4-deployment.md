@@ -6,14 +6,14 @@
 ```mermaid
 C4Deployment
   title Media streaming — deployment
-  Deployment_Node(network__oth_loc_home, "Home office rack", "Location", "[network]") {
-    Deployment_Node(compute__tech_pve_01, "Proxmox host 01", "Proxmox VE 8", "[compute] Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host).") {
-      Deployment_Node(compute__tech_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
-        Deployment_Node(compute__tech_docker, "Docker Engine", "Docker Compose", "[compute]") {
+  Deployment_Node(network__infra_loc_home, "Home office rack", "Location", "[network]") {
+    Deployment_Node(compute__infra_pve_01, "Proxmox host 01", "Proxmox VE 8", "[compute] Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).") {
+      Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
+        Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "[compute]") {
           System(app_jellyfin, "Jellyfin [NEW]", "Media server streaming the family's videos and music to TVs and phones.")
         }
       }
-      Deployment_Node(dns__tech_lxc_pihole, "LXC pihole", "Debian 12 LXC", "[dns]") {
+      Deployment_Node(dns__infra_lxc_pihole, "LXC pihole", "Debian 12 LXC", "[dns]") {
         System_Ext(dns__app_pihole, "Pi-hole", "[dns] Network-wide DNS resolver with ad and tracker blocking.")
       }
     }
@@ -41,14 +41,14 @@ C4Deployment
 ```mermaid
 C4Deployment
   title Media streaming — deployment
-  Deployment_Node(network__oth_loc_home, "Home office rack", "Location", "[network]") {
-    Deployment_Node(compute__tech_pve_01, "Proxmox host 01", "Proxmox VE 8", "[compute] Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host).") {
-      Deployment_Node(compute__tech_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
-        Deployment_Node(compute__tech_docker, "Docker Engine", "Docker Compose", "[compute]") {
+  Deployment_Node(network__infra_loc_home, "Home office rack", "Location", "[network]") {
+    Deployment_Node(compute__infra_pve_01, "Proxmox host 01", "Proxmox VE 8", "[compute] Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host).") {
+      Deployment_Node(compute__infra_vm_docker, "VM docker-01", "Debian 12 VM", "[compute] Shared Docker host for containerised solutions.") {
+        Deployment_Node(compute__infra_docker, "Docker Engine", "Docker Compose", "[compute]") {
           System(app_jellyfin, "Jellyfin", "Media server streaming the family's videos and music to TVs and phones.")
         }
       }
-      Deployment_Node(dns__tech_lxc_pihole, "LXC pihole", "Debian 12 LXC", "[dns]") {
+      Deployment_Node(dns__infra_lxc_pihole, "LXC pihole", "Debian 12 LXC", "[dns]") {
         System_Ext(dns__app_pihole, "Pi-hole", "[dns] Network-wide DNS resolver with ad and tracker blocking.")
       }
     }
@@ -65,11 +65,11 @@ C4Deployment
 |---|---|---|---|---|---|
 | Jellyfin (`app-jellyfin`) | ApplicationComponent | Application | system | new | Media server streaming the family's videos and music to TVs and phones. |
 | Pi-hole (`dns/app-pihole`) | ApplicationComponent | Application | system |  | Network-wide DNS resolver with ad and tracker blocking. |
-| Home office rack (`network/oth-loc-home`) | Location | Other | deployment |  |  |
-| Proxmox host 01 (`compute/tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| VM docker-01 (`compute/tech-vm-docker`) | Node | Technology | deployment |  | Shared Docker host for containerised solutions. |
-| Docker Engine (`compute/tech-docker`) | SystemSoftware | Technology | deployment |  |  |
-| LXC pihole (`dns/tech-lxc-pihole`) | Node | Technology | deployment |  |  |
+| Home office rack (`network/infra-loc-home`) | Location | Infrastructure | deployment |  |  |
+| Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| VM docker-01 (`compute/infra-vm-docker`) | Node | Infrastructure | deployment |  | Shared Docker host for containerised solutions. |
+| Docker Engine (`compute/infra-docker`) | SystemSoftware | Infrastructure | deployment |  |  |
+| LXC pihole (`dns/infra-lxc-pihole`) | Node | Infrastructure | deployment |  |  |
 
 ## Related decisions
 

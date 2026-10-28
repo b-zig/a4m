@@ -2,7 +2,7 @@ views:
   - id: view-overview
     name: DNS filtering — overview
     documentation: Pi-hole, the DNS service it offers, who uses it, and where it runs.
-    include_layers: [business, application, technology]
+    include_layers: [business, information, application, infrastructure]
   - id: c4-context
     kind: c4-context
     name: DNS filtering — system context

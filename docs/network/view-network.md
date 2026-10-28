@@ -7,70 +7,58 @@ Network segments, rack and power, with the nodes other SAs connect to them.
 
 ```mermaid
 flowchart TB
-  subgraph layer_technology["Technology"]
+  subgraph layer_infrastructure["Infrastructure"]
     direction LR
-    tech_router["Edge router<br/>«Device»"]
-    tech_switch["Core switch<br/>«Device»"]
-    tech_net_wan["Internet (ISP)<br/>«CommunicationNetwork»"]
-    tech_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork»"]
-    tech_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork»"]
-    compute__tech_nas["NAS<br/>«Device» · compute"]
-    compute__tech_pve_01["Proxmox host 01<br/>«Node» · compute"]
-    dns__tech_lxc_pihole["LXC pihole<br/>«Node» · dns"]
-    home_automation__tech_vm_haos["VM haos<br/>«Node» · home-automation"]
+    infra_loc_home[["Home office rack<br/>«Location»"]]
+    infra_router["Edge router<br/>«Device»"]
+    infra_switch["Core switch<br/>«Device»"]
+    infra_net_wan["Internet (ISP)<br/>«CommunicationNetwork»"]
+    infra_net_lan["LAN (VLAN 10)<br/>«CommunicationNetwork»"]
+    infra_net_iot["IoT (VLAN 20)<br/>«CommunicationNetwork»"]
+    infra_ups["UPS<br/>«Equipment»"]
+    compute__infra_nas["NAS<br/>«Device» · compute"]
+    compute__infra_pve_01["Proxmox host 01<br/>«Node» · compute"]
+    dns__infra_lxc_pihole["LXC pihole<br/>«Node» · dns"]
+    home_automation__infra_vm_haos["VM haos<br/>«Node» · home-automation"]
   end
-  subgraph layer_physical["Physical"]
-    direction LR
-    phys_ups["UPS<br/>«Equipment»"]
-  end
-  subgraph layer_other["Other"]
-    direction LR
-    oth_loc_home[["Home office rack<br/>«Location»"]]
-  end
-  oth_loc_home -->|"aggregates"| tech_router
-  oth_loc_home -->|"aggregates"| tech_switch
-  oth_loc_home -->|"aggregates"| phys_ups
-  phys_ups -->|"serves"| tech_router
-  tech_router ---|"associated with"| tech_net_wan
-  tech_router ---|"associated with"| tech_net_lan
-  tech_router ---|"associated with"| tech_net_iot
-  tech_switch ---|"associated with"| tech_net_lan
-  tech_switch ---|"associated with"| tech_net_iot
-  oth_loc_home -->|"aggregates"| compute__tech_pve_01
-  oth_loc_home -->|"aggregates"| compute__tech_nas
-  phys_ups -->|"serves"| compute__tech_pve_01
-  phys_ups -->|"serves"| compute__tech_nas
-  compute__tech_pve_01 ---|"associated with"| tech_net_lan
-  compute__tech_nas ---|"associated with"| tech_net_lan
-  compute__tech_pve_01 -->|"composed of"| dns__tech_lxc_pihole
-  dns__tech_lxc_pihole ---|"associated with"| tech_net_lan
-  compute__tech_pve_01 -->|"composed of"| home_automation__tech_vm_haos
-  home_automation__tech_vm_haos ---|"associated with"| tech_net_iot
-  classDef technology fill:#C9E7B7,stroke:#555,color:#000
-  class tech_router,tech_switch,tech_net_wan,tech_net_lan,tech_net_iot,compute__tech_nas,compute__tech_pve_01,dns__tech_lxc_pihole,home_automation__tech_vm_haos technology
-  style layer_technology fill:#fafafa,stroke:#bbb
-  classDef physical fill:#C9E7B7,stroke:#555,color:#000
-  class phys_ups physical
-  style layer_physical fill:#fafafa,stroke:#bbb
-  classDef other fill:#FFFFFF,stroke:#555,color:#000
-  class oth_loc_home other
-  style layer_other fill:#fafafa,stroke:#bbb
+  infra_loc_home -->|"aggregates"| infra_router
+  infra_loc_home -->|"aggregates"| infra_switch
+  infra_loc_home -->|"aggregates"| infra_ups
+  infra_router ---|"associated with"| infra_net_wan
+  infra_router ---|"associated with"| infra_net_lan
+  infra_router ---|"associated with"| infra_net_iot
+  infra_switch ---|"associated with"| infra_net_lan
+  infra_switch ---|"associated with"| infra_net_iot
+  infra_ups -->|"serves"| infra_router
+  infra_loc_home -->|"aggregates"| compute__infra_pve_01
+  infra_loc_home -->|"aggregates"| compute__infra_nas
+  infra_ups -->|"serves"| compute__infra_pve_01
+  infra_ups -->|"serves"| compute__infra_nas
+  compute__infra_pve_01 ---|"associated with"| infra_net_lan
+  compute__infra_nas ---|"associated with"| infra_net_lan
+  compute__infra_pve_01 -->|"composed of"| dns__infra_lxc_pihole
+  dns__infra_lxc_pihole ---|"associated with"| infra_net_lan
+  compute__infra_pve_01 -->|"composed of"| home_automation__infra_vm_haos
+  home_automation__infra_vm_haos ---|"associated with"| infra_net_iot
+  classDef infrastructure fill:#C9E7B7,stroke:#555,color:#000
+  class infra_loc_home,infra_router,infra_switch,infra_net_wan,infra_net_lan,infra_net_iot,infra_ups,compute__infra_nas,compute__infra_pve_01,dns__infra_lxc_pihole,home_automation__infra_vm_haos infrastructure
+  style layer_infrastructure fill:#fafafa,stroke:#bbb
   classDef foreign stroke:#777,stroke-dasharray:3 3
-  class compute__tech_nas,compute__tech_pve_01,dns__tech_lxc_pihole,home_automation__tech_vm_haos foreign
+  class compute__infra_nas,compute__infra_pve_01,dns__infra_lxc_pihole,home_automation__infra_vm_haos foreign
 ```
 
 ## Elements
 
 | Element | Type | Layer | C4 | State | Description |
 |---|---|---|---|---|---|
-| Home office rack (`oth-loc-home`) | Location | Other | deployment |  |  |
-| UPS (`phys-ups`) | Equipment | Physical |  |  | 900 VA line-interactive UPS; ~20 minutes runtime for host, NAS and network. |
-| Edge router (`tech-router`) | Device | Technology |  |  |  |
-| Core switch (`tech-switch`) | Device | Technology |  |  |  |
-| Internet (ISP) (`tech-net-wan`) | CommunicationNetwork | Technology |  |  |  |
-| LAN (VLAN 10) (`tech-net-lan`) | CommunicationNetwork | Technology |  |  |  |
-| IoT (VLAN 20) (`tech-net-iot`) | CommunicationNetwork | Technology |  |  |  |
-| NAS (`compute/tech-nas`) | Device | Technology | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
-| Proxmox host 01 (`compute/tech-pve-01`) | Node | Technology | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/mot-asm-single-host). |
-| LXC pihole (`dns/tech-lxc-pihole`) | Node | Technology | deployment |  |  |
-| VM haos (`home-automation/tech-vm-haos`) | Node | Technology | deployment |  |  |
+| Home office rack (`infra-loc-home`) | Location | Infrastructure | deployment |  |  |
+| Edge router (`infra-router`) | Device | Infrastructure |  |  |  |
+| Core switch (`infra-switch`) | Device | Infrastructure |  |  |  |
+| Internet (ISP) (`infra-net-wan`) | CommunicationNetwork | Infrastructure |  |  |  |
+| LAN (VLAN 10) (`infra-net-lan`) | CommunicationNetwork | Infrastructure |  |  |  |
+| IoT (VLAN 20) (`infra-net-iot`) | CommunicationNetwork | Infrastructure |  |  |  |
+| UPS (`infra-ups`) | Equipment | Infrastructure |  |  | 900 VA line-interactive UPS; ~20 minutes runtime for host, NAS and network. |
+| NAS (`compute/infra-nas`) | Device | Infrastructure | deployment |  | Synology NAS holding solution data (NFS) and running backup jobs. |
+| Proxmox host 01 (`compute/infra-pve-01`) | Node | Infrastructure | deployment |  | Mini PC hypervisor; the only compute host (see enterprise/bus-asm-single-host). |
+| LXC pihole (`dns/infra-lxc-pihole`) | Node | Infrastructure | deployment |  |  |
+| VM haos (`home-automation/infra-vm-haos`) | Node | Infrastructure | deployment |  |  |

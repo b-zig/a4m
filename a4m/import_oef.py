@@ -111,7 +111,7 @@ def import_oef(oef_path: Path, sa: str, root: Path | None = None, rules: Rules |
         xsi_type = node.get(f"{{{XSI}}}type")
         el_type = "Junction" if xsi_type in ("AndJunction", "OrJunction") else xsi_type
         name = _text(node, "name") or el_type
-        prefix = rules.layers[rules.layer_of(el_type)]["prefix"]
+        prefix = rules.layers[rules.layer_of(el_type)].get("prefix") or el_type.lower()
         properties = props(node)
         owner = properties.pop("a4m:sa", sa)
         if owner != sa:  # another SA's element, shown on our views: keep the reference only
@@ -296,7 +296,7 @@ def _write(model: Model, existing: Model | None, sa_dir: Path, root: Path, rules
         return files.setdefault(rel_path, {"elements": [], "relationships": [], "views": []})
 
     for el in model.own_elements():
-        home("elements", el.id, f"{rules.layer_of(el.type)}/imported.yaml")["elements"].append(_element_dict(el))
+        home("elements", el.id, f"{rules.folder_of(el.type) or 'application'}/imported.yaml")["elements"].append(_element_dict(el))
     for rel in model.own_relationships():
         home("relationships", rel.id, "relationships/imported.yaml")["relationships"].append(_relationship_dict(rel))
     for view in model.views.values():

@@ -3,7 +3,7 @@ id: ADR-0001
 title: Keep the architecture as ArchiMate YAML in git, with C4 as derived views
 status: accepted
 date: 2026-10-23
-affects: [mot-pri-as-code, mot-goal-portable, impl-wp-office]
+affects: [bus-pri-as-code, bus-goal-portable, bus-wp-office]
 ---
 
 ## Context

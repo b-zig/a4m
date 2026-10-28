@@ -12,12 +12,12 @@ BASE = """
 elements:
   - { id: app-a, type: ApplicationComponent, name: A }
   - { id: app-svc, type: ApplicationService, name: Service }
-  - { id: tech-node, type: Node, name: Node }
+  - { id: infra-node, type: Node, name: Node }
 relationships:
   - { type: Realization, source: app-a, target: app-svc }
-  - { type: Realization, source: tech-node, target: app-a }
+  - { type: Realization, source: infra-node, target: app-a }
 views:
-  - { id: view-all, name: All, include_layers: [application, technology] }
+  - { id: view-all, name: All, include_layers: [application, infrastructure] }
 """
 
 
@@ -35,8 +35,8 @@ class ValidationErrorsTest(WorkspaceTestCase):
 
     def test_invalid_relationship_lists_alternatives(self):
         self.write_sa("s", {"a.yaml": BASE.replace(
-            "  - { type: Realization, source: tech-node, target: app-a }",
-            "  - { type: Assignment, source: tech-node, target: app-a }",
+            "  - { type: Realization, source: infra-node, target: app-a }",
+            "  - { type: Assignment, source: infra-node, target: app-a }",
         )})
         issues = [i for i in validate(self.load("s")) if i.code == "invalid-relationship"]
         self.assertEqual(len(issues), 1)
@@ -53,7 +53,7 @@ class ValidationErrorsTest(WorkspaceTestCase):
 
     def test_unknown_type_suggests(self):
         self.write_sa("s", {"a.yaml": BASE.replace("type: Node", "type: Nodes").replace("type: Realization, source: app-a", "type: Realisation, source: app-a")})
-        issues = {i.code: i for i in validate(self.load("s")) if i.severity == "error"}
+        issues = {i.code: i for i in validate(self.load("s")) if i.severity == "error" and i.code != "layer-folder"}
         self.assertEqual(set(issues), {"unknown-type", "unknown-relationship"})
         self.assertIn("did you mean Node", issues["unknown-type"].message)
         self.assertIn("did you mean Realization", issues["unknown-relationship"].message)
@@ -75,7 +75,7 @@ class ValidationErrorsTest(WorkspaceTestCase):
         self.assertIn("bad-attribute", self.codes("s", "error"))
 
     def test_id_prefix_warning(self):
-        self.write_sa("s", {"a.yaml": BASE.replace("id: tech-node", "id: node").replace("source: tech-node", "source: node")})
+        self.write_sa("s", {"a.yaml": BASE.replace("id: infra-node", "id: node").replace("source: infra-node", "source: node")})
         self.assertIn("id-prefix", self.codes("s", "warning"))
 
     def test_orphans_and_unviewed(self):
@@ -85,7 +85,7 @@ class ValidationErrorsTest(WorkspaceTestCase):
         self.assertIn("not-in-view", warnings)
 
     def test_view_with_unknown_include(self):
-        self.write_sa("s", {"a.yaml": BASE.replace("include_layers: [application, technology]", "include: [app-a, app-zzz]")})
+        self.write_sa("s", {"a.yaml": BASE.replace("include_layers: [application, infrastructure]", "include: [app-a, app-zzz]")})
         self.assertIn("view-ref", self.codes("s", "error"))
 
     def test_yaml_syntax_error_is_reported_not_raised(self):
@@ -136,12 +136,12 @@ PLATFORM = """
 elements:
   - { id: app-bus, type: ApplicationComponent, name: Event bus, c4: system }
   - { id: app-svc-bus, type: ApplicationService, name: Event streaming }
-  - { id: tech-broker, type: Node, name: Broker }
+  - { id: infra-broker, type: Node, name: Broker }
 relationships:
   - { type: Realization, source: app-bus, target: app-svc-bus }
-  - { type: Realization, source: tech-broker, target: app-bus }
+  - { type: Realization, source: infra-broker, target: app-bus }
 views:
-  - { id: view-all, name: All, include_layers: [application, technology] }
+  - { id: view-all, name: All, include_layers: [application, infrastructure] }
 """
 SOLUTION = """
 elements:
@@ -176,7 +176,7 @@ class CrossSaTest(WorkspaceTestCase):
         model = self.load("sol")
         self.assertTrue(model.elements["plat/app-svc-bus"].foreign)
         self.assertTrue(model.elements["plat/app-bus"].foreign)  # stands behind the service (Realization)
-        self.assertIn("plat/tech-broker", model.elements)  # behind the system (Realization): deployment views need it
+        self.assertIn("plat/infra-broker", model.elements)  # behind the system (Realization): deployment views need it
         self.assertEqual(model.referenced, {"plat/app-svc-bus"})
 
     def test_layer_view_shows_only_direct_neighbours(self):
@@ -196,7 +196,7 @@ class CrossSaTest(WorkspaceTestCase):
         self.assertEqual((rel.source, rel.target, rel.foreign), ("app-svc-bus", "sol/app-orders", True))
 
     def test_not_exported(self):
-        self.solution(SOLUTION.replace("plat/app-svc-bus", "plat/tech-broker"))
+        self.solution(SOLUTION.replace("plat/app-svc-bus", "plat/infra-broker"))
         issue = next(i for i in validate(self.load("sol")) if i.code == "not-exported")
         self.assertIn("plat/app-svc-bus", issue.message)  # lists what it could use instead
 
@@ -254,6 +254,38 @@ class CrossSaTest(WorkspaceTestCase):
         self.assertEqual([(u.consumer, u.rel.type) for u in usages], [("sol", "Serving")])
         self.assertEqual(Workspace(self.root).dependencies()["sol"].keys(), {"plat"})
 
+
+class LayerFolderTest(WorkspaceTestCase):
+    """Elements live in models/<sa>/<layer>/: business, information, application, infrastructure."""
+
+    def issues(self, files):
+        self.write_sa("s", files)
+        return [i for i in validate(self.load("s")) if i.code == "layer-folder"]
+
+    def test_right_folders(self):
+        self.assertEqual(self.issues({
+            "business/a.yaml": "elements:\n  - { id: bus-goal, type: Goal, name: G }\n",
+            "information/a.yaml": "elements:\n  - { id: data-x, type: DataObject, name: X }\n",
+            "application/a.yaml": "elements:\n  - { id: app-x, type: ApplicationComponent, name: X }\n",
+            "infrastructure/a.yaml": "elements:\n  - { id: infra-x, type: Equipment, name: X }\n  - { id: j, type: Junction, name: J }\n",
+        }), [])
+
+    def test_wrong_folder_names_the_right_one(self):
+        [issue] = self.issues({"application/a.yaml": "elements:\n  - { id: data-x, type: DataObject, name: X }\n"})
+        self.assertEqual(issue.severity, "error")
+        self.assertIn("move it to models/s/information/", issue.message)
+        self.assertIn("(it is in application/)", issue.message)
+
+    def test_sa_root_and_old_folders(self):
+        issues = self.issues({
+            "a.yaml": "elements:\n  - { id: bus-a, type: BusinessActor, name: A }\n",
+            "technology/a.yaml": "elements:\n  - { id: infra-n, type: Node, name: N }\n",
+            "views/j.yaml": "elements:\n  - { id: j, type: Junction, name: J }\n",
+        })
+        messages = {i.ref: i.message for i in issues}
+        self.assertIn("(it is in the SA root)", messages["bus-a"])
+        self.assertIn("models/s/infrastructure/", messages["infra-n"])
+        self.assertIn("business/ or information/ or application/ or infrastructure/", messages["j"])
 
 if __name__ == "__main__":
     unittest.main()
